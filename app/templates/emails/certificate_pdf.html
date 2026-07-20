@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>
+      @page {
+        size: 980px 680px;
+        margin: 0;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        width: 980px;
+        height: 680px;
+        overflow: hidden;
+        background: #ffffff;
+      }
+
+      .cert-document {
+        position: relative;
+        width: 980px;
+        height: 680px;
+        overflow: hidden;
+      }
+
+      .cert-template-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      .cert-overlay-fields {
+        position: absolute;
+        left: 50%;
+        top: 62%;
+        transform: translate(-50%, -50%);
+        width: 740px;
+        text-align: center;
+        display: block;
+        z-index: 1;
+      }
+
+      .cert-recipient-name {
+        margin: 0 0 12px 0;
+        color: #1f2f53;
+        font-family: "Palatino Linotype", "Book Antiqua", Palatino, "Times New Roman", serif;
+        font-size: 46px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        line-height: 1.15;
+      }
+
+      .cert-description-text {
+        margin: 0;
+        color: #325f95;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 1.35;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cert-document">
+      <img
+        src="{{ certificate_template_src }}"
+        alt="Certificate template"
+        class="cert-template-image"
+      >
+      <main class="cert-overlay-fields" aria-label="Certificate personalization">
+        <p class="cert-recipient-name">{{ full_name }}</p>
+        <p class="cert-description-text">{{ certificate_description }}</p>
+      </main>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,590 @@
+diff --git a/app/template/html/templateBeta.html b/app/template/html/templateBeta.html
+index ef8b56f..eef645c 100644
+--- a/app/template/html/templateBeta.html
++++ b/app/template/html/templateBeta.html
+@@ -4,13 +4,14 @@
+ {% block title %}Inner SPARC | Template Beta{% endblock %}
+ 
+ {% block extra_css %}
+-<link rel="stylesheet" href="{% static 'css/templateBeta.css' %}?v=6">
++<link rel="stylesheet" href="{% static 'css/templateBeta.css' %}?v=13">
+ <link rel="stylesheet" href="{% static 'css/doc-validator.css' %}?v=1">
+-<link rel="stylesheet" href="{% static 'js/components/OnboardingQuizPanel.css' %}?v=1">
++<link rel="stylesheet" href="{% static 'js/components/OnboardingQuizPanel.css' %}?v=6">
++<link rel="stylesheet" href="{% static 'css/certification-panel.css' %}?v=5">
+ {% endblock %}
+ 
+ {% block content %}
+-<div class="tpl1" id="tpl1Root" data-first-step-video="{% static 'images/videoplayback.mp4' %}" data-user-name="{{ user.get_full_name|default:user.username|default:'Agent'|escape }}" data-completed-steps="{{ onboarding_completed_steps|default:'[]' }}" data-account-first-name="{{ user.first_name|default:''|escape }}" data-account-last-name="{{ user.last_name|default:''|escape }}" data-account-email="{{ user.email|default:''|escape }}" data-account-phone="{{ profile_phone_number|default:''|escape }}" data-onboarding-data-url="{{ onboarding_profile_data_url|escape }}">
++<div class="tpl1" id="tpl1Root" data-first-step-video="{% static 'images/videoplayback.mp4' %}" data-user-name="{{ user.get_full_name|default:user.username|default:'Agent'|escape }}" data-completed-steps="{{ onboarding_completed_steps|default:'[]' }}" data-account-first-name="{{ user.first_name|default:''|escape }}" data-account-last-name="{{ user.last_name|default:''|escape }}" data-account-email="{{ user.email|default:''|escape }}" data-account-phone="{{ profile_phone_number|default:''|escape }}" data-onboarding-data-url="{{ onboarding_profile_data_url|escape }}" data-dev-unlock-all="{{ ONBOARDING_DEV_UNLOCK_ALL|lower }}" data-doc-detection-enabled="{{ ONBOARDING_DOC_DETECTION_ENABLED|lower }}">
+     <form class="tpl1-hidden-form" aria-hidden="true">{% csrf_token %}</form>
+ 
+ 
+@@ -134,6 +135,8 @@
+         </main>
+     </div>
+ 
++    <div id="floatingFireStreakMount" aria-live="polite" aria-atomic="true"></div>
++
+     <button class="tpl1-mobile-backdrop" type="button" id="tpl1MobileBackdrop" aria-label="Close steps panel" hidden></button>
+ 
+     <div class="tpl1-modal" id="tpl1AccountModal" role="dialog" aria-modal="true" aria-labelledby="tpl1AccountModalTitle" hidden>
+@@ -193,16 +196,6 @@
+     </div>
+ </div>
+ 
+-<!-- Minimal transparent floating Lottie (move existing #lottieCalm here) -->
+-<div id="lottie-float" class="lottie-float" aria-hidden="false">
+-    <button id="lottieTinyToggle" class="lottie-tiny-toggle" aria-expanded="true" aria-label="Toggle assistant">
+-        <span class="chev">‹</span>
+-    </button>
+-
+-    <!-- KEEP the existing container id exactly as-is — DO NOT duplicate -->
+-    <div id="lottieCalm" style="width:120px;height:120px;" aria-hidden="false"></div>
+-</div>
+-
+ <button class="chatbot-trigger" type="button" id="chatbotTrigger" aria-label="Open chat assistant">
+     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+         <path d="M8 18.5H7a3.5 3.5 0 0 1-3.5-3.5V8A3.5 3.5 0 0 1 7 4.5h10A3.5 3.5 0 0 1 20.5 8v7a3.5 3.5 0 0 1-3.5 3.5h-4.2L9 21.5v-3z"></path>
+@@ -242,395 +235,179 @@
+     </div>
+ </div>
+ 
+-<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.10.1/lottie.min.js"></script>
+ <script>
+-// Lottie module-based switcher — hide until module 1 completed
+-document.addEventListener('DOMContentLoaded', function () {
+-  var container = document.getElementById('lottieCalm');
+-  if (!container) return;
+-
+-  // ensure fade helper class is present
+-  container.classList.add('lottie-fade');
+-
+-  var animation = null;
+-  var currentPath = null;
+-  var debounceTimer = null;
+-  var DEBOUNCE_MS = 220;
+-
+-  function jsonForModules(count) {
+-    if (count >= 4) return "{% static 'json/Fire3.json' %}";
+-    if (count === 3) return "{% static 'json/Fire2.json' %}";
+-    if (count === 2) return "{% static 'json/calm2.json' %}";
+-    if (count === 1) return "{% static 'json/calm-1.json' %}";
+-    return null;
+-  }
+-
+-  function loadLottie(path) {
+-    if (!path) return;
+-    animation = lottie.loadAnimation({
+-      container: container,
+-      renderer: 'svg',
+-      loop: true,
+-      autoplay: true,
+-      path: path
+-    });
+-    currentPath = path;
+-  }
+-
+-  function destroyCurrent() {
+-    try {
+-      if (animation && typeof animation.destroy === 'function') {
+-        animation.destroy();
+-      }
+-    } catch (e) {
+-      console.warn('Lottie destroy failed', e);
+-    }
+-    animation = null;
+-    currentPath = null;
+-  }
+-
+-  // fade, destroy then load new path
+-  function swapToPath(path) {
+-    if (!path) return;
+-    if (path === currentPath) return;
+-
+-    // fade out
+-    container.classList.add('fading-out');
+-
+-    var dur = parseFloat(getComputedStyle(container).transitionDuration || '0.18') * 1000;
+-    var wait = Math.max(160, dur + 20);
+-
+-    setTimeout(function () {
+-      destroyCurrent();
+-      // make sure container is visible before mounting SVG
+-      container.classList.remove('lottie-hidden');
+-      loadLottie(path);
+-      // short delay so svg mounts, then fade in
+-      setTimeout(function () {
+-        container.classList.remove('fading-out');
+-      }, 40);
+-    }, wait);
+-  }
+-
+-  // hide container and destroy any running animation
+-  function hideContainer() {
+-    if (!container.classList.contains('lottie-hidden')) {
+-      container.classList.add('fading-out');
+-      var dur = parseFloat(getComputedStyle(container).transitionDuration || '0.18') * 1000;
+-      var wait = Math.max(160, dur + 20);
+-      setTimeout(function () {
+-        destroyCurrent();
+-        container.classList.add('lottie-hidden');
+-        container.classList.remove('fading-out');
+-      }, wait);
++window.tailwind = window.tailwind || {};
++window.tailwind.config = {
++    corePlugins: {
++        preflight: false
+     }
+-  }
+-
+-  // show container and load path (if needed)
+-  function showContainerAndSwap(path) {
+-    if (!path) return;
+-    if (container.classList.contains('lottie-hidden')) {
+-      // reveal container then load
+-      container.classList.remove('lottie-hidden');
+-      // small delay to ensure visibility transition, then load
+-      setTimeout(function () {
+-        loadLottie(path);
+-        // ensure opacity transitions to visible
+-        container.classList.remove('fading-out');
+-      }, 40);
+-      currentPath = path;
+-      return;
+-    }
+-    // already visible: swap normally
+-    swapToPath(path);
+-  }
+-
+-  // DOM-based count: completed module = group where all child steps have 'done' class
+-  function computeCompletedModulesFromDOM() {
+-    var groupsEl = document.getElementById('tplBetaGroups');
+-    if (!groupsEl) return 0;
+-    var groupNodes = groupsEl.querySelectorAll('.tpl1-group');
+-    var completedGroups = 0;
+-    groupNodes.forEach(function (g) {
+-      var stepEls = g.querySelectorAll('.tpl1-steps .tpl1-step, .tpl1-steps button, .tpl1-steps a');
+-      if (!stepEls || stepEls.length === 0) {
+-        if (g.classList.contains('done') || g.classList.contains('is-complete')) completedGroups++;
+-        return;
+-      }
+-      var allDone = true;
+-      stepEls.forEach(function (s) {
+-        if (!(s.classList.contains('done') || s.classList.contains('is-complete') || s.getAttribute('data-complete') === '1')) {
+-          allDone = false;
+-        }
+-      });
+-      if (allDone) completedGroups++;
+-    });
+-    return completedGroups;
+-  }
+-
+-  function updateLottieByModules(modulesCompleted) {
+-    if (debounceTimer) clearTimeout(debounceTimer);
+-    debounceTimer = setTimeout(function () {
+-      var count = (typeof modulesCompleted === 'number') ? modulesCompleted : computeCompletedModulesFromDOM();
+-      var target = jsonForModules(count);
+-
+-      if (!target) {
+-        // no modules completed -> hide and avoid loading calm-1 prematurely
+-        hideContainer();
+-        return;
+-      }
+-
+-      // ensure we only show calm-1 after module 1 is completed (count >= 1)
+-      showContainerAndSwap(target);
+-    }, DEBOUNCE_MS);
+-  }
+-
+-  // initial: hide until at least one module is completed
+-  (function init() {
+-    container.classList.add('lottie-hidden');
+-    // run check soon after load in case UI renders late
+-    setTimeout(function () { updateLottieByModules(); }, 120);
+-    setTimeout(function () { updateLottieByModules(); }, 600);
+-  }());
+-
+-  // watch sidebar groups for changes
+-  var groupsEl = document.getElementById('tplBetaGroups');
+-  var mo = null;
+-  if (groupsEl) {
+-    mo = new MutationObserver(function () { updateLottieByModules(); });
+-    mo.observe(groupsEl, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'data-complete', 'aria-checked'] });
+-  }
+-
+-  window.updateLottieByModules = updateLottieByModules;
+-  window.destroyLottieSwitcher = function () {
+-    destroyCurrent();
+-    if (mo) mo.disconnect();
+-    if (debounceTimer) clearTimeout(debounceTimer);
+-  };
+-});
++};
+ </script>
++<script src="https://cdn.tailwindcss.com"></script>
++<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
++<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
++<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.10.1/lottie.min.js"></script>
+ <script>
+-window.ONBOARDING_DEV_UNLOCK_ALL = {{ ONBOARDING_DEV_UNLOCK_ALL|yesno:"true,false" }};
++window.ONBOARDING_DEV_UNLOCK_ALL = document.getElementById('tpl1Root').dataset.devUnlockAll === 'true';
++// Temporary feature toggle: disable DocValidator detection while keeping upload flow active.
++window.ONBOARDING_DOC_DETECTION_ENABLED = document.getElementById('tpl1Root').dataset.docDetectionEnabled === 'true';
+ </script>
+-<script src="{% static 'js/doc-validator.js' %}?v=1"></script>
+-<link rel="stylesheet" href="{% static 'css/quiz-panel.css' %}?v=1">
+-<script src="{% static 'js/onboardingBeta.js' %}?v=12"></script>
++{% if ONBOARDING_DOC_DETECTION_ENABLED %}
++<script src="{% static 'js/doc-validator.js' %}?v=2"></script>
++{% endif %}
++<link rel="stylesheet" href="{% static 'css/quiz-panel.css' %}?v=8">
++<link rel="stylesheet" href="{% static 'css/panel-buttons.css' %}?v=1">
++<script src="{% static 'js/certification-panel.js' %}?v=5"></script>
++<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
++<script src="{% static 'js/onboardingBeta.js' %}?v=15"></script>
++<script src="{% static 'js/config/floatingFireMap.js' %}?v=20260326b"></script>
++<script src="{% static 'js/providers/animationProvider.js' %}?v=20260326b"></script>
++<script src="{% static 'js/hooks/useFloatingFireState.js' %}?v=20260326b"></script>
++<script src="{% static 'js/components/FloatingFireStreak.js' %}?v=20260326b"></script>
++<script src="{% static 'js/components/FireCelebrationModal.js' %}?v=20260326b"></script>
+ <script>
+-document.addEventListener('DOMContentLoaded', function () {
+-    var wrapper = document.getElementById('lottie-float');
+-    var toggle = document.getElementById('lottieTinyToggle');
+-    var el = document.getElementById('lottieCalm');
+-    if (!wrapper || !el) return;
+-
+-    var dragging = false;
+-    var offsetX = 0;
+-    var offsetY = 0;
+-    var initialPositionSwitched = false;
+-    var posKey = 'lottieFloatPos';
+-    var collapsedKey = 'lottieCollapsed';
+-    var collapsedShift = 98;
+-    var expandedLeft = null;
+-
+-    function getRect(node) {
+-        return node.getBoundingClientRect();
+-    }
++(function initFloatingFireStreak() {
++    var DEBUG = !!window.__DEBUG_FLOATING_FIRE;
+ 
+-    function setExplicitPosition(node, left, top) {
+-        node.style.right = 'auto';
+-        node.style.transform = 'none';
+-        node.style.left = Math.round(left) + 'px';
+-        node.style.top = Math.round(top) + 'px';
+-        expandedLeft = Math.round(left);
+-        initialPositionSwitched = true;
++    if (!window.useFloatingFireState || !window.React || !window.ReactDOM || !window.FloatingFireStreak) {
++        console.warn('[FloatingFireStreak] Missing required dependencies for idle fire');
++        return;
+     }
+ 
+-    function switchToLeftTop(x, y) {
+-        if (initialPositionSwitched) return;
+-        var r = getRect(wrapper);
+-        var computedLeft = (x !== undefined) ? x : r.left;
+-        var computedTop = (y !== undefined) ? y : r.top;
+-        setExplicitPosition(wrapper, computedLeft, computedTop);
++    var hasModuleModals = !!(
++        window.Module1CelebrationModal &&
++        window.Module2CelebrationModal &&
++        window.Module3CelebrationModal &&
++        window.Module4CelebrationModal
++    );
++    if (DEBUG && !hasModuleModals) {
++        console.debug('[FloatingFireStreak] Isolated module modal components missing; idle fire will continue without modal');
+     }
+ 
+-    function clampPosition(l, t, elW, elH) {
+-        var minLeft = 0;
+-        var minTop = 0;
+-        var maxLeft = Math.max(0, window.innerWidth - elW);
+-        var maxTop = Math.max(0, window.innerHeight - elH);
+-        return {
+-            left: Math.min(Math.max(l, minLeft), maxLeft),
+-            top: Math.min(Math.max(t, minTop), maxTop)
+-        };
++    var container = document.getElementById('floatingFireStreakMount');
++    if (!container) {
++        console.warn('[FloatingFireStreak] Mount node not found');
++        return;
+     }
+ 
+-    // restore saved position (left/top) if present
+-    try {
+-        var saved = localStorage.getItem(posKey);
+-        if (saved) {
+-            var pos = JSON.parse(saved);
+-            if (typeof pos.left === 'number' && typeof pos.top === 'number') {
+-                setExplicitPosition(wrapper, pos.left, pos.top);
+-            }
+-        }
+-    } catch (e) {}
+-
+-    // restore collapsed state
+-    try {
+-        if (toggle && localStorage.getItem(collapsedKey) === '1') {
+-            wrapper.classList.add('collapsed');
+-            toggle.setAttribute('aria-expanded', 'false');
+-            if (initialPositionSwitched && expandedLeft !== null) {
+-                wrapper.style.left = (expandedLeft + collapsedShift) + 'px';
+-            }
+-        }
+-    } catch (e) {}
++    var hookInstance = window.useFloatingFireState();
++    var reactRoot = window.ReactDOM.createRoot(container);
+ 
+-    function onPointerDown(clientX, clientY) {
+-        if (wrapper.classList.contains('collapsed')) {
+-            wrapper.classList.remove('collapsed');
+-            if (toggle) {
+-                toggle.setAttribute('aria-expanded', 'true');
+-            }
+-            if (initialPositionSwitched && expandedLeft !== null) {
+-                wrapper.style.left = expandedLeft + 'px';
++    if (DEBUG) {
++        console.debug('[FloatingFireStreak] init success');
++    }
++
++    function renderFloatingFire() {
++        var state = hookInstance.getState();
++        try {
++            var children = [
++                window.React.createElement(window.FloatingFireStreak, {
++                    state: state,
++                    containerId: 'floatingFireStreakLayer',
++                    onPlaybackError: hookInstance.reportPlaybackError
++                })
++            ];
++
++            if (hasModuleModals && state.modalOpen) {
++                var moduleBucket = state.modalModule >= 4 ? 4 : state.modalModule;
++                var modalComponent = null;
++
++                if (moduleBucket === 1) {
++                    modalComponent = window.Module1CelebrationModal;
++                } else if (moduleBucket === 2) {
++                    modalComponent = window.Module2CelebrationModal;
++                } else if (moduleBucket === 3) {
++                    modalComponent = window.Module3CelebrationModal;
++                } else if (moduleBucket >= 4) {
++                    modalComponent = window.Module4CelebrationModal;
++                }
++
++                if (modalComponent) {
++                    children.push(
++                        window.React.createElement(modalComponent, {
++                            key: 'module-modal-' + moduleBucket + '-' + String(state.openCycleKey || 0),
++                            isOpen: true,
++                            moduleCount: state.modalModule,
++                            openCycleKey: state.openCycleKey,
++                            onPlaybackError: hookInstance.reportPlaybackError,
++                            onClose: hookInstance.closeModal
++                        })
++                    );
++                }
+             }
+-            try { localStorage.setItem(collapsedKey, '0'); } catch (e) {}
+-        }
+ 
+-        dragging = true;
+-        wrapper.classList.add('dragging');
+-        var rect = getRect(wrapper);
+-        // If wrapper still uses right+transform, switch to left/top while preserving visual coords
+-        if (!initialPositionSwitched) {
+-            switchToLeftTop(rect.left, rect.top);
++            reactRoot.render(
++                window.React.createElement(
++                    window.React.Fragment,
++                    null,
++                    children[0],
++                    children[1] || null
++                )
++            );
++        } catch (e) {
++            console.error('[FloatingFireStreak] Render error:', e);
+         }
+-
+-        // compute offset from wrapper's top-left
+-        offsetX = clientX - wrapper.getBoundingClientRect().left;
+-        offsetY = clientY - wrapper.getBoundingClientRect().top;
+-
+-        // prevent text selection while dragging
+-        document.body.style.userSelect = 'none';
+-        document.body.style.webkitUserSelect = 'none';
+     }
+ 
+-    function onPointerMove(clientX, clientY) {
+-        if (!dragging) return;
+-        var elW = wrapper.offsetWidth;
+-        var elH = wrapper.offsetHeight;
+-        var newLeft = clientX - offsetX;
+-        var newTop = clientY - offsetY;
+-        var clamped = clampPosition(newLeft, newTop, elW, elH);
+-        wrapper.style.left = clamped.left + 'px';
+-        wrapper.style.top = clamped.top + 'px';
+-        expandedLeft = clamped.left;
++    function handleStateChange() {
++        renderFloatingFire();
+     }
+ 
+-    function onPointerUp() {
+-        if (!dragging) return;
+-        dragging = false;
+-        wrapper.classList.remove('dragging');
+-        document.body.style.userSelect = '';
+-        document.body.style.webkitUserSelect = '';
++    document.addEventListener('floatingFire:stateChange', handleStateChange);
++    renderFloatingFire();
++
++    // Sync initial module progress using authoritative onboarding count.
++    (function syncInitialModuleCount(retriesLeft) {
++        var canReadCount = typeof window.getOnboardingCompletedModulesCount === 'function';
++        if (!canReadCount) {
++            if (retriesLeft > 0) {
++                setTimeout(function () {
++                    syncInitialModuleCount(retriesLeft - 1);
++                }, 180);
++            } else if (DEBUG) {
++                console.debug('[FloatingFireStreak] getOnboardingCompletedModulesCount unavailable after retries');
++            }
++            return;
++        }
+ 
++        var completed = 0;
+         try {
+-            localStorage.setItem(posKey, JSON.stringify({
+-                left: expandedLeft !== null ? expandedLeft : parseInt(wrapper.style.left || 0, 10),
+-                top: parseInt(wrapper.style.top || 0, 10)
+-            }));
+-        } catch (e) {}
+-    }
+-
+-    // Mouse events
+-    wrapper.addEventListener('mousedown', function (ev) {
+-        // ignore clicks on toggle button
+-        if (toggle && (ev.target === toggle || toggle.contains(ev.target))) return;
+-        if (ev.button !== 0) return;
+-        ev.preventDefault();
+-        onPointerDown(ev.clientX, ev.clientY);
+-    });
+-
+-    document.addEventListener('mousemove', function (ev) {
+-        onPointerMove(ev.clientX, ev.clientY);
+-    });
+-
+-    document.addEventListener('mouseup', function () {
+-        onPointerUp();
+-    });
+-
+-    // Touch events
+-    wrapper.addEventListener('touchstart', function (ev) {
+-        // ignore touches on toggle button
+-        if (toggle && (ev.target === toggle || toggle.contains(ev.target))) return;
+-        var t = ev.touches[0];
+-        if (!t) return;
+-        ev.preventDefault();
+-        onPointerDown(t.clientX, t.clientY);
+-    }, { passive: false });
+-
+-    document.addEventListener('touchmove', function (ev) {
+-        if (!dragging) return;
+-        var t = ev.touches[0];
+-        if (!t) return;
+-        ev.preventDefault();
+-        onPointerMove(t.clientX, t.clientY);
+-    }, { passive: false });
+-
+-    document.addEventListener('touchend', function () {
+-        onPointerUp();
+-    });
+-
+-    // Keep toggle working and persist state
+-    if (toggle) {
+-        toggle.addEventListener('click', function (e) {
+-            e.preventDefault();
+-            e.stopPropagation();
+-            var collapsed = wrapper.classList.toggle('collapsed');
+-            toggle.setAttribute('aria-expanded', String(!collapsed));
+-
+-            if (initialPositionSwitched && expandedLeft !== null) {
+-                wrapper.style.left = (collapsed ? expandedLeft + collapsedShift : expandedLeft) + 'px';
++            completed = Number(window.getOnboardingCompletedModulesCount()) || 0;
++        } catch (err) {
++            if (DEBUG) {
++                console.debug('[FloatingFireStreak] failed to read onboarding module count', err);
+             }
++        }
+ 
+-            try { localStorage.setItem(collapsedKey, collapsed ? '1' : '0'); } catch (ee) {}
+-        });
+-    }
++        if (DEBUG) {
++            console.debug('[FloatingFireStreak] initial authoritative module count', completed);
++        }
+ 
+-    // Keep wrapper in viewport bounds after resize
+-    window.addEventListener('resize', function () {
+-        if (!initialPositionSwitched) return;
+-        var elW = wrapper.offsetWidth;
+-        var elH = wrapper.offsetHeight;
+-        var top = parseInt(wrapper.style.top || wrapper.getBoundingClientRect().top, 10);
+-        var baseLeft = expandedLeft !== null
+-            ? expandedLeft
+-            : parseInt(wrapper.style.left || wrapper.getBoundingClientRect().left, 10);
+-        var clamped = clampPosition(baseLeft, top, elW, elH);
+-        expandedLeft = clamped.left;
+-        wrapper.style.top = clamped.top + 'px';
+-        wrapper.style.left = (wrapper.classList.contains('collapsed')
+-            ? clamped.left + collapsedShift
+-            : clamped.left) + 'px';
++        document.dispatchEvent(new CustomEvent('onboarding:modulesUpdated', {
++            detail: { modulesCompleted: completed }
++        }));
++    }(3));
+ 
+-        try {
+-            localStorage.setItem(posKey, JSON.stringify({ left: clamped.left, top: clamped.top }));
+-        } catch (e) {}
++    window.addEventListener('beforeunload', function() {
++        if (hookInstance && hookInstance.cleanup) hookInstance.cleanup();
++        document.removeEventListener('floatingFire:stateChange', handleStateChange);
++        if (reactRoot && typeof reactRoot.unmount === 'function') {
++            reactRoot.unmount();
++        }
+     });
+-
+-    // Persist sane defaults once explicit positioning has started
+-    if (initialPositionSwitched && expandedLeft !== null) {
+-        try {
+-            localStorage.setItem(posKey, JSON.stringify({
+-                left: expandedLeft,
+-                top: parseInt(wrapper.style.top || 0, 10)
+-            }));
+-        } catch (e) {}
+-    }
+-
+-    // Sync aria-expanded if markup/classes were changed externally
+-    if (toggle) {
+-        toggle.setAttribute('aria-expanded', String(!wrapper.classList.contains('collapsed')));
+-    }
+-});
++})();
+ </script>
++<style>
++@keyframes floatingFireBob {
++    0% { transform: translateY(0); }
++    50% { transform: translateY(-8px); }
++    100% { transform: translateY(0); }
++}
++
++@keyframes celebrationAuraPulse {
++    0% { transform: scale(0.92); opacity: 0.45; }
++    50% { transform: scale(1.08); opacity: 0.95; }
++    100% { transform: scale(1.16); opacity: 0.18; }
++}
++</style>
+ {% endblock %}

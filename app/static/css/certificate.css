@@ -1,0 +1,449 @@
+/* certification-panel.css - flat single-section certificate layout */
+
+:root {
+  --cert-text: #1f2a44;
+  --cert-muted: #5b6c8d;
+  --cert-border: rgba(18, 24, 33, 0.08);
+  --cert-line: rgba(176, 145, 92, 0.35);
+  --cert-line-strong: rgba(176, 145, 92, 0.62);
+  --cert-doc-radius: 10px;
+  --cert-focus-ring: 0 0 0 3px rgba(30, 95, 220, 0.24);
+}
+
+.cert-panel,
+.cert-section {
+  width: 100%;
+  max-width: 1100px;
+  margin: 12px auto;
+  padding: 12px;
+  box-sizing: border-box;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+.cert-panel--empty {
+  min-height: 220px;
+  border: 1px solid var(--cert-border);
+  border-radius: 10px;
+  background: rgba(245, 246, 248, 0.48);
+  justify-content: center;
+  align-items: center;
+}
+
+.cert-empty {
+  width: 100%;
+  max-width: 460px;
+  text-align: center;
+}
+
+.cert-empty-icon {
+  display: grid;
+  place-items: center;
+  color: #1d7f3b;
+  margin-bottom: 10px;
+}
+
+.cert-empty-title {
+  margin: 0 0 8px;
+  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  color: #1c2a4d;
+}
+
+.cert-empty-message,
+.cert-empty-hint {
+  margin: 0;
+  color: #5e6f8f;
+  line-height: 1.5;
+}
+
+.cert-empty-hint {
+  margin-top: 4px;
+}
+
+.cert-header-bar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  border-bottom: 1px solid rgba(18, 24, 33, 0.07);
+  padding-bottom: 8px;
+}
+
+.cert-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.cert-success-icon {
+  width: 1.6rem;
+  height: 1.6rem;
+  min-width: 1.6rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(28, 125, 56, 0.14);
+  color: #1a7c38;
+  font-weight: 700;
+}
+
+.cert-header-text {
+  margin: 0;
+  color: var(--cert-text);
+  font-size: clamp(0.92rem, 1.4vw, 1.02rem);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.cert-wrapper {
+  width: 100%;
+  max-width: 1004px;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  overflow: visible;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  box-sizing: border-box;
+  margin: 0 auto;
+  min-width: 0;
+  position: relative;
+  height: 680px;
+}
+
+.cert-inner {
+  width: 980px;
+  height: 680px;
+  flex: 0 0 auto;
+  transform-origin: center center;
+  will-change: transform;
+  position: relative;
+  margin: 0;
+  top: auto;
+}
+
+.cert-scale-wrap {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  padding: 0 12px;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.cert-scale-inner {
+  width: 980px;
+  height: 680px;
+  transform-origin: center center;
+  will-change: transform;
+  position: relative;
+  margin: 0;
+  top: auto;
+}
+
+.cert-scale-inner,
+.cert-scale-inner > .cert-content,
+.cert-scale-inner .cert-document {
+  margin-top: 0;
+}
+
+.cert-content,
+.cert-img {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  min-height: 0;
+  display: block;
+  object-fit: contain;
+}
+
+.cert-canvas-scale,
+.cert-canvas-frame,
+.cert-document {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+}
+
+.cert-document {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 6px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.36), rgba(255, 255, 255, 0.2)),
+    repeating-linear-gradient(0deg, rgba(31, 42, 68, 0.012) 0, rgba(31, 42, 68, 0.012) 1px, transparent 1px, transparent 6px),
+    #f6f1e5;
+  border: 1px solid var(--cert-line-strong);
+  border-radius: var(--cert-doc-radius);
+  color: var(--cert-text);
+  padding: 23px 34px;
+  overflow: hidden;
+}
+
+.cert-document::after {
+  content: 'INNER SPARC';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  font-size: 76px;
+  letter-spacing: 0.22em;
+  color: rgba(31, 42, 68, 0.036);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.cert-document-top,
+.cert-header,
+.cert-body,
+.cert-details,
+.cert-document-footer {
+  position: relative;
+  z-index: 1;
+}
+
+.cert-document-top,
+.cert-header,
+.cert-body {
+  text-align: center;
+}
+
+.cert-logo {
+  display: block;
+  margin: 0 auto 6px;
+  height: 30px;
+  width: auto;
+  max-width: 130px;
+  object-fit: contain;
+}
+
+.cert-gold-divider {
+  width: min(68%, 520px);
+  height: 1px;
+  margin: 0 auto 7px;
+  background: linear-gradient(90deg, rgba(191, 154, 94, 0), rgba(191, 154, 94, 0.86), rgba(191, 154, 94, 0));
+}
+
+.cert-title {
+  margin: 0;
+  color: #1f2a44;
+  text-transform: uppercase;
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  font-size: 17px;
+  letter-spacing: 0.18em;
+  line-height: 1.3;
+}
+
+.cert-recipient-name {
+  margin: 0;
+  color: #17233d;
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  font-weight: 700;
+  font-size: 34px;
+  line-height: 1.2;
+}
+
+.cert-recipient-underline {
+  width: min(62%, 220px);
+  height: 1px;
+  margin: 5px auto 7px;
+  background: linear-gradient(90deg, rgba(191, 154, 94, 0), rgba(191, 154, 94, 0.85), rgba(191, 154, 94, 0));
+}
+
+.cert-body-text {
+  margin: 0;
+  color: #253250;
+  line-height: 1.48;
+  font-size: 15px;
+  max-width: 92%;
+  margin-inline: auto;
+}
+
+.cert-details {
+  margin: 3px 0 0;
+  padding-top: 7px;
+  border-top: 1px solid var(--cert-line);
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.cert-meta-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 0;
+}
+
+.cert-meta-divider {
+  background: rgba(176, 145, 92, 0.64);
+}
+
+.cert-meta-label {
+  margin: 0;
+  color: #4f607f;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-weight: 700;
+  font-size: 10px;
+}
+
+.cert-meta-value {
+  margin: 0;
+  color: #17233d;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.cert-document-footer {
+  margin-top: 3px;
+  display: flex;
+  justify-content: center;
+}
+
+.cert-signature-block {
+  text-align: center;
+  min-width: min(50%, 320px);
+}
+
+.cert-signature-line {
+  width: min(220px, 100%);
+  margin: 0 auto 4px;
+  border-top: 1px solid #2e3f62;
+}
+
+.cert-signature-name {
+  margin: 0;
+  color: #1c2947;
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  font-size: 16px;
+}
+
+.cert-signature-title {
+  margin: 1px 0 0;
+  color: #4f607f;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.cert-section .tpl1-foot {
+  margin-top: 10px;
+}
+
+.cert-section .tpl1-controls .tpl1-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--cert-focus-ring);
+}
+
+.cert-pdf-clone,
+.cert-pdf-clone * {
+  animation: none !important;
+  transition: none !important;
+}
+
+.cert-document {
+  position: relative;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  overflow: hidden;
+}
+
+.cert-document::after {
+  content: none;
+}
+
+.cert-template-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
+
+.cert-overlay-fields {
+  position: absolute;
+  left: 50%;
+  top: 62%;
+  transform: translate(-50%, -50%);
+  width: min(76%, 740px);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  z-index: 1;
+}
+
+.cert-recipient-name {
+  margin: 0;
+  width: 100%;
+  color: #1f2f53;
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, "Times New Roman", serif;
+  font-size: clamp(36px, 3.8vw, 50px);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+}
+
+.cert-description-text {
+  margin: 0;
+  width: min(88%, 660px);
+  color: #325f95;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(16px, 1.6vw, 22px);
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+@media (max-width: 480px) {
+  .cert-panel,
+  .cert-section {
+    padding: 8px;
+  }
+
+  .cert-scale-wrap {
+    padding: 8px;
+  }
+
+  .cert-section .tpl1-foot {
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: 980px) {
+  .cert-scale-wrap {
+    padding: 8px;
+  }
+}
+
+[data-theme='dark'] .cert-header-text,
+[data-theme='dark'] .tpl1-note {
+  color: rgba(240, 245, 255, 0.9);
+}

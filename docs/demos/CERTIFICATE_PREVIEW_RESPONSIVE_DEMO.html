@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Certificate Preview Responsive Demo</title>
+  <link rel="stylesheet" href="app/static/css/certification-panel.css" />
+  <style>
+    :root {
+      --demo-bg: #eef1f5;
+      --demo-text: #1f2a44;
+      --demo-muted: #5f6f8f;
+      --demo-border: #d9e1ec;
+      --demo-card: #ffffff;
+      --demo-shadow: 0 16px 30px rgba(18, 28, 45, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: radial-gradient(circle at 20% 0%, #f7f9fc, #eef1f5 62%);
+      color: var(--demo-text);
+      font-family: "Segoe UI", "Inter", system-ui, -apple-system, sans-serif;
+      padding: 24px;
+    }
+
+    .demo-shell {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      gap: 20px;
+    }
+
+    .demo-head {
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid var(--demo-border);
+      border-radius: 14px;
+      box-shadow: var(--demo-shadow);
+      padding: 16px 18px;
+    }
+
+    .demo-title {
+      margin: 0;
+      font-size: clamp(1.1rem, 1.5vw, 1.4rem);
+    }
+
+    .demo-sub {
+      margin: 0.4rem 0 0;
+      color: var(--demo-muted);
+      font-size: 0.94rem;
+      line-height: 1.5;
+    }
+
+    .demo-grid {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .demo-col {
+      background: var(--demo-card);
+      border: 1px solid var(--demo-border);
+      border-radius: 14px;
+      box-shadow: var(--demo-shadow);
+      padding: 14px;
+      min-width: 0;
+    }
+
+    .demo-col h2 {
+      margin: 0 0 0.2rem;
+      font-size: 1rem;
+    }
+
+    .demo-col p {
+      margin: 0 0 0.75rem;
+      font-size: 0.82rem;
+      color: var(--demo-muted);
+    }
+
+    .viewport {
+      width: 100%;
+      border: 1px solid #e3e9f2;
+      border-radius: 12px;
+      background: #f5f6f8;
+      overflow: auto;
+      padding: 10px;
+      margin: 0 auto;
+    }
+
+    .viewport--mobile-sm {
+      max-width: 320px;
+      min-height: 560px;
+    }
+
+    .viewport--mobile {
+      max-width: 375px;
+      min-height: 560px;
+    }
+
+    .viewport--tablet {
+      max-width: 768px;
+      min-height: 560px;
+    }
+
+    .viewport--desktop {
+      max-width: 1280px;
+      min-height: 560px;
+    }
+
+    .tpl1-btn {
+      border: 1px solid #ced8ea;
+      border-radius: 10px;
+      background: #ffffff;
+      color: #1d2b4f;
+      padding: 10px 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .tpl1-btn.primary {
+      background: #1f6feb;
+      border-color: #1f6feb;
+      color: #ffffff;
+    }
+
+    .demo-checklist {
+      background: #ffffff;
+      border: 1px solid var(--demo-border);
+      border-radius: 14px;
+      box-shadow: var(--demo-shadow);
+      padding: 16px 18px;
+    }
+
+    .demo-checklist h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1rem;
+    }
+
+    .demo-checklist ul {
+      margin: 0;
+      padding-left: 1rem;
+      color: var(--demo-muted);
+      line-height: 1.6;
+      font-size: 0.9rem;
+    }
+
+    .qa-box {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #d6deeb;
+      background: #f8fbff;
+      font-family: Consolas, "SFMono-Regular", Menlo, monospace;
+      font-size: 0.8rem;
+      line-height: 1.4;
+      color: #334466;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    @media (max-width: 1180px) {
+      .demo-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .viewport--tablet,
+      .viewport--desktop {
+        max-width: 100%;
+      }
+
+      .viewport--mobile-sm,
+      .viewport--mobile {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-shell">
+    <header class="demo-head">
+      <h1 class="demo-title">Premium Certificate Preview Panel Demo</h1>
+      <p class="demo-sub">Breakpoints rendered side by side for visual QA: mobile 320px and 375px, tablet 768px, and desktop 1280px.</p>
+    </header>
+
+    <section class="demo-grid" aria-label="Responsive breakpoints">
+      <article class="demo-col">
+        <h2>Mobile Narrow</h2>
+        <p>Viewport width 320px</p>
+        <div class="viewport viewport--mobile-sm">
+          <div id="demoMobile320"></div>
+        </div>
+      </article>
+
+      <article class="demo-col">
+        <h2>Mobile</h2>
+        <p>Viewport width 375px</p>
+        <div class="viewport viewport--mobile">
+          <div id="demoMobile375"></div>
+        </div>
+      </article>
+
+      <article class="demo-col">
+        <h2>Tablet</h2>
+        <p>Viewport width 768px</p>
+        <div class="viewport viewport--tablet">
+          <div id="demoTablet"></div>
+        </div>
+      </article>
+
+      <article class="demo-col">
+        <h2>Desktop</h2>
+        <p>Viewport width 1280px</p>
+        <div class="viewport viewport--desktop">
+          <div id="demoDesktop"></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="demo-checklist" aria-label="Quick checks">
+      <h3>Quick acceptance checks</h3>
+      <ul>
+        <li>Page-level horizontal scroll stays hidden; only wrapper-level horizontal scroll is allowed when needed.</li>
+        <li>Verify extra narrow widths (320px and 375px) with browser responsive mode.</li>
+        <li>Certificate remains centered and proportional in each viewport panel.</li>
+        <li>No vertical clipping and no excessive empty space below certificate.</li>
+        <li>Actions and footer remain inside one panel container at every breakpoint.</li>
+        <li>Only Prev and Download buttons are visible in the footer.</li>
+        <li>No fullscreen or share controls are present.</li>
+        <li>Download and Prev buttons remain clickable in all breakpoints.</li>
+        <li>Downloaded PDF/PNG is high-resolution (300+ DPI) suitable for print.</li>
+        <li>Export size matches certificate pixel bounds exactly with no extra whitespace.</li>
+        <li>Console QA metrics show visual/canvas/cropped dimensions and DPI target.</li>
+      </ul>
+      <div id="qaMetrics" class="qa-box">QA metrics will appear here after Download is clicked.</div>
+    </section>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="app/static/js/certification-panel.js"></script>
+  <script>
+    (function renderDemoPanels() {
+      var demoData = {
+        fullName: 'Chrishawne Bertillo',
+        programTitle: 'Employee Onboarding Program',
+        completionDate: 'March 28, 2026',
+        certificateId: 'OB-2026-08852',
+        issuedBy: 'Gabriel V. Libacao Jr.',
+        issuedTitle: 'CEO / Founder',
+        logoUrl: 'app/static/images/innersparc.png'
+      };
+
+      function mount(targetId) {
+        var panel = new window.CertificationPanel({
+          completed: true,
+          certificateData: demoData,
+          onDownload: async function (cert, context) {
+            var certId = cert && cert.certificateId ? String(cert.certificateId) : 'certificate';
+            var safeCertId = certId.replace(/[^a-zA-Z0-9_-]+/g, '-');
+            var fileName = 'Certificate-' + safeCertId + '.pdf';
+            var certTarget = context && context.element ? context.element : '.cert-inner';
+            var helper = context && typeof context.downloadCertificateAsPdf === 'function'
+              ? context.downloadCertificateAsPdf
+              : window.downloadCertificateAsPdf;
+
+            await helper(certTarget, fileName, {
+              targetDPI: 300,
+              scaleCap: 3.5,
+              expandCrop: 0
+            });
+
+            var qaEl = document.getElementById('qaMetrics');
+            if (qaEl && window.__CERT_EXPORT_QA_LAST) {
+              qaEl.textContent = JSON.stringify(window.__CERT_EXPORT_QA_LAST, null, 2);
+            }
+
+            return true;
+          }
+        });
+
+        var target = document.getElementById(targetId);
+        if (!target) {
+          return;
+        }
+
+        target.innerHTML = panel.render();
+      }
+
+      mount('demoMobile320');
+      mount('demoMobile375');
+      mount('demoTablet');
+      mount('demoDesktop');
+    })();
+  </script>
+</body>
+</html>

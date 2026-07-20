@@ -1,0 +1,956 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Inner SPARC | Template Beta{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/templateBeta.css' %}?v=61">
+<link rel="stylesheet" href="{% static 'css/overview.css' %}?v=1">
+<link rel="stylesheet" href="{% static 'css/doc-validator.css' %}?v=1">
+<link rel="stylesheet" href="{% static 'js/components/OnboardingQuizPanel.css' %}?v=7">
+    <link rel="stylesheet" href="{% static 'css/certification-panel.css' %}?v=19">
+<link rel="stylesheet" href="{% static 'css/quiz-panel.css' %}?v=8">
+<link rel="stylesheet" href="{% static 'css/panel-buttons.css' %}?v=1">
+<link rel="stylesheet" href="{% static 'css/progress-path.css' %}?v=2">
+<link rel="stylesheet" href="{% static 'css/welcome-video-player.css' %}?v=13">
+{% endblock %}
+
+{% block content %}
+<div class="tpl1" id="tpl1Root" data-first-step-video="{% static 'images/videoplayback.mp4' %}" data-user-id="{{ user.id|default:''|escape }}" data-user-name="{{ user.get_full_name|default:user.username|default:'Agent'|escape }}" data-cert-program-title="Agent Foundation" data-cert-description="Has successfully completed the Agent Foundation program, demonstrating commitment to financial awareness, responsible decision-making, and personal growth. We appreciate the dedication and enthusiasm throughout each step of the learning journey." data-cert-template-url="{% static 'images/Certificate_completion.png' %}" data-cert-issued-by="Gabriel V. Libacao Jr." data-cert-issued-title="CEO / Founder" data-cert-logo-url="{% static 'images/innersparc.png' %}" data-user-icon-url="{% if profile_photo_2x2_url %}{{ profile_photo_2x2_url|escape }}{% else %}{% static 'images/Sir-Gab.png' %}{% endif %}" data-default-user-icon-url="{% static 'images/Sir-Gab.png' %}" data-completed-steps="{{ onboarding_completed_steps|default:'[]' }}" data-account-first-name="{{ user.first_name|default:''|escape }}" data-account-last-name="{{ user.last_name|default:''|escape }}" data-account-email="{{ user.email|default:''|escape }}" data-account-phone="{{ profile_phone_number|default:''|escape }}" data-account-birthdate="{{ profile_birthdate|default:''|escape }}" data-account-gender="{{ profile_gender|default:''|escape }}" data-onboarding-data-url="{{ onboarding_profile_data_url|escape }}" data-dev-unlock-all="{{ ONBOARDING_DEV_UNLOCK_ALL|lower }}" data-doc-detection-enabled="{{ ONBOARDING_DOC_DETECTION_ENABLED|lower }}">
+    <form class="tpl1-hidden-form" aria-hidden="true">{% csrf_token %}</form>
+
+
+    <div class="tpl1-app" id="tpl1AppShell">
+        <aside class="tpl1-side" id="tpl1Sidebar" aria-label="Onboarding sidebar">
+            <div class="tpl1-side-header">
+                <button class="tpl1-side-toggle" type="button" id="tpl1SideToggle" aria-controls="tpl1Sidebar" aria-label="Collapse sidebar" aria-expanded="true">
+                    <span class="bars" aria-hidden="true"></span>
+                </button>
+                <div class="tpl1-brand">
+                    <div class="tpl1-brand-copy">
+                        <h2>Onboarding Navigator</h2>
+                        <p>Complete all required steps to unlock access.</p>
+                        <div class="tpl1-brand-pills">
+                            <span class="tpl1-brand-badge" id="tpl1StepCountBadge">10 steps total</span>
+                            <span class="tpl1-brand-badge tpl1-brand-badge-soft" id="tpl1StepsLeftBadge">0 steps left</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="tpl1-side-nav" role="navigation" aria-label="Main navigation">
+                <div class="tpl1-side-scroll">
+                    <div class="tpl1-groups" id="tplBetaGroups"></div>
+                </div>
+            </nav>
+
+            <footer class="tpl1-side-footer" id="tpl1SideFooter" aria-label="Profile actions">
+                <section class="tpl1-side-profile tpl1-group" id="tpl1SideProfile" aria-label="Profile actions">
+                    <button class="tpl1-side-profile-head tpl1-group-btn" type="button" id="tpl1SideProfileToggle" aria-expanded="false" aria-controls="tpl1SideProfileActions" aria-label="Toggle profile actions" title="Profile actions">
+                        <span class="tpl1-side-avatar-wrap" aria-hidden="true">
+                            <span class="tpl1-side-avatar" id="tpl1SideAvatar">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <circle cx="12" cy="8" r="3.2"></circle>
+                                    <path d="M5.5 19a6.5 6.5 0 0 1 13 0"></path>
+                                </svg>
+                            </span>
+                            <span class="tpl1-side-status-dot" aria-hidden="true"></span>
+                        </span>
+                        <span class="tpl1-meta">
+                            <strong id="tpl1SideUserName">{{ user.get_full_name|default:user.username|default:'Agent'|escape }}</strong>
+                            <span>{{ user.email|default:'Account'|escape }}</span>
+                        </span>
+                        <span class="tpl1-chevron" aria-hidden="true"></span>
+                    </button>
+                    <div class="tpl1-side-profile-actions tpl1-steps" id="tpl1SideProfileActions" role="menu" aria-label="Profile actions" hidden>
+                        <button class="tpl1-side-profile-action tpl1-step" type="button" role="menuitem" id="tpl1AccountSettings" aria-label="Account Settings" title="Account Settings">
+                            <span class="tpl1-step-inner">
+                                <span class="tpl1-side-profile-action-icon tpl1-icon" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33h0A1.65 1.65 0 0 0 10 3.09V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                                    </svg>
+                                </span>
+                                <span class="tpl1-side-profile-action-label tpl1-step-label">Account Settings</span>
+                            </span>
+                        </button>
+                        <button class="tpl1-side-profile-action tpl1-step" type="button" role="menuitem" id="tpl1SignOut" aria-label="Logout" title="Logout">
+                            <span class="tpl1-step-inner">
+                                <span class="tpl1-side-profile-action-icon tpl1-icon" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                        <polyline points="16 17 21 12 16 7"></polyline>
+                                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                                    </svg>
+                                </span>
+                                <span class="tpl1-side-profile-action-label tpl1-step-label">Logout</span>
+                            </span>
+                        </button>
+                    </div>
+                </section>
+            </footer>
+        </aside>
+
+        <main class="tpl1-main">
+            <header class="tpl1-top">
+                <div class="tpl1-top-row">
+                    <div class="tpl1-top-left">
+                        <div class="tpl1-top-brand">
+                            <img class="tpl1-top-brand-icon" src="{% static 'images/innersparc.png' %}" alt="Inner SPARC Logo" />
+                            <div class="tpl1-title-block">
+                                <h1>Inner SPARC Realty Corporation</h1>
+                                <p>Step-by-step workflow</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tpl1-actions">
+                        <span class="tpl1-chip tpl1-chip-inline" id="tplBetaCurrent">Current: Law of the Iceberg</span>
+                        <button class="tpl1-toggle" type="button" id="tpl1Theme" aria-label="Enable dark mode" title="Toggle theme">
+                            <svg class="tpl1-theme-icon moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"></path>
+                            </svg>
+                            <svg class="tpl1-theme-icon sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <circle cx="12" cy="12" r="4"></circle>
+                                <path d="M12 2v2"></path>
+                                <path d="M12 20v2"></path>
+                                <path d="m4.93 4.93 1.41 1.41"></path>
+                                <path d="m17.66 17.66 1.41 1.41"></path>
+                                <path d="M2 12h2"></path>
+                                <path d="M20 12h2"></path>
+                                <path d="m6.34 17.66-1.41 1.41"></path>
+                                <path d="m19.07 4.93-1.41 1.41"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <section class="tpl1-body">
+                <section class="tpl1-panel" aria-live="polite">
+                    <section class="tpl1-progress" aria-label="Progress">
+                        <div class="tpl1-progress-head">
+                            <strong>Task Completion</strong>
+                            <span id="tplBetaPercentText">0% complete</span>
+                        </div>
+                        <div class="tpl1-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="tplBetaTrack">
+                            <div class="tpl1-fill" id="tplBetaFill"></div>
+                        </div>
+                    </section>
+                    <div class="tpl1-form-divider"></div>
+                    <section id="tplBetaPanel"></section>
+                </section>
+            </section>
+        </main>
+    </div>
+
+    <button class="tpl1-mobile-backdrop" type="button" id="tpl1MobileBackdrop" aria-label="Close steps panel" hidden></button>
+
+    <div class="tpl1-modal" id="tpl1AccountModal" role="dialog" aria-modal="true" aria-labelledby="tpl1AccountModalTitle" hidden>
+        <button class="tpl1-modal-backdrop" type="button" id="tpl1AccountBackdrop" aria-label="Close account settings"></button>
+        <section class="tpl1-modal-card">
+            <header class="tpl1-modal-head">
+                <div>
+                    <h3 id="tpl1AccountModalTitle">Account Profile</h3>
+                    <p>Update your account details below.</p>
+                </div>
+                <button class="tpl1-modal-close" type="button" id="tpl1AccountClose" aria-label="Close account settings">&times;</button>
+            </header>
+            <div class="tpl1-modal-body">
+                <form method="post" action="/portal-account/update/" class="tpl1-form-card" id="tpl1AccountForm" novalidate>
+                    {% csrf_token %}
+                    <div class="tpl1-profile-head tpl1-account-avatar-head">
+                        <div class="tpl1-avatar-wrap">
+                            <img class="tpl1-profile-photo" id="tpl1AccountAvatarImage" src="{% if profile_photo_2x2_url %}{{ profile_photo_2x2_url|escape }}{% else %}{% static 'images/Sir-Gab.png' %}{% endif %}" alt="Profile avatar" loading="lazy" decoding="async" />
+                            <button class="tpl1-avatar-edit" type="button" id="tpl1AccountAvatarEdit" aria-label="Upload avatar image" title="Upload avatar image">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                    <circle cx="12" cy="13" r="4"></circle>
+                                </svg>
+                            </button>
+                        </div>
+                        <input type="file" id="tpl1AccountAvatarInput" accept=".jpg,.jpeg,.png,image/jpeg,image/png" hidden>
+                    </div>
+                    <div class="tpl1-field-msg" id="tpl1AccountAvatarError" aria-live="polite"></div>
+                    <div class="tpl1-card-grid">
+                        <input class="tpl1-field" type="text" name="first_name" placeholder="First Name" value="{{ user.first_name|default:'' }}">
+                        <input class="tpl1-field" type="text" name="last_name" placeholder="Last Name" value="{{ user.last_name|default:'' }}">
+                        <input class="tpl1-field tpl1-field-full" type="email" name="email" placeholder="Email" value="{{ user.email|default:'' }}">
+                        <div class="tpl1-phone-unified tpl1-field-group tpl1-field-full" id="tpl1PhoneUnified" data-default-dial="+63" role="group" aria-label="Mobile number">
+                            <button id="tpl1PhoneCountryBtn" type="button" class="tpl1-phone-country" aria-haspopup="listbox" aria-expanded="false" aria-controls="tpl1PhoneCountryList">
+                                <span class="tpl1-flag">🇵🇭</span>
+                                <span class="tpl1-code">+63</span>
+                                <span class="tpl1-chevron" aria-hidden="true">▾</span>
+                            </button>
+                            <div class="tpl1-phone-divider" aria-hidden="true"></div>
+                            <div class="tpl1-phone-input-wrap">
+                                <input id="tpl1AccountPhone" name="phone_number" class="tpl1-field tpl1-phone-input" type="tel" inputmode="tel" placeholder="9XXXXXXXXX" value="{{ profile_phone_number|default:'' }}" aria-label="Mobile number" />
+                            </div>
+
+                            <div id="tpl1PhoneCountryList" class="tpl1-phone-country-list" role="listbox" aria-hidden="true" tabindex="-1">
+                                <button type="button" role="option" class="country-option" data-code="+63" data-iso="PH" aria-selected="true"><span class="flag">🇵🇭</span><span class="name">Philippines</span><span class="dial">+63</span></button>
+                                <button type="button" role="option" class="country-option" data-code="+1" data-iso="US" aria-selected="false"><span class="flag">🇺🇸</span><span class="name">United States</span><span class="dial">+1</span></button>
+                                <button type="button" role="option" class="country-option" data-code="+44" data-iso="GB" aria-selected="false"><span class="flag">🇬🇧</span><span class="name">United Kingdom</span><span class="dial">+44</span></button>
+                            </div>
+                        </div>
+                        <div class="tpl1-field-msg" id="tpl1AccountPhoneError" aria-live="polite"></div>
+                        <input class="tpl1-field" id="tpl1AccountBirthdate" type="date" name="birthdate" value="{{ profile_birthdate|default:'' }}" aria-label="Birthdate" />
+                        <select class="tpl1-field" id="tpl1AccountGender" name="gender" aria-label="Gender">
+                            <option value="">Select Gender</option>
+                            <option value="male" {% if profile_gender == 'male' %}selected{% endif %}>Male</option>
+                            <option value="female" {% if profile_gender == 'female' %}selected{% endif %}>Female</option>
+                            <option value="prefer_not_to_say" {% if profile_gender == 'prefer_not_to_say' %}selected{% endif %}>Prefer not to say</option>
+                        </select>
+                        <div class="tpl1-field-msg" id="tpl1AccountBirthdateError" aria-live="polite"></div>
+                        <div class="tpl1-field-msg" id="tpl1AccountGenderError" aria-live="polite"></div>
+                    </div>
+                    <div class="tpl1-foot tpl1-foot-flat">
+                        <span class="tpl1-note tpl1-save-msg" id="tpl1AccountSaveMessage" aria-live="polite">Saved.</span>
+                        <div class="tpl1-controls">
+                            <button class="tpl1-btn primary" type="submit">Save Changes</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <div class="tpl1-modal" id="tpl1VideoQuizModal" role="dialog" aria-modal="true" aria-labelledby="tpl1VideoQuizTitle" aria-hidden="true" hidden>
+        <button class="tpl1-modal-backdrop" type="button" id="tpl1VideoQuizBackdrop" aria-label="Close quiz modal"></button>
+        <section class="tpl1-modal-card tpl1-video-quiz-card">
+            <header class="tpl1-modal-head tpl1-video-quiz-head">
+                <div>
+                    <h3 id="tpl1VideoQuizTitle">Agent Readiness Quiz</h3>
+                    <p>Complete the quiz to unlock the next training step.</p>
+                </div>
+                <button class="tpl1-modal-close" type="button" id="tpl1VideoQuizClose" aria-label="Close quiz modal">&times;</button>
+            </header>
+            <div class="tpl1-modal-body tpl1-video-quiz-body" id="tpl1VideoQuizRoot"></div>
+        </section>
+    </div>
+
+    <div class="tpl1-modal tpl1-about-modal" id="tpl1AboutModal" role="dialog" aria-modal="true" aria-labelledby="tpl1AboutModalTitle" aria-hidden="true" hidden>
+        <button class="tpl1-modal-backdrop" type="button" id="tpl1AboutBackdrop" aria-label="Close Inner SPARC details"></button>
+        <section class="tpl1-modal-card tpl1-about-modal-card">
+            <header class="tpl1-modal-head tpl1-about-modal-head">
+                <div>
+                    <p class="tpl1-about-kicker">Who We Are</p>
+                    <h3 id="tpl1AboutModalTitle">Inner SPARC Realty Corporation</h3>
+                    <p>Built on discipline, systems, and people-first execution.</p>
+                </div>
+                <button class="tpl1-modal-close" type="button" id="tpl1AboutClose" aria-label="Close Inner SPARC details">&times;</button>
+            </header>
+            <div class="tpl1-modal-body tpl1-about-modal-body">
+                <section class="tpl1-about-hero" aria-label="Inner SPARC team overview">
+                    <img class="tpl1-about-team-image" src="{% static 'images/Inner_Team.png' %}" alt="Inner SPARC team" loading="lazy" />
+                    <div class="tpl1-about-hero-copy">
+                        <h4>Developing trusted communities, one disciplined system at a time.</h4>
+                        <p>Inner SPARC aligns strategy, operations, and people development so every team member can deliver consistent value to clients and stakeholders.</p>
+                        <div class="tpl1-about-pill-row" aria-label="Key strengths">
+                            <span class="tpl1-about-pill">Service-Driven Culture</span>
+                            <span class="tpl1-about-pill">Operational Excellence</span>
+                            <span class="tpl1-about-pill">Leadership Development</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="tpl1-about-grid" aria-label="Inner SPARC principles">
+                    <article class="tpl1-about-point">
+                        <h5>Mission Focus</h5>
+                        <p>We build and scale teams that serve with clarity, accountability, and measurable execution.</p>
+                    </article>
+                    <article class="tpl1-about-point">
+                        <h5>How We Operate</h5>
+                        <p>Our workflows are designed to be repeatable, trainable, and resilient across growth stages.</p>
+                    </article>
+                    <article class="tpl1-about-point">
+                        <h5>Why Onboarding Matters</h5>
+                        <p>Onboarding is where standards are formed, confidence is built, and long-term performance begins.</p>
+                    </article>
+                </section>
+            </div>
+        </section>
+    </div>
+
+    <div class="tpl1-content-templates" aria-hidden="true">
+        <template id="tpl1OverviewAboutTemplate">
+            <div class="tpl1-overview-stack" aria-label="Overview content">
+                <section class="tpl1-overview-hero" aria-labelledby="betaAboutInnerSparcTitle">
+                    <div class="tpl1-overview-hero-copy">
+                        <p class="tpl1-overview-kicker">Build Better With Proper Systems</p>
+                        <h3 id="betaAboutInnerSparcTitle">Inner SPARC Realty Corporation</h3>
+                        <p>We build communication and high-performing teams through clear systems, practices training, and connected community.</p>
+                        <div class="tpl1-overview-proof-list" aria-label="Overview benefits">
+                            <span>Clear Roadmap</span>
+                            <span>Faster Team Readiness</span>
+                            <span>Consistent Results</span>
+                        </div>
+                    </div>
+                    <div class="tpl1-overview-hero-icon" aria-label="Inner SPARC brand">
+                        <img src="{% static 'images/innersparc.png' %}" alt="Inner SPARC logo" loading="lazy" />
+                        <p class="tpl1-overview-hero-note">Trusted onboarding foundation for every new team member.</p>
+                    </div>
+                </section>
+
+                <section class="tpl1-overview-challenge" aria-labelledby="betaChallengeTitle">
+                    <h3 id="betaChallengeTitle">Let me ask you something...</h3>
+                    <p class="tpl1-overview-challenge-lead">Losing deals because agents aren't ready fast enough?</p>
+                    <div class="tpl1-overview-challenge-list" aria-label="Common challenges">
+                        <div class="tpl1-overview-challenge-item">Spending hours manually onboarding each new agent?</div>
+                        <div class="tpl1-overview-challenge-item">Dealing with inconsistent training across your team?</div>
+                        <div class="tpl1-overview-challenge-item">Losing deals because agents aren't ready fast enough?</div>
+                        <div class="tpl1-overview-challenge-item">Drowning in paperwork and compliance documentation?</div>
+                    </div>
+                    <p class="tpl1-overview-challenge-footnote">If yes... <strong>you're not alone.</strong></p>
+                    <p class="tpl1-overview-challenge-subtitle">Manual onboarding is killing your growth potential.</p>
+                </section>
+
+                <section class="tpl1-overview-stats" aria-label="Overview metrics">
+                    <div class="tpl1-stat-card">
+                        <strong>500+</strong>
+                        <span>Agents Onboarded</span>
+                    </div>
+                    <div class="tpl1-stat-card">
+                        <strong>92%</strong>
+                        <span>Faster Time-to-Close</span>
+                    </div>
+                    <div class="tpl1-stat-card">
+                        <strong>₱8.2M</strong>
+                        <span>Revenue Generated</span>
+                    </div>
+                </section>
+
+                <section class="tpl1-overview-features" aria-labelledby="betaFeaturesTitle">
+                    <p class="tpl1-overview-features-subtitle">Three focused systems that help you reach success with confidence.</p>
+                    <h3 id="betaFeaturesTitle">What We Do</h3>
+                    <div class="tpl1-overview-feature-grid">
+                        <article class="tpl1-feature-card">
+                            <div class="tpl1-feature-icon">◷</div>
+                            <p class="tpl1-feature-metric">83% time saved</p>
+                            <h4>10x Faster Onboarding</h4>
+                            <p>Transform weeks into days. Get your agents selling faster than ever before.</p>
+                        </article>
+                        <article class="tpl1-feature-card">
+                            <div class="tpl1-feature-icon">◎</div>
+                            <p class="tpl1-feature-metric">100% consistency</p>
+                            <h4>Zero Training Gaps</h4>
+                            <p>Every agent gets the same world-class training. No shortcuts, no inconsistencies.</p>
+                        </article>
+                        <article class="tpl1-feature-card">
+                            <div class="tpl1-feature-icon">↗</div>
+                            <p class="tpl1-feature-metric">3x faster ROI</p>
+                            <h4>Instant Productivity</h4>
+                            <p>Agents start generating revenue from day one. No waiting, no ramp-up period.</p>
+                        </article>
+                        <article class="tpl1-feature-card">
+                            <div class="tpl1-feature-icon">◉</div>
+                            <p class="tpl1-feature-metric">Zero violations</p>
+                            <h4>Built-in Compliance</h4>
+                            <p>Automated documentation and compliance checks. Sleep easy knowing everything is covered.</p>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="tpl1-overview-journey" aria-labelledby="betaJourneyTitle">
+                    <div class="tpl1-journey-content">
+                        <p class="tpl1-journey-label">Proven system</p>
+                        <h3 id="betaJourneyTitle">From Application to <span>First Sale</span></h3>
+                        <ol>
+                            <li><span class="tpl1-journey-step-index">1</span><span>Automated application & background check</span></li>
+                            <li><span class="tpl1-journey-step-index">2</span><span>AI-powered training modules & assessments</span></li>
+                            <li><span class="tpl1-journey-step-index">3</span><span>Live mentor matching & shadowing</span></li>
+                            <li><span class="tpl1-journey-step-index">4</span><span>First deal support & celebration</span></li>
+                        </ol>
+                    </div>
+                    <div class="tpl1-journey-metrics">
+                        <article class="tpl1-journey-metric-card support-card">
+                            <div class="tpl1-metric-icon metric-support" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Support Access icon">
+                                    <path d="M10 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"></path>
+                                    <path d="M18 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"></path>
+                                    <path d="M3.8 19a6.2 6.2 0 0 1 12.4 0"></path>
+                                    <path d="M14.8 19a4.2 4.2 0 0 1 6-2.9"></path>
+                                </svg>
+                            </div>
+                            <strong>24/7</strong>
+                            <span>Support Access</span>
+                        </article>
+                        <article class="tpl1-journey-metric-card deal-card">
+                            <div class="tpl1-metric-icon metric-deal" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="To First Deal icon">
+                                    <path d="M13 2 5 14h6l-1 8 9-13h-6l0-7z"></path>
+                                </svg>
+                            </div>
+                            <strong>72hrs</strong>
+                            <span>To First Deal</span>
+                        </article>
+                        <article class="tpl1-journey-metric-card wide commission-card">
+                            <div class="tpl1-metric-icon metric-commission" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Avg. First Month Commission icon">
+                                    <path d="M4 19V5"></path>
+                                    <path d="M4 19h16"></path>
+                                    <path d="M8 15v-4"></path>
+                                    <path d="M12 15V9"></path>
+                                    <path d="M16 15V6"></path>
+                                </svg>
+                            </div>
+                            <strong>₱215,000</strong>
+                            <span>Avg. First Month Commission</span>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="tpl1-overview-cta" aria-label="CTA Section">
+                    <h3>Ready to Transform Your Onboarding?</h3>
+                    <p>Join hundreds of teams who've automated their way to faster growth and happier agents.</p>
+                    <h2 class="tpl1-overview-cta-line">Let's Start Your Journey Now!</h2>
+                </section>
+            </div>
+        </template>
+
+        <!-- TEST OVERRIDE -->
+        <div id="welcome-orientation-video" data-video-src="{% static 'Garcia Module11.mp4' %}" data-thumbnail-src="{% static 'images/thumb-welcome-orientation-portrait.svg' %}"></div>
+        <!-- VIDEO LOOM: parent content map (slugified title ids) -->
+        <div id="terminologies-tcp-vs-tsp" data-video-src="https://drive.google.com/file/d/1RVV6Axi-jIMUxzftyHHKvOhmR7QgfBVt/view?usp=drive_link"></div>
+        <div id="650-homes" data-video-src="https://drive.google.com/file/d/1m3nzHSzhWdxNKuE9jnjgCqAC_wPf0OiK/view?usp=drive_link"></div>
+        <div id="profriends" data-video-src="https://drive.google.com/file/d/16J-b1pGrynCO2feZP1P4wOXAXTzfBSb6/view?usp=drive_link"></div>
+        <div id="my-citihomes" data-video-src="https://drive.google.com/file/d/1QDzTvm9-rguFTYyHHiNecjK5oyJscqFy/view?usp=drive_link"></div>
+        <div id="homemark" data-video-src="https://drive.google.com/file/d/19lCrPZ_tAXgTfk6OddFAOp2QWGiATyzQ/view?usp=drive_link"></div>
+        <div id="instruction-to-team-leader" data-video-src="/portal-onboarding/video-proxy/?file_id=1O1U6RpzJ8kHmFuEvd3TzhTKljIwqqNNw"></div>
+        <div id="intro-to-participants" data-video-src="/portal-onboarding/video-proxy/?file_id=1EMhhAIY4SMuTsC13O16pluM68tdbNGsC"></div>
+        <div id="law-of-the-iceberg" data-video-src="/portal-onboarding/video-proxy/?file_id=1j6uQ1SAuI7krmvdhJ7FSb70Rw5paQasb"></div>
+        <div id="law-of-the-summit" data-video-src="/portal-onboarding/video-proxy/?file_id=1chic1NgoCiM4ldO-ckUYIdj2_AvJvaG2"></div>
+        <div id="law-of-the-shareholder" data-video-src="/portal-onboarding/video-proxy/?file_id=1KSiJuvjznS8_3B3rCT8Ls5uohHcXqUA0"></div>
+        <div id="m-h-s" data-video-src="/portal-onboarding/video-proxy/?file_id=1R7Z6r319ppE9E0FTtMiq-xv8ieInvhKJ"></div>
+        <div id="develop-your-kse" data-video-src="/portal-onboarding/video-proxy/?file_id=18CRTmrcgY5GKv_Tx1zw2I1gYU_J3FEtc"></div>
+        <div id="mindset-1-youre-not-poor" data-video-src="/portal-onboarding/video-proxy/?file_id=1mzyocFYm5V6PUIQ7dgvaZAsuDIajSJ8F"></div>
+        <div id="mindset-2-the-philippines-is-rich" data-video-src="/portal-onboarding/video-proxy/?file_id=11UL68piMMkTpOPr-fxNaW_lelAnxG6yG"></div>
+        <div id="mindset-3-pinoys-are-rich" data-video-src="/portal-onboarding/video-proxy/?file_id=1xR6cWK-uydGT-WcNfT4VQR2eBxwd0mLr"></div>
+        <div id="mindset-4-strangers-friends" data-video-src="/portal-onboarding/video-proxy/?file_id=1WAtoHVq3O18_VXPAaSr-9dctAeGgyDh3"></div>
+        <div id="mindset-5-we-have-more-than-enough" data-video-src="/portal-onboarding/video-proxy/?file_id=1EM9JUH5kC-qTbXkkVno8ArKab_uNWBis"></div>
+        <div id="wheres-the-master-key" data-video-src="/portal-onboarding/video-proxy/?file_id=1BAg43NGMSCB9nlZw3zeGQO84YnJKRDa5"></div>
+        <div id="tell-yourself-a-lie" data-video-src="/portal-onboarding/video-proxy/?file_id=1yekDAfjlTlrZOE_gYI9eJ7cju804CJTs"></div>
+        <div id="gutom-ka" data-video-src="/portal-onboarding/video-proxy/?file_id=1STQpsgIQrjcuir2v3i9K4szhGUqmlk_Q"></div>
+        <div id="lost-gold" data-video-src="/portal-onboarding/video-proxy/?file_id=12abvJENHCunj3IiYNRbMC_336-NVnArL"></div>
+        <div id="dont-overcomplicate" data-video-src="/portal-onboarding/video-proxy/?file_id=1gij4bOM1uFX78MW3dpg158IN5R8OF2GS"></div>
+        <div id="be-like-spotify" data-video-src="/portal-onboarding/video-proxy/?file_id=1w8RXtaCP5zLLBVstyo3Pf1Dy3ckEi3_W"></div>
+        <div id="deathbed" data-video-src="/portal-onboarding/video-proxy/?file_id=1bOn2Jxg0Hw3_bBoj72DgwTx8NsNLXD8I"></div>
+        <div id="eyes-on-the-prize" data-video-src="/portal-onboarding/video-proxy/?file_id=1xoJ_VJC2cI1PLl20oekdVK2C6gVxdbdO"></div>
+        <div id="keep-a-track-record" data-video-src="/portal-onboarding/video-proxy/?file_id=19-SC70y5_zu64BALgkXHNmS3gvqEYzr8"></div>
+        <div id="pocket-library" data-video-src="/portal-onboarding/video-proxy/?file_id=1HesLaocvspT0BYYjiZvTYK0ZKUGB8955"></div>
+        <div id="push-your-buttons" data-video-src="/portal-onboarding/video-proxy/?file_id=1J0Uli1elwbBVjQgOtr7kMi_jSV9tGJkl"></div>
+        <div id="sweat-in-peace" data-video-src="/portal-onboarding/video-proxy/?file_id=1XNIrtMYYSADfiES9o2kVJF4cICKDLNOX"></div>
+        <div id="welcome-the-unexpected" data-video-src="/portal-onboarding/video-proxy/?file_id=1pMbY2id16kJSFTM4CGSBTbDi3UR97PVp"></div>
+    </div>
+</div>
+
+<button class="chatbot-trigger" type="button" id="chatbotTrigger" aria-label="Open chat assistant">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M8 18.5H7a3.5 3.5 0 0 1-3.5-3.5V8A3.5 3.5 0 0 1 7 4.5h10A3.5 3.5 0 0 1 20.5 8v7a3.5 3.5 0 0 1-3.5 3.5h-4.2L9 21.5v-3z"></path>
+        <circle cx="9" cy="11.5" r="0.95" fill="currentColor" stroke="none"></circle>
+        <circle cx="12" cy="11.5" r="0.95" fill="currentColor" stroke="none"></circle>
+        <circle cx="15" cy="11.5" r="0.95" fill="currentColor" stroke="none"></circle>
+    </svg>
+    <span class="chatbot-trigger-label">Chat with us</span>
+</button>
+
+<div class="chatbot-overlay" id="chatbotOverlay" aria-hidden="true">
+    <div class="chatbot-modal" id="chatbotModal" role="dialog" aria-modal="true" aria-labelledby="chatbotTitle">
+        <div class="chatbot-header">
+            <div class="chatbot-header-avatar" aria-hidden="true">IS</div>
+            <div class="chatbot-header-info">
+                <h2 id="chatbotTitle">SPARC Assistant</h2>
+                <div class="chatbot-status"><span class="chatbot-status-dot"></span>Online · Inner SPARC Realty</div>
+            </div>
+            <button class="chatbot-close" type="button" id="chatbotClose" aria-label="Close chat assistant">✕</button>
+        </div>
+
+        <div class="chatbot-body" id="chatbotBody"></div>
+        <div class="chatbot-quick-replies" id="chatbotQuickReplies"></div>
+
+        <div class="chatbot-footer">
+            <div class="chatbot-input-row">
+                <input type="text" id="chatbotInput" placeholder="Ask anything about Inner SPARC..." autocomplete="off" />
+                <button class="chatbot-send" type="button" id="chatbotSend" aria-label="Send message">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </div>
+            <p class="chatbot-powered">Quick FAQ assistant · For detailed concerns, contact our team</p>
+        </div>
+    </div>
+</div>
+
+<script>
+window.tailwind = window.tailwind || {};
+window.tailwind.config = {
+    corePlugins: {
+        preflight: false
+    }
+};
+</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.10.1/lottie.min.js"></script>
+<script>
+window.ONBOARDING_DEV_UNLOCK_ALL = document.getElementById('tpl1Root').dataset.devUnlockAll === 'true';
+// Temporary feature toggle: disable DocValidator detection while keeping upload flow active.
+window.ONBOARDING_DOC_DETECTION_ENABLED = document.getElementById('tpl1Root').dataset.docDetectionEnabled === 'true';
+</script>
+{% if ONBOARDING_DOC_DETECTION_ENABLED %}
+<script src="{% static 'js/doc-validator.js' %}?v=2"></script>
+{% endif %}
+<script src="{% static 'js/certification-panel.js' %}?v=18"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+/* PNG export - full-frame certificate capture with safe margin crop and loading state */
+(async function () {
+    function cropCanvasEmptyBorders(srcCanvas, expand = 2) {
+        const ctx = srcCanvas.getContext('2d');
+        const w = srcCanvas.width;
+        const h = srcCanvas.height;
+        const data = ctx.getImageData(0, 0, w, h).data;
+        let top = 0;
+        let bottom = h - 1;
+        let left = 0;
+        let right = w - 1;
+        let found = false;
+
+        outerTop: for (let y = 0; y < h; y++) {
+            for (let x = 0; x < w; x++) {
+                if (data[(y * w + x) * 4 + 3] !== 0) {
+                    top = y;
+                    found = true;
+                    break outerTop;
+                }
+            }
+        }
+
+        if (!found) {
+            return {
+                canvas: srcCanvas,
+                crop: { left: 0, top: 0, right: w - 1, bottom: h - 1, cropW: w, cropH: h }
+            };
+        }
+
+        outerBottom: for (let y = h - 1; y >= 0; y--) {
+            for (let x = 0; x < w; x++) {
+                if (data[(y * w + x) * 4 + 3] !== 0) {
+                    bottom = y;
+                    break outerBottom;
+                }
+            }
+        }
+
+        outerLeft: for (let x = 0; x < w; x++) {
+            for (let y = top; y <= bottom; y++) {
+                if (data[(y * w + x) * 4 + 3] !== 0) {
+                    left = x;
+                    break outerLeft;
+                }
+            }
+        }
+
+        outerRight: for (let x = w - 1; x >= 0; x--) {
+            for (let y = top; y <= bottom; y++) {
+                if (data[(y * w + x) * 4 + 3] !== 0) {
+                    right = x;
+                    break outerRight;
+                }
+            }
+        }
+
+        const safeExpand = Math.max(2, Number(expand) || 2);
+        left = Math.max(0, left - safeExpand);
+        top = Math.max(0, top - safeExpand);
+        right = Math.min(w - 1, right + safeExpand);
+        bottom = Math.min(h - 1, bottom + safeExpand);
+
+        const cropW = Math.max(1, right - left + 1);
+        const cropH = Math.max(1, bottom - top + 1);
+        const out = document.createElement('canvas');
+        out.width = cropW;
+        out.height = cropH;
+        out.getContext('2d').drawImage(srcCanvas, left, top, cropW, cropH, 0, 0, cropW, cropH);
+
+        return { canvas: out, crop: { left, top, right, bottom, cropW, cropH } };
+    }
+
+    async function waitForAssets(root) {
+        if (document.fonts && document.fonts.ready) {
+            await document.fonts.ready;
+        }
+
+        const images = Array.from(root.querySelectorAll('img'));
+        await Promise.all(images.map((img) => {
+            if (img.complete) return Promise.resolve();
+            return new Promise((resolve) => {
+                img.onload = resolve;
+                img.onerror = resolve;
+            });
+        }));
+    }
+
+    async function downloadCertificateImage(selector, filename, opts = {}) {
+        const {
+            normalizeToWidth = null,
+            targetDPI = null,
+            scaleCap = 3,
+            expandCrop = 2
+        } = opts;
+
+        if (!selector) {
+            throw new Error('Certificate selector is required.');
+        }
+
+        const el = document.querySelector(selector);
+        if (!el) throw new Error('Certificate element not found: ' + selector);
+
+        await waitForAssets(el);
+
+        const rect = el.getBoundingClientRect();
+        const visualW = Math.max(1, Math.round(rect.width));
+        const visualH = Math.max(1, Math.round(rect.height));
+        const targetWidth = normalizeToWidth && typeof normalizeToWidth === 'number'
+            ? Math.max(1, Math.round(normalizeToWidth))
+            : visualW;
+        const ratio = visualH / visualW;
+        const targetHeight = Math.max(1, Math.round(targetWidth * ratio));
+        const computedBg = window.getComputedStyle(el).backgroundColor || '#ffffff';
+
+        const clone = el.cloneNode(true);
+        clone.style.width = targetWidth + 'px';
+        clone.style.height = targetHeight + 'px';
+        clone.style.boxShadow = 'none';
+        clone.style.margin = '0';
+        clone.style.display = 'block';
+        clone.style.transform = 'none';
+        clone.style.transformOrigin = 'top left';
+        clone.style.background = computedBg;
+
+        const off = document.createElement('div');
+        off.style.position = 'fixed';
+        off.style.left = '-99999px';
+        off.style.top = '0';
+        off.style.width = targetWidth + 'px';
+        off.style.height = targetHeight + 'px';
+        off.style.overflow = 'visible';
+        off.appendChild(clone);
+        document.body.appendChild(off);
+
+        try {
+            await waitForAssets(clone);
+
+            const dpr = window.devicePixelRatio || 1;
+            const dpiScale = targetDPI && typeof targetDPI === 'number'
+                ? Math.max(1, targetDPI / 96)
+                : dpr;
+            const scale = Math.min(Math.max(1, Number(scaleCap) || 3), Math.max(1, dpiScale));
+
+            const canvas = await html2canvas(clone, {
+                width: targetWidth,
+                height: targetHeight,
+                scale,
+                useCORS: true,
+                backgroundColor: null,
+                logging: false
+            });
+
+            const croppedResult = cropCanvasEmptyBorders(canvas, expandCrop);
+            const cropped = croppedResult.canvas;
+            const dataUrl = cropped.toDataURL('image/png');
+
+            const a = document.createElement('a');
+            a.href = dataUrl;
+            a.download = filename || 'certificate.png';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+
+            window.__CERT_EXPORT_LAST = {
+                visual: { width: visualW, height: visualH },
+                target: { width: targetWidth, height: targetHeight },
+                canvas: { width: canvas.width, height: canvas.height },
+                cropped: { width: cropped.width, height: cropped.height },
+                crop: croppedResult.crop,
+                scale
+            };
+            return window.__CERT_EXPORT_LAST;
+        } catch (err) {
+            const rawMessage = String(err || '');
+            if (/taint|security|cross-origin|cross origin/i.test(rawMessage)) {
+                alert('Export failed: cross-origin images detected. Host images same-origin or enable CORS and set crossorigin="anonymous".');
+            } else {
+                alert('Export failed: ' + (err && err.message ? err.message : rawMessage));
+            }
+            throw err;
+        } finally {
+            document.body.removeChild(off);
+        }
+    }
+
+    document.addEventListener('click', function (e) {
+        const btn = e.target.closest('.cert-footer-download, .cert-download, .tpl1-btn.cert-download');
+        if (!btn) return;
+
+        e.preventDefault();
+        if (btn.disabled) return;
+
+        const origText = btn.innerText || btn.textContent || 'Download';
+        btn.disabled = true;
+        btn.setAttribute('aria-disabled', 'true');
+        btn.dataset._origText = origText;
+        btn.innerText = 'Downloading';
+
+        const frameNode = document.querySelector('#certificate .cert-document, .cert-document, #certificate');
+        const certId = (frameNode && frameNode.getAttribute('data-certificate-id')
+            ? frameNode.getAttribute('data-certificate-id')
+            : 'certificate').trim().replace(/\s+/g, '-');
+        const filename = 'Certificate-' + certId + '.png';
+        const DESIGN_WIDTH = 980;
+
+        downloadCertificateImage('#certificate .cert-document, .cert-document, #certificate', filename, {
+            normalizeToWidth: DESIGN_WIDTH,
+            scaleCap: 3,
+            expandCrop: 2
+        })
+            .catch((err) => console.error('Export failed', err))
+            .finally(() => {
+                btn.disabled = false;
+                btn.setAttribute('aria-disabled', 'false');
+                btn.innerText = btn.dataset._origText || origText;
+                delete btn.dataset._origText;
+            });
+    });
+
+    window.downloadCertificateImage = downloadCertificateImage;
+})();
+</script>
+    <script src="{% static 'js/onboardingBeta.js' %}?v=102"></script>
+    <script src="{% static 'js/components/LevelCompleteVanilla.js' %}?v=20260416h"></script>
+    <script src="{% static 'js/config/floatingFireMap.js' %}?v=20260408a"></script>
+    <script src="{% static 'js/hooks/useFloatingFireState.js' %}?v=20260408a"></script>
+<script>
+(function initTemplateBetaLevelCompleteModal() {
+    if (window.__TPL_BETA_LEVEL_COMPLETE_INIT) return;
+    window.__TPL_BETA_LEVEL_COMPLETE_INIT = true;
+
+    window.__DEBUG_FLOATING_FIRE = !!(
+        window.__DEBUG_FLOATING_FIRE === true ||
+        window.location.search.indexOf('debug=fire') > -1
+    );
+
+    function buildStageSnapshot() {
+        if (typeof window.getOnboardingStageProgressSnapshot === 'function') {
+            try {
+                var snapshot = window.getOnboardingStageProgressSnapshot();
+                if (snapshot && Array.isArray(snapshot.stageLabels) && snapshot.stageLabels.length) {
+                    return snapshot;
+                }
+            } catch (err) {}
+        }
+
+        var fallbackLabels = ['INTRODUCTION', 'PROFILE AND CREDENTIALS', 'AGENT FOUNDATION'];
+        return {
+            stageLabels: fallbackLabels,
+            progressTrackLabels: fallbackLabels,
+            totalStages: fallbackLabels.length
+        };
+    }
+
+    if (typeof window.useFloatingFireState !== 'function') {
+        console.warn('[TemplateBeta] useFloatingFireState is unavailable; level complete modal disabled.');
+        return;
+    }
+
+    var hook = window.useFloatingFireState({
+        debug: !!window.__DEBUG_FLOATING_FIRE
+    });
+    var lastRenderSignature = null;
+    var lastEmailTriggerSignature = null;
+
+    function shouldTriggerCertificateEmailFromModal(state, snapshot) {
+        if (!state || !state.modalOpen) return false;
+
+        if (!snapshot || !snapshot.lastCompletionIsAgentFoundation) {
+            return false;
+        }
+
+        var currentCount = Number(state.modalModule || state.currentModule || 0) || 0;
+        var previousCount = Number(state.previousModalModule || 0) || 0;
+        if (currentCount <= previousCount) return false;
+
+        var latestCompletedLabel = snapshot && snapshot.latestCompletedLabel
+            ? String(snapshot.latestCompletedLabel).toUpperCase().trim()
+            : '';
+        if (!latestCompletedLabel) {
+            latestCompletedLabel = snapshot && snapshot.currentStageLabel
+                ? String(snapshot.currentStageLabel).toUpperCase().trim()
+                : '';
+        }
+
+        if (!latestCompletedLabel) {
+            return false;
+        }
+
+        if (latestCompletedLabel === 'INTRODUCTION' || latestCompletedLabel === 'PROFILE AND CREDENTIALS') {
+            return false;
+        }
+
+        return true;
+    }
+
+    async function fallbackTriggerCertificateEmail() {
+        try {
+            var csrfToken = '';
+            var csrfInput = document.querySelector('input[name="csrfmiddlewaretoken"]');
+            if (csrfInput && csrfInput.value) {
+                csrfToken = String(csrfInput.value);
+            }
+            if (!csrfToken) {
+                var cookieMatch = document.cookie.match(/(?:^|; )csrftoken=([^;]+)/);
+                if (cookieMatch && cookieMatch[1]) {
+                    csrfToken = decodeURIComponent(cookieMatch[1]);
+                }
+            }
+
+            await fetch('/portal-onboarding/complete/', {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                },
+                body: 'force_resend=1'
+            });
+        } catch (err) {
+            console.warn('[TemplateBeta] Certificate email trigger fallback failed.', err);
+        }
+    }
+
+    function triggerCertificateEmailOnModal(state, snapshot) {
+        if (!shouldTriggerCertificateEmailFromModal(state, snapshot)) {
+            return;
+        }
+
+        var signature = [
+            Number(state.modalModule || 0) || 0,
+            Number(state.previousModalModule || 0) || 0,
+            snapshot && snapshot.latestCompletedLabel ? String(snapshot.latestCompletedLabel) : '',
+            snapshot && snapshot.currentStageLabel ? String(snapshot.currentStageLabel) : ''
+        ].join('::');
+
+        if (signature === lastEmailTriggerSignature) {
+            return;
+        }
+
+        lastEmailTriggerSignature = signature;
+
+        if (typeof window.triggerAgentFoundationCompletionEmail === 'function') {
+            window.triggerAgentFoundationCompletionEmail({ forceResend: true });
+            return;
+        }
+
+        fallbackTriggerCertificateEmail();
+    }
+
+    function buildRenderSignature(state, snapshot, reducedMotion) {
+        var labels = snapshot && Array.isArray(snapshot.progressTrackLabels) && snapshot.progressTrackLabels.length
+            ? snapshot.progressTrackLabels.join('|')
+            : (snapshot && Array.isArray(snapshot.stageLabels) ? snapshot.stageLabels.join('|') : '');
+        return [
+            !!state.modalOpen,
+            Number(state.modalModule || 0) || 0,
+            Number(state.previousModalModule || 0) || 0,
+            Number(state.currentModule || 0) || 0,
+            Number(snapshot && snapshot.totalStages || 0) || 0,
+            labels,
+            !!reducedMotion
+        ].join('::');
+    }
+
+    function renderModalFromState(stateLike) {
+        if (typeof window.renderLevelCompleteModal !== 'function') return;
+
+        var state = stateLike && typeof stateLike === 'object'
+            ? stateLike
+            : (hook && typeof hook.getState === 'function' ? hook.getState() : {});
+
+        var snapshot = buildStageSnapshot();
+        var progressTrackLabels = snapshot && Array.isArray(snapshot.progressTrackLabels) && snapshot.progressTrackLabels.length
+            ? snapshot.progressTrackLabels
+            : (snapshot && Array.isArray(snapshot.stageLabels) ? snapshot.stageLabels : []);
+        var xpCurrentLevel = Number(state.modalModule || state.currentModule || 0) || 0;
+        var xpPreviousLevel = Number(state.previousModalModule || 0) || 0;
+        var currentLevel = (snapshot && typeof snapshot.currentStageIndex === 'number')
+            ? Math.max(0, snapshot.currentStageIndex + 1)
+            : xpCurrentLevel;
+        var previousLevel = (snapshot && typeof snapshot.currentStageIndex === 'number')
+            ? Math.max(0, snapshot.currentStageIndex)
+            : xpPreviousLevel;
+        var completionLabel = snapshot && snapshot.latestCompletedLabel
+            ? String(snapshot.latestCompletedLabel)
+            : '';
+        var reducedMotion = false;
+
+        try {
+            // Keep celebration motion on by default. Opt in to reduced motion via:
+            // 1) window.__FORCE_REDUCED_MOTION = true
+            // 2) URL query param: ?reduced_motion=1
+            reducedMotion = !!(
+                window.__FORCE_REDUCED_MOTION === true ||
+                window.location.search.indexOf('reduced_motion=1') > -1
+            );
+        } catch (err) {}
+
+        var nextSignature = buildRenderSignature(state, snapshot, reducedMotion);
+        if (state.modalOpen && nextSignature === lastRenderSignature) {
+            // Avoid clearing/restarting timers for duplicate state events while open.
+            return;
+        }
+        lastRenderSignature = nextSignature;
+
+        var shouldAnimate = !!state.modalOpen && (xpCurrentLevel > xpPreviousLevel);
+
+        triggerCertificateEmailOnModal(state, snapshot);
+
+        window.renderLevelCompleteModal({
+            isOpen: !!state.modalOpen,
+            currentLevel: currentLevel,
+            previousLevel: previousLevel,
+            xpCurrentLevel: xpCurrentLevel,
+            xpPreviousLevel: xpPreviousLevel,
+            stepLabels: snapshot.stageLabels,
+            progressTrackLabels: progressTrackLabels,
+            totalStages: progressTrackLabels.length || snapshot.totalStages,
+            completionLabel: completionLabel,
+            // Show certificate feedback only if the last completion was an Agent Foundation module.
+            showCertificateFeedback: !!(snapshot && snapshot.lastCompletionIsAgentFoundation),
+            shouldAnimateProgress: shouldAnimate,
+            reducedMotion: reducedMotion,
+            onClose: function () {
+                if (hook && typeof hook.closeModal === 'function') {
+                    hook.closeModal();
+                }
+            }
+        });
+    }
+
+    function onStateChange(event) {
+        var detail = event && event.detail ? event.detail : null;
+        renderModalFromState(detail);
+    }
+
+    document.addEventListener('floatingFire:stateChange', onStateChange);
+    document.addEventListener('floatingFire:modalReady', function () {
+        renderModalFromState();
+    });
+
+    renderModalFromState();
+})();
+</script>
+<script src="https://unpkg.com/framer-motion@11/dist/framer-motion.js"></script>
+<script src="{% static 'js/components/ProgressPath.umd.js' %}?v=2"></script>
+{% endblock %}

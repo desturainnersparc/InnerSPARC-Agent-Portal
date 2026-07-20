@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>FireCelebrationModal Smoke Test</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.10.1/lottie.min.js"></script>
+  <script src="/static/js/providers/animationProvider.js"></script>
+  <style>body{font-family:system-ui,Segoe UI,Arial;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#081024;color:#fff}#smokeWrap{width:980px;max-width:96%;background:#031022;padding:20px;border-radius:10px}button{padding:8px 12px;border-radius:6px;border:none;background:#06b6d4;color:#042;cursor:pointer}</style>
+</head>
+<body>
+  <div id="smokeWrap">
+    <h2>FireCelebrationModal Smoke Test</h2>
+    <p>Use the buttons to trigger the modal and clear floating-fire localStorage keys.</p>
+    <div style="display:flex;gap:8px;margin:12px 0;">
+      <button id="btnOpen">Open modal (module 1)</button>
+      <button id="btnOpen3">Open modal (module 3)</button>
+      <button id="btnClear">Clear floating-fire storage</button>
+    </div>
+    <div id="floatingFireStreakMount"></div>
+  </div>
+
+  <script>
+    // minimal floatingFireMap stub for smoke test (replace paths with real json if available)
+    window.floatingFireMap = {
+      resolveFloatingFireConfig: function (moduleCount) { return { idlePath: '/static/animations/sample-celebration.json', glowDropShadow: 'rgba(249,115,22,0.6)', glowAura: 'rgba(251,113,133,0.12)' }; },
+      resolveValidatedAssetPath: function (opts) { return { path: opts.candidatePath || null }; }
+    };
+
+    // Load the modal UMD
+    var s = document.createElement('script');
+    s.src = '/static/js/components/FireCelebrationModal.js';
+    s.onload = function () {
+      console.log('Modal script loaded', !!window.FireCelebrationModal);
+    };
+    document.body.appendChild(s);
+
+    // tiny host: mount FloatingFireStreak-like host to render modal when available
+    function mountHost(moduleCount) {
+      var container = document.getElementById('floatingFireStreakMount');
+      ReactDOM.createRoot(container).render(
+        React.createElement(React.Fragment, null,
+          React.createElement('div', { style: { color: '#9ca3af', marginBottom: 8 } }, 'Host: simulated floating fire'),
+          window.FireCelebrationModal ? React.createElement(window.FireCelebrationModal, { isOpen: true, moduleCount: moduleCount, containerId: 'smokeFireLayer', onClose: function () { ReactDOM.createRoot(container).render(React.createElement('div', null, 'Closed')); }, onPlaybackError: function () { console.warn('playback error'); } }) : React.createElement('div', null, 'Modal not loaded yet')
+        )
+      );
+    }
+
+    document.getElementById('btnOpen').addEventListener('click', function () { mountHost(1); });
+    document.getElementById('btnOpen3').addEventListener('click', function () { mountHost(3); });
+    document.getElementById('btnClear').addEventListener('click', function () {
+      try {
+        var root = document.getElementById('tpl1Root');
+        var email = (root && root.dataset && root.dataset.accountEmail) ? root.dataset.accountEmail : 'anon';
+        var safeScope = String(email || 'anon').toLowerCase().replace(/[^a-z0-9]+/g, '_');
+        var keys = ['innerSparc_floating_fire_latest_module_v2_' + safeScope, 'innerSparc_floating_fire_last_shown_module_v2_' + safeScope, 'innerSparc_floating_fire_pending_modal_module_v2_' + safeScope];
+        keys.forEach(function (k) { localStorage.removeItem(k); });
+        alert('Cleared keys');
+      } catch (e) { alert('Clear failed'); }
+    });
+  </script>
+</body>
+</html>
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>FireCelebrationModal Smoke Test</title>
+  <style>body{background:#071029;color:#fff;font-family:sans-serif;padding:20px}</style>
+</head>
+<body>
+  <div id="root"></div>
+  <script>
+    // This smoke harness assumes window.React and window.ReactDOM are available globally in your environment.
+    (function(){
+      if (!window.React || !window.ReactDOM) {
+        document.body.innerHTML = '<p style="color:orange">React / ReactDOM not found on window. Load them to run smoke test.</p>';
+        return;
+      }
+
+      var FireCelebrationModal = window.FireCelebrationModal || (typeof require === 'function' ? require('./FireCelebrationModal') : null);
+      if (!FireCelebrationModal) {
+        document.body.innerHTML = '<p style="color:orange">FireCelebrationModal not found.</p>';
+        return;
+      }
+
+      function App(){
+        var React = window.React;
+        var useState = React.useState;
+        var openState = useState(true);
+        var isOpen = openState[0];
+        var setOpen = openState[1];
+
+        return React.createElement('div', null,
+          React.createElement('button',{onClick:function(){setOpen(true)}},'Open Modal'),
+          React.createElement(FireCelebrationModal,{isOpen:isOpen,moduleCount:2,onClose:function(){setOpen(false)},onPlaybackError:function(){console.warn('playback error')},fullScreen:false,containerId:'smoke-anim'})
+        );
+      }
+
+      window.ReactDOM.render(window.React.createElement(App), document.getElementById('root'));
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Inner SPARC | Home{% endblock %}
+
+{% block content %}
+<div class="landing-page">
+    {% include 'partials/public_header.html' with modal_triggers=True %}
+
+    <section class="hero" id="home">
+        <div class="container hero-inner">
+            <div class="hero-content">
+                <h2 class="hero-fade hero-title">
+                    Start Your Real Estate
+                    <span class="gradient-text">Career Today</span>
+                </h2>
+                <p class="hero-fade hero-sub hero-delay-2">
+                    Inner SPARC helps new agents understand requirements,
+                    organize applications, and complete onboarding. 
+                </p>
+                <div class="hero-actions">
+                    <a class="cta-btn hero-fade hero-cta hero-delay-3" href="{% url 'sign_in' %}" data-open-modal="signin-modal">
+                        Log In Now
+                    </a>
+                    <p class="hero-fade hero-signin hero-delay-4">
+                        Don't have an account?
+                        <a href="{% url 'sign_up' %}" data-open-modal="signup-modal">Register</a>
+                    </p>
+                    <div class="hero-fade hero-trust hero-delay-4" aria-label="Trust indicators">
+                        <span class="hero-trust-item">Structured onboarding path</span>
+                        <span class="hero-trust-item">Guidance from experienced leaders</span>
+                        <span class="hero-trust-item">Built for first-time real estate agents</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section container about-grid about-auto-dynamic" id="about">
+        <article class="about-copy">
+            <h3>
+                <span>We <span class="champion-highlight"><em>Champion</em></span> the</span>
+                <span>pursuit of your</span>
+                <span style="position: relative; display: inline-block;">
+                  next great move
+                  <span style="position: absolute; bottom: -8px; left: 0; right: 0; height: 3px; background: linear-gradient(to right, #3b3bbf, #1a1a2e, transparent); border: none;"></span>
+                </span>
+            </h3>
+            <p>
+                We help new agents transform into confident, successful professionals through
+                structured onboarding and comprehensive support designed by experienced real estate leaders.
+            </p>
+            <ul class="about-proof-list" aria-label="Why agents trust Inner SPARC">
+                <li>Step-by-step visibility from application to onboarding completion</li>
+                <li>Practical learning support focused on your first active deals</li>
+                <li>A centralized portal that keeps requirements and progress organized</li>
+            </ul>
+        </article>
+        <div class="about-image-wrap">
+            <div class="image-glow" aria-hidden="true"></div>
+            <img
+                class="about-image"
+                src="{% static 'images/Inner_Team.png' %}"
+                alt="Inner SPARC team collaborating"
+                loading="lazy"
+            />
+        </div>
+    </section>
+
+    <section class="section section-soft" id="features">
+        <div class="container">
+            <div class="section-header motion motion-up" data-delay="40">
+                <p class="section-kicker">A clear onboarding system designed for confidence and consistency</p>
+                <h3>How We Help</h3>
+                <p>Everything you need to launch your real estate career with confidence.</p>
+            </div>
+            <div class="feature-grid">
+                <article class="card feature-card motion motion-up" data-delay="100">
+                    <div class="feature-media">
+                        <img
+                            src="{% static 'images/guided_application.png' %}"
+                            alt="Guided Application"
+                            loading="lazy"
+                        />
+                    </div>
+                    <h4>Guided Application</h4>
+                    <p>Follow a clear step-by-step process so every requirement is submitted correctly.</p>
+                    <p class="feature-helper">Know exactly what to submit, when to submit it, and what comes next.</p>
+                </article>
+                <article class="card feature-card motion motion-up" data-delay="200">
+                    <div class="feature-media">
+                        <img
+                            src="{% static 'images/agent training.jpg' %}"
+                            alt="Agent Training"
+                            loading="lazy"
+                        />
+                    </div>
+                    <h4>Agent Training</h4>
+                    <p>Access practical onboarding modules that prepare you for your first transactions.</p>
+                    <p class="feature-helper">Build field-ready confidence through practical and relevant learning support.</p>
+                </article>
+                <article class="card feature-card motion motion-up" data-delay="300">
+                    <div class="feature-media">
+                        <img
+                            src="{% static 'images/career support.jpg' %}"
+                            alt="Career Support"
+                            loading="lazy"
+                        />
+                    </div>
+                    <h4>Career Support</h4>
+                    <p>Get ongoing guidance as you grow your confidence, pipeline, and skills.</p>
+                    <p class="feature-helper">Stay aligned with a support system that helps you move forward with clarity.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    {% include 'partials/auth_modals.html' %}
+
+    {% include 'partials/public_footer.html' with footer_on_home=True footer_id='contact' %}
+</div>
+{% endblock %}

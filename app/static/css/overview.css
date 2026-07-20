@@ -1,0 +1,935 @@
+/* ============================================================
+   NEW OVERVIEW SECTION STYLES (v1)
+   Modern, persuasive 6-section hero layout
+   =========================================================== */
+
+.tpl1-overview-stack {
+    display: grid;
+    gap: 24px;
+    width: 100%;
+}
+
+/* ============================================================
+   1. HERO SECTION - 2-column (copy + icon)
+   =========================================================== */
+
+.tpl1-overview-hero {
+    display: grid;
+    grid-template-columns: 1fr minmax(160px, 200px);
+    gap: 28px;
+    align-items: center;
+    padding: 24px;
+    border: none;
+    border-radius: 16px;
+    background: transparent;
+    box-shadow: none;
+}
+
+.tpl1-overview-hero-copy {
+    display: grid;
+    gap: 12px;
+}
+
+.tpl1-overview-kicker {
+    margin: 0;
+    font-size: 0.80rem;
+    font-weight: 700;
+    color: #1c7d38;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.tpl1-overview-hero h3 {
+    margin: 4px 0 0;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1b2254;
+    line-height: 1.25;
+}
+
+.tpl1-overview-hero > .tpl1-overview-hero-copy > p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #5f72a0;
+    line-height: 1.6;
+}
+
+.tpl1-overview-proof-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.tpl1-overview-proof-list span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    min-height: 34px;
+    font-size: 0.80rem;
+    color: #2e4274;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    border: 1px solid #b8c8e6;
+    border-radius: 14px;
+    background: #e8edf7;
+    padding: 6px 18px;
+    transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.tpl1-overview-proof-list span::before {
+    content: none;
+}
+
+.tpl1-overview-proof-list span::after {
+    content: none;
+}
+
+.tpl1-overview-hero-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    width: 190px;
+    height: auto;
+    border-radius: 12px;
+    background: transparent;
+    padding: 0;
+    text-align: center;
+    justify-self: center;
+}
+
+.tpl1-overview-hero-icon img {
+    width: 140px;
+    height: auto;
+    object-fit: contain;
+}
+
+.tpl1-overview-hero-note {
+    margin: 0;
+    max-width: 180px;
+    font-size: 0.86rem;
+    font-weight: 500;
+    line-height: 1.4;
+    color: #5f72a0;
+}
+
+/* ============================================================
+   2. CHALLENGE SECTION - Problem narrative
+   =========================================================== */
+
+.tpl1-overview-challenge {
+    padding: 20px 8px 8px;
+    border: none;
+    border-radius: 16px;
+    background: transparent;
+    box-shadow: none;
+}
+
+.tpl1-overview-challenge h3 {
+    margin: 0 0 8px;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1b2254;
+    text-align: center;
+}
+
+.tpl1-overview-challenge-lead {
+    margin: 0 0 18px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #FF7518;
+    text-align: center;
+}
+
+.tpl1-overview-challenge-list {
+    display: grid;
+    gap: 10px;
+    margin: 16px 0;
+}
+
+.tpl1-overview-challenge-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    font-size: 0.9rem;
+    color: #5f6f93;
+    line-height: 1.5;
+    box-shadow: inset 0 0 0 1px #d4d8e2;
+}
+
+.tpl1-overview-challenge-item::before {
+    content: '⚠';
+    color: #ff9132;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.tpl1-overview-challenge-footnote {
+    margin: 16px 0 0;
+    font-size: 0.9rem;
+    color: #5f6f93;
+    text-align: center;
+}
+
+.tpl1-overview-challenge-footnote strong {
+    color: #1b2254;
+    font-weight: 700;
+}
+
+.tpl1-overview-challenge-subtitle {
+    margin: 12px 0 0;
+    font-size: 0.85rem;
+    color: #5f6f93;
+    text-align: center;
+}
+
+/* ============================================================
+   3. STATS GRID - 3 metric cards
+   =========================================================== */
+
+.tpl1-overview-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.tpl1-stat-card {
+    padding: 20px;
+    border: none;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: none;
+    display: grid;
+    gap: 4px;
+    text-align: center;
+    outline: 1px solid #d9dde6;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, outline-color 0.22s ease;
+}
+
+.tpl1-stat-card strong {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1c7d38;
+    line-height: 1.1;
+}
+
+.tpl1-stat-card span {
+    font-size: 0.78rem;
+    color: #5f6f93;
+    line-height: 1.4;
+}
+
+/* ============================================================
+   4. FEATURES SECTION - 4 cards in 2x2 grid
+   =========================================================== */
+
+.tpl1-overview-features {
+    padding: 12px 0 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.tpl1-overview-features-subtitle {
+    margin: 0 0 4px;
+    font-size: 0.85rem;
+    color: #5f6f93;
+    text-align: center;
+}
+
+.tpl1-overview-features h3 {
+    margin: 0 0 20px;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1b2254;
+    text-align: center;
+}
+
+.tpl1-overview-feature-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.tpl1-feature-card {
+    padding: 18px 16px 16px;
+    border: none;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: none;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+        'icon metric'
+        'title title'
+        'desc desc';
+    row-gap: 8px;
+    column-gap: 10px;
+    align-items: start;
+    outline: 1px solid #d9dde6;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, outline-color 0.22s ease;
+}
+
+.tpl1-feature-icon {
+    grid-area: icon;
+    width: 38px;
+    height: 38px;
+    border-radius: 9px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    color: #1f63ff;
+    background: #e9effa;
+    transition: background-color 0.22s ease, color 0.22s ease, transform 0.22s ease;
+}
+
+.tpl1-feature-metric {
+    grid-area: metric;
+    justify-self: end;
+    align-self: center;
+    margin: 0;
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: #1f63ff;
+    text-align: right;
+    text-transform: none;
+    letter-spacing: 0;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.tpl1-feature-card h4 {
+    grid-area: title;
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1b2254;
+    line-height: 1.3;
+}
+
+.tpl1-feature-card > p:not(.tpl1-feature-metric) {
+    grid-area: desc;
+    margin: 0;
+    font-size: 0.85rem;
+    color: #5f6f93;
+    line-height: 1.45;
+}
+
+/* ============================================================
+   5. JOURNEY PATH SECTION - 2-column layout
+   =========================================================== */
+
+.tpl1-overview-journey {
+    display: grid;
+    grid-template-columns: minmax(240px, 1fr) minmax(200px, 1fr);
+    gap: 18px;
+    align-items: start;
+    padding: 20px;
+    border: 1px solid #d9dde6;
+    border-radius: 12px;
+    background: transparent;
+    box-shadow: none;
+}
+
+.tpl1-journey-label {
+    margin: 0 0 4px;
+    font-size: 0.80rem;
+    font-weight: 700;
+    color: #1c7d38;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.tpl1-overview-journey h3 {
+    margin: 4px 0 14px;
+    font-size: 2.1rem;
+    font-weight: 700;
+    color: #1b2254;
+    line-height: 1.15;
+}
+
+.tpl1-overview-journey h3 span {
+    color: #1c7d38;
+    display: inline;
+}
+
+.tpl1-overview-journey ol {
+    margin: 0;
+    padding-left: 0;
+    display: grid;
+    gap: 10px;
+    list-style: none;
+}
+
+.tpl1-overview-journey li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.98rem;
+    color: #2f436f;
+    line-height: 1.5;
+}
+
+.tpl1-journey-step-index {
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    background: #2a72ea;
+    color: #ffffff;
+    font-size: 0.82rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.tpl1-journey-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.tpl1-journey-metrics article {
+    display: grid;
+    gap: 6px;
+    justify-items: center;
+    align-content: center;
+    min-height: 100px;
+    padding: 14px;
+    border: 1px solid #d9dde6;
+    border-radius: 10px;
+    background: #ffffff;
+    text-align: center;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.tpl1-journey-metrics article.wide {
+    grid-column: 1 / -1;
+}
+
+.tpl1-metric-icon {
+    font-size: 1.35rem;
+    display: block;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tpl1-metric-icon svg {
+    width: 26px;
+    height: 26px;
+    display: block;
+}
+
+.tpl1-metric-icon.metric-support svg {
+    width: 26px;
+    height: 26px;
+}
+
+.tpl1-metric-icon.metric-support {
+    color: #2a72ea;
+    margin-top: 0;
+}
+
+.tpl1-metric-icon.metric-deal {
+    color: #ff9132;
+}
+
+.tpl1-metric-icon.metric-commission {
+    color: #1c7d38;
+}
+
+.tpl1-journey-metrics strong {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1b2254;
+    line-height: 1.1;
+}
+
+.tpl1-journey-metrics span {
+    font-size: 0.82rem;
+    color: #5f6f93;
+}
+
+/* ============================================================
+   6. CTA SECTION - Call-to-action banner
+   =========================================================== */
+
+.tpl1-overview-cta {
+    padding: 32px;
+    border: none;
+    border-radius: 16px;
+    background: transparent;
+    box-shadow: none;
+    text-align: center;
+    color: #1b2254;
+}
+
+.tpl1-overview-cta h3 {
+    margin: 0 0 8px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #1b2254;
+    line-height: 1.3;
+}
+
+.tpl1-overview-cta p {
+    margin: 0 0 16px;
+    font-size: 0.95rem;
+    color: #5f6f93;
+    line-height: 1.5;
+}
+
+.tpl1-overview-cta-line {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1c7d38;
+    letter-spacing: 0.01em;
+}
+
+.tpl1-overview-wrap .tpl1-btn {
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+@media (hover: hover) {
+    .tpl1-overview-proof-list span:hover {
+        transform: translateY(-1px);
+        background: #edf2fa;
+        border-color: #b6c2d8;
+    }
+
+    .tpl1-stat-card:hover,
+    .tpl1-feature-card:hover,
+    .tpl1-journey-metrics article:hover {
+        transform: translateY(-2px);
+    }
+
+    .tpl1-stat-card:hover,
+    .tpl1-feature-card:hover {
+        outline-color: #bfc9d9;
+        box-shadow: 0 10px 24px rgba(28, 40, 78, 0.08);
+    }
+
+    .tpl1-feature-card:hover .tpl1-feature-icon {
+        background: #dfe9ff;
+        transform: translateY(-1px);
+    }
+
+    .tpl1-journey-metrics article:hover {
+        border-color: #bfc9d9;
+        box-shadow: 0 10px 24px rgba(28, 40, 78, 0.08);
+    }
+
+    .tpl1-overview-wrap .tpl1-btn:hover,
+    .tpl1-overview-wrap .tpl1-btn:focus-visible,
+    .tpl1-cta-btn:hover,
+    .tpl1-cta-btn:focus-visible {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 18px rgba(31, 99, 255, 0.18);
+    }
+}
+
+/* ============================================================
+   DARK MODE SUPPORT
+   =========================================================== */
+
+[data-theme="dark"] .tpl1 .tpl1-overview-hero,
+[data-theme="dark"] .tpl1 .tpl1-overview-challenge,
+[data-theme="dark"] .tpl1 .tpl1-overview-features,
+[data-theme="dark"] .tpl1 .tpl1-overview-journey {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+[data-theme="dark"] .tpl1 .tpl1-overview-hero h3,
+[data-theme="dark"] .tpl1 .tpl1-overview-challenge h3,
+[data-theme="dark"] .tpl1 .tpl1-overview-features h3,
+[data-theme="dark"] .tpl1 .tpl1-overview-journey h3 {
+    color: #e5eaff;
+}
+
+[data-theme="dark"] .tpl1 .tpl1-overview-journey li {
+    color: #9eb0d6;
+}
+
+[data-theme="dark"] .tpl1 .tpl1-overview-hero > .tpl1-overview-hero-copy > p,
+[data-theme="dark"] .tpl1 .tpl1-overview-hero-note,
+[data-theme="dark"] .tpl1 .tpl1-overview-challenge-item,
+[data-theme="dark"] .tpl1 .tpl1-overview-challenge-footnote,
+[data-theme="dark"] .tpl1 .tpl1-overview-challenge-subtitle,
+[data-theme="dark"] .tpl1 .tpl1-overview-challenge-lead,
+[data-theme="dark"] .tpl1 .tpl1-overview-features-subtitle {
+    color: #9eb0d6;
+}
+
+[data-theme="dark"] .tpl1 .tpl1-overview-challenge-item {
+    background: transparent;
+    border: none;
+    box-shadow: inset 0 0 0 1px rgba(141, 146, 255, 0.28);
+}
+
+[data-theme="dark"] .tpl1 .tpl1-stat-card,
+[data-theme="dark"] .tpl1 .tpl1-feature-card,
+[data-theme="dark"] .tpl1 .tpl1-journey-metrics article {
+    background: #1c2f59;
+    border: none;
+    box-shadow: none;
+    outline: 1px solid rgba(141, 146, 255, 0.24);
+}
+
+[data-theme="dark"] .tpl1 .tpl1-journey-metrics strong {
+    color: #e5eaff;
+}
+
+[data-theme="dark"] .tpl1 .tpl1-metric-icon.metric-support {
+    color: #6ea5ff;
+}
+
+[data-theme="dark"] .tpl1 .tpl1-metric-icon.metric-deal {
+    color: #ffb06d;
+}
+
+[data-theme="dark"] .tpl1 .tpl1-metric-icon.metric-commission {
+    color: #7dd19b;
+}
+
+[data-theme="dark"] .tpl1 .tpl1-overview-journey {
+    border-color: rgba(141, 146, 255, 0.24);
+}
+
+[data-theme="dark"] .tpl1 .tpl1-feature-card h4 {
+    color: #e5eaff;
+}
+
+[data-theme="dark"] .tpl1 .tpl1-feature-icon {
+    background: #20345f;
+    color: #6ea5ff;
+}
+
+[data-theme="dark"] .tpl1 .tpl1-overview-proof-list span {
+    background: #1b2d55;
+    border-color: #324a7b;
+    color: #c4d5f5;
+}
+
+[data-theme="dark"] .tpl1 .tpl1-overview-cta {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+[data-theme="dark"] .tpl1 .tpl1-overview-cta h3 {
+    color: #e5eaff;
+}
+
+[data-theme="dark"] .tpl1 .tpl1-overview-cta p {
+    color: #9eb0d6;
+}
+
+[data-theme="dark"] .tpl1 .tpl1-overview-cta-line {
+    color: #7dd19b;
+}
+
+[data-theme="dark"] .tpl1 .tpl1-cta-btn {
+    background: rgba(70, 185, 107, 0.15) !important;
+    border-color: rgba(70, 185, 107, 0.36) !important;
+    color: #7dd19b !important;
+}
+
+[data-theme="dark"] .tpl1 .tpl1-cta-btn:hover,
+[data-theme="dark"] .tpl1 .tpl1-cta-btn:focus-visible {
+    background: rgba(70, 185, 107, 0.26) !important;
+    border-color: rgba(70, 185, 107, 0.45) !important;
+}
+
+@media (hover: hover) {
+    [data-theme="dark"] .tpl1 .tpl1-overview-proof-list span:hover {
+        background: #223866;
+        border-color: #3d5b94;
+    }
+
+    [data-theme="dark"] .tpl1 .tpl1-stat-card:hover,
+    [data-theme="dark"] .tpl1 .tpl1-feature-card:hover,
+    [data-theme="dark"] .tpl1 .tpl1-journey-metrics article:hover {
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.28);
+    }
+
+    [data-theme="dark"] .tpl1 .tpl1-stat-card:hover,
+    [data-theme="dark"] .tpl1 .tpl1-feature-card:hover {
+        outline-color: rgba(141, 146, 255, 0.4);
+    }
+
+    [data-theme="dark"] .tpl1 .tpl1-journey-metrics article:hover {
+        border-color: rgba(141, 146, 255, 0.38);
+    }
+
+    [data-theme="dark"] .tpl1 .tpl1-feature-card:hover .tpl1-feature-icon {
+        background: #2a4579;
+        color: #9ec0ff;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE DESIGN
+   =========================================================== */
+
+@media (max-width: 900px) {
+    .tpl1-overview-hero {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        padding: 18px;
+    }
+
+    .tpl1-overview-hero-icon {
+        width: 170px;
+        height: auto;
+        margin: 0 auto;
+    }
+
+    .tpl1-overview-hero-icon img {
+        width: 128px;
+    }
+
+    .tpl1-overview-hero-note {
+        font-size: 0.82rem;
+        max-width: 170px;
+    }
+
+    .tpl1-overview-features,
+    .tpl1-overview-challenge,
+    .tpl1-overview-journey,
+    .tpl1-overview-cta {
+        padding: 20px;
+    }
+
+    .tpl1-overview-proof-list {
+        gap: 8px;
+    }
+
+    .tpl1-overview-proof-list span {
+        min-height: 32px;
+        padding: 6px 14px;
+    }
+
+    .tpl1-overview-challenge-lead {
+        font-size: 1.08rem;
+    }
+
+    .tpl1-overview-features h3,
+    .tpl1-overview-challenge h3,
+    .tpl1-overview-journey h3 {
+        font-size: 1.6rem;
+    }
+
+    .tpl1-overview-feature-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tpl1-feature-metric {
+        font-size: 0.92rem;
+    }
+
+    .tpl1-feature-card h4 {
+        font-size: 0.98rem;
+    }
+
+    .tpl1-feature-card > p:not(.tpl1-feature-metric) {
+        font-size: 0.95rem;
+    }
+
+    .tpl1-overview-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .tpl1-overview-journey {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .tpl1-journey-metrics article.wide {
+        grid-column: 1 / -1;
+    }
+
+    .tpl1-overview-journey li {
+        font-size: 1rem;
+    }
+
+    .tpl1-journey-metrics strong {
+        font-size: 2rem;
+    }
+
+    .tpl1-journey-metrics span {
+        font-size: 0.82rem;
+    }
+
+    .tpl1-overview-cta h3 {
+        font-size: 1.15rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .tpl1-overview-stack {
+        gap: 18px;
+    }
+
+    .tpl1-overview-hero,
+    .tpl1-overview-challenge,
+    .tpl1-overview-features,
+    .tpl1-overview-journey,
+    .tpl1-overview-cta {
+        padding: 16px;
+        border-radius: 12px;
+    }
+
+    .tpl1-overview-proof-list {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    .tpl1-overview-proof-list span {
+        justify-content: center;
+    }
+
+    .tpl1-overview-challenge-lead {
+        font-size: 0.98rem;
+    }
+
+    .tpl1-overview-hero h3,
+    .tpl1-overview-challenge h3,
+    .tpl1-overview-features h3,
+    .tpl1-overview-journey h3 {
+        font-size: 1.28rem;
+    }
+
+    .tpl1-overview-hero-icon {
+        width: 150px;
+        height: auto;
+    }
+
+    .tpl1-overview-hero-icon img {
+        width: 112px;
+    }
+
+    .tpl1-overview-hero-note {
+        font-size: 0.78rem;
+        max-width: 145px;
+    }
+
+    .tpl1-overview-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .tpl1-stat-card {
+        padding: 16px;
+    }
+
+    .tpl1-stat-card strong {
+        font-size: 1.4rem;
+    }
+
+    .tpl1-overview-challenge-list {
+        gap: 8px;
+    }
+
+    .tpl1-overview-challenge-item {
+        padding: 10px;
+        font-size: 0.85rem;
+    }
+
+    .tpl1-feature-card {
+        padding: 16px;
+    }
+
+    .tpl1-feature-card h4 {
+        font-size: 0.95rem;
+    }
+
+    .tpl1-feature-card {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            'icon'
+            'metric'
+            'title'
+            'desc';
+        row-gap: 8px;
+    }
+
+    .tpl1-feature-icon {
+        width: 34px;
+        height: 34px;
+    }
+
+    .tpl1-feature-metric {
+        text-align: left;
+        font-size: 0.95rem;
+    }
+
+    .tpl1-feature-card h4 {
+        font-size: 1.05rem;
+    }
+
+    .tpl1-feature-card > p:not(.tpl1-feature-metric) {
+        font-size: 0.9rem;
+    }
+
+    .tpl1-overview-journey ol {
+        font-size: 0.8rem;
+    }
+
+    .tpl1-overview-journey li {
+        font-size: 0.9rem;
+    }
+
+    .tpl1-journey-step-index {
+        width: 24px;
+        height: 24px;
+        font-size: 0.74rem;
+    }
+
+    .tpl1-journey-metrics {
+        grid-template-columns: 1fr;
+    }
+
+    .tpl1-journey-metrics article.wide {
+        grid-column: auto;
+    }
+
+    .tpl1-journey-metrics strong {
+        font-size: 1.8rem;
+    }
+
+    .tpl1-journey-metrics span {
+        font-size: 0.78rem;
+    }
+
+    .tpl1-overview-cta h3 {
+        font-size: 1.02rem;
+    }
+
+    .tpl1-overview-cta p {
+        font-size: 0.9rem;
+    }
+
+    .tpl1-overview-cta-line {
+        font-size: 0.98rem;
+    }
+
+    .tpl1-cta-btn {
+        padding: 9px 16px !important;
+        font-size: 0.85rem;
+    }
+}

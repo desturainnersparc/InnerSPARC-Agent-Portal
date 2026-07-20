@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Inner SPARC – Chat Assistant</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/static/css/innersparc-chatbot-modal.css"/>
+</head>
+<body>
+
+<button class="trigger" onclick="openModal()">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+  </svg>
+  Chat with us
+</button>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay" onclick="handleOverlay(event)">
+  <div class="modal" id="modal">
+
+    <!-- Header -->
+    <div class="modal-header">
+      <div class="header-avatar">🏠</div>
+      <div class="header-info">
+        <h2>SPARC Assistant</h2>
+        <div class="status"><span class="status-dot"></span> Online · Inner SPARC Realty</div>
+      </div>
+      <button class="close-btn" onclick="closeModal()">✕</button>
+    </div>
+
+    <!-- AI Badge -->
+    <div class="ai-badge">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+      </svg>
+      Powered by AI · Answers FAQs instantly, routes complex questions to our team
+    </div>
+
+    <!-- Messages -->
+    <div class="chat-body" id="chatBody"></div>
+
+    <!-- Quick Replies -->
+    <div class="quick-replies" id="quickReplies"></div>
+
+    <!-- Footer -->
+    <div class="chat-footer">
+      <div class="input-row">
+        <input type="text" id="userInput" placeholder="Ask anything about Inner SPARC…" onkeydown="if(event.key==='Enter') sendMsg()"/>
+        <button class="send-btn" id="sendBtn" onclick="sendMsg()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+        </button>
+      </div>
+      <div class="powered">⚡ AI-assisted · Replies may not always be perfect</div>
+    </div>
+
+  </div>
+</div>
+
+<script src="/static/js/innersparc-chatbot-modal.js"></script>
+</body>
+</html>

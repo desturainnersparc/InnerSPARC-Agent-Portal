@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CertificationPanel - Development Preview</title>
+    
+    <!-- Include CSS -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --brand-indigo: #222689;
+            --brand-green: #1C7D38;
+            --brand-orange: #FF9132;
+            --bg: #eef3fa;
+            --panel-bg: #ffffff;
+            --text: #1f2758;
+            --muted: #5f6f93;
+            --accent: var(--brand-indigo);
+            --surface: var(--panel-bg);
+            --surface-soft: #f3f6ff;
+            --line: #cfd7eb;
+            --primary: var(--brand-green);
+            --primary-soft: #eaf7ef;
+            --highlight-soft: #fff1e3;
+            --focus-ring: rgba(255, 145, 50, 0.34);
+            --shadow: 0 14px 34px rgba(18, 30, 74, 0.12);
+        }
+
+        [data-theme="dark"] {
+            --bg: #0f152d;
+            --panel-bg: #111c3a;
+            --surface-soft: #19254b;
+            --text: #ecf1ff;
+            --muted: #9eb0d6;
+            --line: #2b3d66;
+            --accent: #8d92ff;
+            --primary-soft: #1a3a2a;
+            --highlight-soft: #3a2b1c;
+            --field-bg: #152348;
+            --field-placeholder: #90a6d2;
+            --shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+
+        .test-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .test-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 1.5rem;
+        }
+
+        .test-header h1 {
+            font-size: 1.875rem;
+            color: var(--text);
+        }
+
+        .test-controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.25rem;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: var(--panel-bg);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 0.9375rem;
+            font-weight: 600;
+            transition: all 180ms ease;
+            font-family: inherit;
+        }
+
+        .btn:hover {
+            background: var(--surface-soft);
+            border-color: var(--primary);
+        }
+
+        .btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .theme-toggle {
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 6px;
+            background: var(--surface-soft);
+            color: var(--text);
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .theme-toggle:hover {
+            opacity: 0.8;
+        }
+
+        .test-section {
+            background: var(--panel-bg);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .test-section h2 {
+            font-size: 1.375rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
+
+        #certificationContainer {
+            /* CertificationPanel will render here */
+        }
+
+        .test-info {
+            background: var(--primary-soft);
+            color: var(--text);
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9375rem;
+            line-height: 1.6;
+        }
+
+        .test-info strong {
+            color: var(--accent);
+        }
+
+        code {
+            background: var(--surface-soft);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            color: var(--primary);
+        }
+
+        .test-footer {
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.875rem;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--line);
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <header class="test-header">
+            <h1>CertificationPanel Test Suite</h1>
+            <div class="test-controls">
+                <button class="btn" id="showCompleted">Show Completed</button>
+                <button class="btn" id="showEmpty">Show Empty State</button>
+                <button class="theme-toggle" id="themeToggle">🌙 Dark Mode</button>
+            </div>
+        </header>
+
+        <section class="test-section">
+            <h2>Instructions</h2>
+            <div class="test-info">
+                <strong>Test Scenario 1 (Completed):</strong> Click "Show Completed" to render the certificate with mock data. 
+                Test the View &amp; Download buttons and the preview modal. Verify responsive design by resizing the browser.
+            </div>
+            <div class="test-info">
+                <strong>Test Scenario 2 (Empty State):</strong> Click "Show Empty State" to see the friendly placeholder before onboarding completion.
+            </div>
+            <div class="test-info">
+                <strong>Dark Mode:</strong> Toggle dark mode with the button above. Verify CSS variables and contrast.
+            </div>
+        </section>
+
+        <section class="test-section">
+            <h2>Certification Panel (Live Preview)</h2>
+            <div id="certificationContainer"></div>
+        </section>
+
+        <footer class="test-footer">
+            <p>CertificationPanel v1.0 | Production-ready component for Inner SPARC Portal</p>
+            <p>Files: <code>CertificationPanel.js</code> | <code>CertificationPanel.css</code> | Integration guide: <code>CERTIFICATION_PANEL_INTEGRATION.md</code></p>
+        </footer>
+    </div>
+
+    <!-- Load CertificationPanel JS (adjust path as needed) -->
+    <script src="app/static/js/CertificationPanel.js"></script>
+
+    <script>
+        // Initialize the panel
+        const panel = new CertificationPanel({ devMode: true });
+
+        // Mock certificate data
+        const mockCertificate = {
+            fullName: 'Chrishawnee Bertillo',
+            programTitle: 'Employee Onboarding Program',
+            completionDate: 'March 25, 2026',
+            certificateId: 'OB-2026-00124',
+            issuedBy: 'HR Department',
+            logoUrl: '', // Can be: '/static/images/innersparc.png'
+            signatureName: 'HR Team',
+            verificationText: 'This certificate is valid and verifiable.'
+        };
+
+        // Button handlers
+        document.getElementById('showCompleted').addEventListener('click', function() {
+            panel.render('#certificationContainer', {
+                completed: true,
+                certificate: mockCertificate
+            });
+            // Update button states
+            document.getElementById('showCompleted').classList.add('active');
+            document.getElementById('showEmpty').classList.remove('active');
+        });
+
+        document.getElementById('showEmpty').addEventListener('click', function() {
+            panel.render('#certificationContainer', {
+                completed: false
+            });
+            // Update button states
+            document.getElementById('showEmpty').classList.add('active');
+            document.getElementById('showCompleted').classList.remove('active');
+        });
+
+        // Theme toggle
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            if (isDark) {
+                document.documentElement.removeAttribute('data-theme');
+                this.textContent = '🌙 Dark Mode';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                this.textContent = '☀️ Light Mode';
+            }
+        });
+
+        // Render default state (completed certificate)
+        panel.render('#certificationContainer', {
+            completed: true,
+            certificate: mockCertificate
+        });
+        document.getElementById('showCompleted').classList.add('active');
+
+        // Override download for demo
+        const originalDownload = panel.downloadCertificate.bind(panel);
+        panel.downloadCertificate = function() {
+            alert(
+                '✓ Download triggered!\n\n' +
+                'Certificate ID: ' + this.state.certificate.certificateId + '\n' +
+                'Name: ' + this.state.certificate.fullName + '\n\n' +
+                'In production, this would:\n' +
+                '1. Call a server endpoint to generate PDF\n' +
+                '2. Use html2pdf library\n' +
+                '3. Or trigger a download of pre-rendered PDF'
+            );
+        };
+    </script>
+
+    <!-- Import the component CSS (adjust path as needed) -->
+    <link rel="stylesheet" href="app/static/css/CertificationPanel.css">
+</body>
+</html>

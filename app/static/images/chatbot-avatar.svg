@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Assistant avatar">
+  <defs>
+    <linearGradient id="hair" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6f4c45"/>
+      <stop offset="1" stop-color="#5a3e39"/>
+    </linearGradient>
+    <linearGradient id="shirt" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e9eef7"/>
+      <stop offset="1" stop-color="#d8e0ee"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="20" fill="#eef2f8"/>
+  <path d="M29 98c2-15 13-26 35-26s33 11 35 26v13H29V98z" fill="url(#shirt)"/>
+  <path d="M56 80h16l2 10-10 9-10-9 2-10z" fill="#f3d3a1"/>
+  <path d="M63.5 84h1l6.5 16h-14z" fill="#3a4a66"/>
+  <circle cx="64" cy="52" r="24" fill="#f3c98b"/>
+  <path d="M40 49c0-19 14-30 30-30 13 0 21 6 25 14 2 4 3 8 3 12v9c-5-3-10-8-13-12-4 6-11 10-19 10H40z" fill="url(#hair)"/>
+  <circle cx="56" cy="54" r="1.9" fill="#513c37"/>
+  <circle cx="72" cy="54" r="1.9" fill="#513c37"/>
+</svg>

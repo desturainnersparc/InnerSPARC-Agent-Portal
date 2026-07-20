@@ -1,0 +1,2302 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Inner SPARC | Super User Admin{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/template2.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="tpl2" id="tpl2Root" data-accounts-api-url="{% url 'portal_admin_accounts' %}" data-superusers-api-url="{% url 'portal_admin_superusers' %}" data-superuser-role-update-api-url="{% url 'portal_admin_superuser_role_update' %}" data-superuser-password-update-api-url="{% url 'portal_admin_superuser_password_update' %}" data-notifications-api-url="{% url 'portal_admin_notifications' %}" data-security-settings-api-url="{% url 'portal_admin_security_settings' %}" data-security-settings-save-api-url="{% url 'portal_admin_security_settings_update' %}" data-current-admin-role="{{ current_admin_role|default:'administrator' }}">
+
+    {% if request.user.is_authenticated and request.user.is_superuser or request.session.portal_is_superuser %}
+    <section class="tpl2-app" aria-label="Super User Admin Dashboard Layout">
+        <aside class="tpl2-sidebar" id="tpl2Sidebar" aria-label="Admin sidebar">
+            <button class="tpl2-side-toggle" type="button" id="tpl2SideToggle" aria-controls="tpl2Sidebar" aria-label="Collapse sidebar" aria-expanded="true">
+                <span class="bars" aria-hidden="true"></span>
+            </button>
+            <div class="tpl2-sidebar-scroll">
+                <div class="tpl2-brand">
+                    <h2>Inner SPARC Reality Corporation</h2>
+                    <p>Admin Control Panel</p>
+                </div>
+
+                <nav class="tpl2-nav" aria-label="Super user admin navigation">
+                    <button class="tpl2-nav-item active" data-nav-section="dashboard" type="button">
+                        <span class="tpl2-nav-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>
+                        <span>Dashboard</span>
+                    </button>
+                    <button class="tpl2-nav-item" data-nav-section="training" type="button">
+                        <span class="tpl2-nav-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"/><path d="M4 14h10"/><path d="M4 9h5"/><path d="M14 6l6 6-6 6"/></svg></span>
+                        <span>Training Performance</span>
+                    </button>
+                    <button class="tpl2-nav-item" data-nav-section="agents" type="button">
+                        <span class="tpl2-nav-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="11" x2="15" y2="11"/><line x1="9" y1="15" x2="15" y2="15"/></svg></span>
+                        <span>Agents App</span>
+                    </button>
+                    <button class="tpl2-nav-item" data-nav-section="accounts" data-admin-only="true" type="button">
+                        <span class="tpl2-nav-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span>Accounts</span>
+                    </button>
+                    <button class="tpl2-nav-item" data-nav-section="settings" data-admin-only="true" type="button">
+                        <span class="tpl2-nav-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><line x1="12" y1="1" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="1" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="23" y2="12"/><line x1="4.22" y1="4.22" x2="7.22" y2="7.22"/><line x1="16.78" y1="16.78" x2="19.78" y2="19.78"/><line x1="19.78" y1="4.22" x2="16.78" y2="7.22"/><line x1="7.22" y1="16.78" x2="4.22" y2="19.78"/></svg></span>
+                        <span>Settings</span>
+                    </button>
+                </nav>
+            </div>
+
+            <footer class="tpl2-side-footer" id="tpl2SideFooter">
+                <section class="tpl2-side-profile" id="tpl2SideProfile" aria-label="Profile actions">
+                    <button class="tpl2-side-profile-head" type="button" id="tpl2SideProfileToggle" aria-expanded="false" aria-controls="tpl2SideProfileActions" aria-label="Toggle profile actions">
+                        <span class="tpl2-side-avatar-wrap" aria-hidden="true">
+                            <span class="tpl2-side-avatar" id="tpl2SideAvatar">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <circle cx="12" cy="8" r="3.2"></circle>
+                                    <path d="M5.5 19a6.5 6.5 0 0 1 13 0"></path>
+                                </svg>
+                            </span>
+                            <span class="tpl2-side-status-dot" aria-hidden="true"></span>
+                        </span>
+                        <span class="tpl2-meta">
+                            <strong id="tpl2SideUserName">{{ request.user.get_full_name|default:request.user.username|default:'Super User'|escape }}</strong>
+                            <span>{{ request.user.email|default:'admin@innersparc.local'|escape }}</span>
+                        </span>
+                        <span class="tpl2-chevron" aria-whidden="true"></span>
+                    </button>
+                    <div class="tpl2-side-profile-actions" id="tpl2SideProfileActions" role="menu" aria-label="Profile actions" hidden>
+                        <button class="tpl2-side-profile-action" type="button" role="menuitem" id="tpl2AccountSettings" aria-label="Account Settings" title="Account Settings">
+                            <span class="tpl2-side-profile-action-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33 1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82 1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                                </svg>
+                            </span>
+                            <span class="tpl2-side-profile-action-label">Account Settings</span>
+                        </button>
+                        <button class="tpl2-side-profile-action" type="button" role="menuitem" id="tpl2SignOut" aria-label="Logout" title="Logout">
+                            <span class="tpl2-side-profile-action-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                    <polyline points="16 17 21 12 16 7"></polyline>
+                                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                                </svg>
+                            </span>
+                            <span class="tpl2-side-profile-action-label">Logout</span>
+                        </button>
+                    </div>
+                </section>
+            </footer>
+        </aside>
+
+        <div class="tpl2-mobile-backdrop" id="tpl2MobileBackdrop" aria-hidden="true"></div>
+
+        <div class="tpl2-main">
+            <header class="tpl2-header" aria-label="Admin top navigation">
+                <div class="tpl2-header-left">
+                    <button class="tpl2-menu-toggle" id="tpl2MenuToggle" type="button" aria-label="Open sidebar menu" aria-controls="tpl2Sidebar" aria-expanded="false">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                    </button>
+                    <div class="tpl2-header-title-group">
+                        <h1 id="header-title">Admin Dashboard</h1>
+                        <p id="header-subtitle">Monitor platform operations and critical tasks.</p>
+                    </div>
+                </div>
+                <div class="tpl2-header-right">
+                    <span class="tpl2-chip">Role: {{ current_admin_role_label|default:'Administrator' }}</span>
+                    <button class="tpl2-theme-toggle tpl2-header-icon-btn" type="button" id="tpl2Theme" aria-label="Enable dark mode" aria-pressed="false" title="Toggle theme">
+                        <svg class="tpl2-theme-icon moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"></path>
+                        </svg>
+                        <svg class="tpl2-theme-icon sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="4"></circle>
+                            <path d="M12 2v2"></path>
+                            <path d="M12 20v2"></path>
+                            <path d="m4.93 4.93 1.41 1.41"></path>
+                            <path d="m17.66 17.66 1.41 1.41"></path>
+                            <path d="M2 12h2"></path>
+                            <path d="M20 12h2"></path>
+                            <path d="m6.34 17.66-1.41 1.41"></path>
+                            <path d="m19.07 4.93-1.41 1.41"></path>
+                        </svg>
+                    </button>
+                    <button class="tpl2-notification-bell tpl2-header-icon-btn" type="button" id="tpl2NotificationBell" title="Notifications" aria-label="Toggle notifications" aria-expanded="false" aria-haspopup="true" aria-controls="tpl2NotificationPanel">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+                        <span class="tpl2-notification-badge" id="tpl2NotificationBadge" hidden>0</span>
+                    </button>
+                    <section class="tpl2-notification-panel" id="tpl2NotificationPanel" aria-label="Notifications" aria-hidden="true">
+                        <header class="tpl2-notification-panel-head">
+                            <h3>Notifications</h3>
+                            <button class="tpl2-notification-refresh" type="button" id="tpl2NotificationRefresh">Refresh</button>
+                        </header>
+                        <div class="tpl2-notification-list" id="tpl2NotificationList">
+                            <div class="tpl2-notification-empty">Loading notifications...</div>
+                        </div>
+                    </section>
+                </div>
+            </header>
+
+            <main class="tpl2-content" aria-label="Admin content area">
+                <!-- DASHBOARD SECTION -->
+                <div class="tpl2-section active" data-section="dashboard">
+                    <!-- ONBOARDING PROGRESS METRICS (TOP) -->
+                    <div class="tpl2-card">
+                        <h2 class="tpl2-card-title">User Onboarding Completion</h2>
+                        <div class="tpl2-metrics-grid">
+                            <!-- Welcome and Orientation -->
+                            <div class="tpl2-metric-card">
+                                <div class="tpl2-metric-header">
+                                    <h3 class="tpl2-metric-title">Welcome and Orientation</h3>
+                                    <span class="tpl2-metric-percentage">{{ onboarding_metrics.welcome_percent }}%</span>
+                                </div>
+                                <div class="tpl2-metric-stats">
+                                    <span class="tpl2-metric-count">{{ onboarding_metrics.welcome_completed }}<span class="tpl2-metric-total">/ {{ onboarding_metrics.total_users }}</span></span>
+                                    <span class="tpl2-metric-label">users completed</span>
+                                </div>
+                                <div class="tpl2-progress-container">
+                                    <div class="tpl2-progress-bar-track">
+                                        <div class="tpl2-progress-bar-fill tpl2-progress-welcome" style="width: {{ onboarding_metrics.welcome_percent }}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Profile & Credentials -->
+                            <div class="tpl2-metric-card">
+                                <div class="tpl2-metric-header">
+                                    <h3 class="tpl2-metric-title">Profile & Credentials</h3>
+                                    <span class="tpl2-metric-percentage">{{ onboarding_metrics.profile_percent }}%</span>
+                                </div>
+                                <div class="tpl2-metric-stats">
+                                    <span class="tpl2-metric-count">{{ onboarding_metrics.profile_completed }}<span class="tpl2-metric-total">/ {{ onboarding_metrics.total_users }}</span></span>
+                                    <span class="tpl2-metric-label">users completed</span>
+                                </div>
+                                <div class="tpl2-progress-container">
+                                    <div class="tpl2-progress-bar-track">
+                                        <div class="tpl2-progress-bar-fill tpl2-progress-profile" style="width: {{ onboarding_metrics.profile_percent }}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- VIDEO LOOM -->
+                            <div class="tpl2-metric-card">
+                                <div class="tpl2-metric-header">
+                                    <h3 class="tpl2-metric-title">VIDEO LOOM</h3>
+                                    <span class="tpl2-metric-percentage">{{ onboarding_metrics.video_loom_percent }}%</span>
+                                </div>
+                                <div class="tpl2-metric-stats">
+                                    <span class="tpl2-metric-count">{{ onboarding_metrics.video_loom_completed }}<span class="tpl2-metric-total">/ {{ onboarding_metrics.total_users }}</span></span>
+                                    <span class="tpl2-metric-label">users completed</span>
+                                </div>
+                                <div class="tpl2-progress-container">
+                                    <div class="tpl2-progress-bar-track">
+                                        <div class="tpl2-progress-bar-fill tpl2-progress-video-loom" style="width: {{ onboarding_metrics.video_loom_percent }}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Agent Foundation -->
+                            <div class="tpl2-metric-card">
+                                <div class="tpl2-metric-header">
+                                    <h3 class="tpl2-metric-title">Agent Foundation </h3>
+                                    <span class="tpl2-metric-percentage">{{ onboarding_metrics.training_percent }}%</span>
+                                </div>
+                                <div class="tpl2-metric-stats">
+                                    <span class="tpl2-metric-count">{{ onboarding_metrics.training_completed }}<span class="tpl2-metric-total">/ {{ onboarding_metrics.total_users }}</span></span>
+                                    <span class="tpl2-metric-label">users completed</span>
+                                </div>
+                                <div class="tpl2-progress-container">
+                                    <div class="tpl2-progress-bar-track">
+                                        <div class="tpl2-progress-bar-fill tpl2-progress-training" style="width: {{ onboarding_metrics.training_percent }}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tpl2-card">
+                        <div class="tpl2-timeline-toolbar">
+                            <div class="tpl2-timeline-toolbar-copy">
+                                <h2 class="tpl2-card-title">Activity Timeline</h2>
+                                <p class="tpl2-text-muted-sm">All user submissions, activity logs, and confirmations tracked daily.</p>
+                            </div>
+                            {% if activity_timeline %}
+                            <div class="tpl2-timeline-filter-bar" aria-label="Timeline date filters">
+                                <div class="tpl2-filter-input-group">
+                                    <label for="timelineDateFilter" class="tpl2-filter-label">Date</label>
+                                    <input type="date" id="timelineDateFilter" class="tpl2-filter-date-input" value="{{ today_date }}" aria-label="Select date to filter timeline">
+                                </div>
+                                <div class="tpl2-filter-quick-buttons" role="group" aria-label="Quick timeline filters">
+                                    <button type="button" class="tpl2-quick-filter-btn tpl2-quick-filter-active" data-filter="today" onclick="filterTimelineByRange('today')">Today</button>
+                                    <button type="button" class="tpl2-quick-filter-btn" data-filter="yesterday" onclick="filterTimelineByRange('yesterday')">Yesterday</button>
+                                    <button type="button" class="tpl2-quick-filter-btn" data-filter="week" onclick="filterTimelineByRange('week')">Last 7 Days</button>
+                                    <button type="button" class="tpl2-quick-filter-btn" data-filter="all" onclick="filterTimelineByRange('all')">All</button>
+                                    <button type="button" class="tpl2-quick-filter-btn tpl2-quick-filter-clear" id="timelineFilterReset" onclick="resetTimelineFilter()">Clear Defaults</button>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        {% if activity_timeline %}
+
+                        <div class="tpl2-daily-timeline" id="timelineContainer">
+                            {% for day in activity_timeline %}
+                            <div class="tpl2-daily-section">
+                                <div class="tpl2-daily-header">
+                                    <h3 class="tpl2-daily-date">{{ day.date_display }}</h3>
+                                </div>
+                                <div class="tpl2-activity-timeline">
+                                    {% for event in day.events %}
+                                    <div class="tpl2-activity-item tpl2-activity-item-{{ event.kind }}">
+                                        <div class="tpl2-activity-icon" aria-hidden="true">
+                                            {% if event.kind == 'submission' %}
+                                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17.5V6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v11a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 17.5z"/><polyline points="9 12 11 14 15 10"/></svg>
+                                            {% elif event.kind == 'confirmation' %}
+                                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="8.5 12.5 11 15 16 10"/></svg>
+                                            {% else %}
+                                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+                                            {% endif %}
+                                        </div>
+                                        <div class="tpl2-activity-body">
+                                            <div class="tpl2-activity-meta-row">
+                                                <div class="tpl2-activity-time">{{ event.timestamp }}</div>
+                                                <span class="tpl2-activity-kind tpl2-activity-kind-{{ event.kind }}">{{ event.kind_label }}</span>
+                                                <span class="tpl2-activity-app-badge">{{ event.application_id }}</span>
+                                                <span class="tpl2-status-badge {% if event.status == 'Approved' %}tpl2-status-approved{% elif event.status == 'Pending' %}tpl2-status-pending{% else %}tpl2-status-in-review{% endif %}">{{ event.status }}</span>
+                                            </div>
+                                            <div class="tpl2-activity-action">
+                                                <span class="tpl2-activity-user">{{ event.user_name }}</span> - {{ event.message }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="tpl2-text-muted-sm">No activity data available yet.</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- TRAINING PERFORMANCE SECTION -->
+                <div class="tpl2-section" data-section="training">
+                    <div class="tpl2-stats-row">
+                        <div class="tpl2-stat-card">
+                            <span class="tpl2-stat-card-label">Average Training Video Completion</span>
+                            <span class="tpl2-stat-card-value">{{ training_overview.average_training_percent }}%</span>
+                            <span class="tpl2-stat-card-trend">Average across {{ training_overview.total_agents }} agents</span>
+                        </div>
+                        <div class="tpl2-stat-card">
+                            <span class="tpl2-stat-card-label">Average Module Completion</span>
+                            <span class="tpl2-stat-card-value">{{ training_overview.average_module_percent }}%</span>
+                            <span class="tpl2-stat-card-trend">{{ training_overview.total_modules }} modules</span>
+                        </div>
+                        <div class="tpl2-stat-card">
+                            <span class="tpl2-stat-card-label">Quiz Completion Rate</span>
+                            <span class="tpl2-stat-card-value">{{ training_overview.quiz_completion_rate }}%</span>
+                            <span class="tpl2-stat-card-trend">{{ training_overview.quiz_completed_count }} agents completed quiz</span>
+                        </div>
+                    </div>
+
+                    <div class="tpl2-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <h2 class="tpl2-card-title">Agent Training Performance</h2>
+                            <p class="tpl2-text-muted-sm">Track each agent's progress across training videos and modules.</p>
+                        </div>
+                        <div class="tpl2-table-wrapper">
+                            <table class="tpl2-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Training Videos %</th>
+                                        <th>Modules Completed</th>
+                                        <th>Quiz Completed</th>
+                                        <th>Application Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for row in agent_training_rows %}
+                                    <tr>
+                                        <td>{{ row.name }}</td>
+                                        <td>{{ row.email }}</td>
+                                        <td>{{ row.training_videos_percent }}%</td>
+                                        <td>{{ row.completed_modules }} / {{ row.total_modules }}</td>
+                                        <td>{{ row.quiz_completed }}</td>
+                                        <td><span class="tpl2-status-badge {{ row.status_class }}">{{ row.application_status }}</span></td>
+                                        <td>
+                                            <div class="tpl2-action-group" style="gap: 8px; display:flex; flex-wrap: wrap; align-items: center;">
+                                                <button class="tpl2-btn tpl2-btn-small tpl2-btn-outline" type="button" data-training-detail-toggle="{{ row.user_id }}" style="font-size: 0.55rem;">View breakdown</button>
+                                                {% if row.training_videos_percent < 100 %}
+                                                <button class="tpl2-btn tpl2-btn-small tpl2-btn-secondary" type="button" data-training-reminder-send="{{ row.user_id }}" data-admin-only="true" style="font-size: 0.55rem;">Send reminder</button>
+                                                {% else %}
+                                                <span class="tpl2-text-muted-sm">Training complete</span>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="tpl2-training-detail-row" id="trainingDetailRow-{{ row.user_id }}" hidden>
+                                        <td colspan="7">
+                                            <div class="tpl2-training-detail-panel">
+                                                <div class="tpl2-training-detail-header">
+                                                    <strong>Module score breakdown</strong>
+                                                    <span class="tpl2-training-detail-note">Click the button again to hide details.</span>
+                                                </div>
+                                                <div class="tpl2-training-breakdown-summary">
+                                                    <div><strong>Quiz score:</strong> {% if row.quiz_score is not None %}{{ row.quiz_score }}%{% else %}Not available{% endif %}</div>
+                                                    <div><strong>Module completion score:</strong> {{ row.module_percent }}%</div>
+                                                </div>
+                                                <div class="tpl2-table-wrapper tpl2-training-breakdown-table">
+                                                    <table class="tpl2-table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Module</th>
+                                                                <th>Progress</th>
+                                                                <th>Steps Completed</th>
+                                                                <th>Score</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for module in row.module_scores %}
+                                                            <tr>
+                                                                <td>{{ module.label }}</td>
+                                                                <td>{{ module.completed_steps }} / {{ module.total_steps }}</td>
+                                                                <td>{{ module.completed_steps }} of {{ module.total_steps }}</td>
+                                                                <td>{{ module.score }}%</td>
+                                                            </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AGENTS APPLICATION SECTION -->
+                <div class="tpl2-section" data-section="agents">
+                    <div class="tpl2-stats-row">
+                        <div class="tpl2-stat-card">
+                            <span class="tpl2-stat-card-label">New Applications</span>
+                            <span class="tpl2-stat-card-value" id="agentsNewApplicationsCount">{{ agents_metrics.new_applications }}</span>
+                            <span class="tpl2-stat-card-trend">This week</span>
+                        </div>
+                        <div class="tpl2-stat-card">
+                            <span class="tpl2-stat-card-label">Pending Review</span>
+                            <span class="tpl2-stat-card-value" id="agentsPendingCount">{{ agents_metrics.pending_review }}</span>
+                            <span class="tpl2-stat-card-trend"><svg class="tpl2-inline-icon tpl2-inline-icon-alert" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 20h20L12 2z"/></svg>In queue</span>
+                        </div>
+                        <div class="tpl2-stat-card">
+                            <span class="tpl2-stat-card-label">Approved</span>
+                            <span class="tpl2-stat-card-value" id="agentsApprovedCount">{{ agents_metrics.approved }}</span>
+                            <span class="tpl2-stat-card-trend">Completed review</span>
+                        </div>
+                        <div class="tpl2-stat-card">
+                            <span class="tpl2-stat-card-label">Rejected</span>
+                            <span class="tpl2-stat-card-value" id="agentsRejectedCount">{{ agents_metrics.rejected }}</span>
+                            <span class="tpl2-stat-card-trend">All time</span>
+                        </div>
+                    </div>
+
+                    <div class="tpl2-card">
+                        <h2 class="tpl2-card-title">Search & Filter Applications</h2>
+                        <div class="tpl2-filter-bar">
+                            <input type="text" class="tpl2-search-input" placeholder="Search by name, email, or app ID...">
+                            <select class="tpl2-filter-select">
+                                <option>All Status</option>
+                                <option>In Progress</option>
+                                <option>Under Review</option>
+                                <option>Approved</option>
+                                <option>Rejected</option>
+                            </select>
+                            <select class="tpl2-filter-select">
+                                <option>All Submission Dates</option>
+                                <option>Last 24 Hours</option>
+                                <option>Last 7 Days</option>
+                                <option>Last 30 Days</option>
+                            </select>
+                            <button class="tpl2-filter-reset-btn" type="button">Reset Filters</button>
+                        </div>
+                    </div>
+
+                    <div class="tpl2-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <h2 class="tpl2-card-title">Applications</h2>
+                        </div>
+                        <div class="tpl2-table-wrapper">
+                            <table class="tpl2-table">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" class="tpl2-table-checkbox"></th>
+                                        <th>Application ID</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Submission Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="applicationsTableBody">
+                                    {% for app in applications %}
+                                    <tr id="applicationRow-{{ app.app_id }}" data-app-id="{{ app.app_id }}" data-user-id="{{ app.user_id }}" data-name="{{ app.name|escape }}" data-email="{{ app.email|escape }}" data-status="{{ app.status }}">
+                                        <td><input type="checkbox" class="tpl2-table-checkbox"></td>
+                                        <td><strong>{{ app.app_id }}</strong></td>
+                                        <td>{{ app.name }}</td>
+                                        <td>{{ app.email }}</td>
+                                        <td>{{ app.submission_date }}</td>
+                                        <td class="tpl2-application-status-cell"><span class="tpl2-status-badge {{ app.status_class }}">{{ app.status }}</span></td>
+                                        <td class="tpl2-application-action-cell">
+                                            <div class="tpl2-action-group" data-role="application-actions">
+                                                <button class="tpl2-icon-btn tpl2-icon-btn-primary" type="button" onclick="openApplicationReviewModal('{{ app.app_id|escapejs }}', '{{ app.user_id|escapejs }}', '{{ app.name|escapejs }}', '{{ app.email|escapejs }}')" title="View application details" aria-label="View application details for {{ app.name }}">
+                                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                                </button>
+                                                <button class="tpl2-icon-btn tpl2-icon-btn-approve" type="button" onclick="approveApplication('{{ app.app_id|escapejs }}', '{{ app.user_id|escapejs }}', '{{ app.name|escapejs }}', '{{ app.email|escapejs }}')" title="Approve application" aria-label="Approve application for {{ app.name }}">
+                                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                                                </button>
+                                                <button class="tpl2-icon-btn tpl2-icon-btn-reject" type="button" onclick="rejectApplication('{{ app.app_id|escapejs }}', '{{ app.user_id|escapejs }}', '{{ app.name|escapejs }}', '{{ app.email|escapejs }}')" title="Reject application" aria-label="Reject application for {{ app.name }}">
+                                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="tpl2-bulk-actions">
+                        <button class="tpl2-btn tpl2-btn-primary tpl2-btn-small" type="button">Bulk Approve Selected</button>
+                        <button class="tpl2-btn tpl2-btn-small" type="button">Export to CSV</button>
+                        <button class="tpl2-btn tpl2-btn-small" type="button">Export to PDF</button>
+                    </div>
+                </div>
+
+                <!-- ACCOUNTS SECTION -->
+                <div class="tpl2-section" data-section="accounts" data-admin-only="true">
+                    <div class="tpl2-stats-row">
+                        <div class="tpl2-stat-card">
+                            <span class="tpl2-stat-card-label">Total Accounts</span>
+                            <span class="tpl2-stat-card-value" id="accountsTotalCount">0</span>
+                            <span class="tpl2-stat-card-trend">Onboarding records</span>
+                        </div>
+                        <div class="tpl2-stat-card">
+                            <span class="tpl2-stat-card-label">Submitted</span>
+                            <span class="tpl2-stat-card-value" id="accountsSubmittedCount">0</span>
+                            <span class="tpl2-stat-card-trend"><svg class="tpl2-inline-icon tpl2-inline-icon-success" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Review-ready</span>
+                        </div>
+                        <div class="tpl2-stat-card">
+                            <span class="tpl2-stat-card-label">Pending</span>
+                            <span class="tpl2-stat-card-value" id="accountsPendingCount">0</span>
+                            <span class="tpl2-stat-card-trend">Activation pending</span>
+                        </div>
+                        <div class="tpl2-stat-card">
+                            <span class="tpl2-stat-card-label">With Documents</span>
+                            <span class="tpl2-stat-card-value" id="accountsWithDocsCount">0</span>
+                            <span class="tpl2-stat-card-trend"><svg class="tpl2-inline-icon tpl2-inline-icon-alert" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 20h20L12 2z"/></svg>At least 1 upload</span>
+                        </div>
+                    </div>
+
+                    <div class="tpl2-accounts-surface" aria-label="Accounts management module">
+                        <div class="tpl2-accounts-surface-top">
+                            <div class="tpl2-accounts-header-row">
+                                <h2 class="tpl2-card-title">Accounts</h2>
+                            </div>
+                            <div class="tpl2-accounts-toolbar" role="region" aria-label="Accounts search and filter controls">
+                                <div class="tpl2-accounts-search-wrap">
+                                    <label for="accountSearchInput" class="tpl2-sr-only">Search accounts</label>
+                                    <input type="text" class="tpl2-accounts-search" placeholder="Search accounts..." id="accountSearchInput" autocomplete="off">
+                                </div>
+                                <div class="tpl2-accounts-controls">
+                                    <label for="statusFilter" class="tpl2-sr-only">Filter by status</label>
+                                    <select class="tpl2-accounts-select" id="statusFilter" aria-label="Filter accounts by status">
+                                        <option value="">All</option>
+                                        <option value="Submitted">Submitted</option>
+                                        <option value="Pending">Pending</option>
+                                    </select>
+                                    <button class="tpl2-accounts-reset" type="button" onclick="resetAccountFilters()">Reset</button>
+                                </div>
+                            </div>
+                            <div id="accountsInlineMessage" class="tpl2-text-muted-sm tpl2-accounts-inline-message" style="display:none;" aria-live="polite"></div>
+                        </div>
+                        <div class="tpl2-accounts-divider" aria-hidden="true"></div>
+                        <div class="tpl2-table-wrapper tpl2-accounts-table-shell" role="region" aria-label="Accounts list" tabindex="0">
+                            <table class="tpl2-table tpl2-accounts-table" aria-describedby="accountsInlineMessage">
+                                <thead>
+                                    <tr>
+                                        <th>Account ID</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Activation Status</th>
+                                        <th>Submitted Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="accountsTableBody">
+                                    <tr>
+                                        <td colspan="6" class="tpl2-text-muted-sm tpl2-accounts-empty">Loading onboarding accounts...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SYSTEM SETTINGS SECTION -->
+                <div class="tpl2-section" data-section="settings" data-admin-only="true">
+                    <!-- User Management -->
+                    <div class="tpl2-card">
+                        <h2 class="tpl2-card-title"><svg class="tpl2-inline-icon tpl2-inline-icon-lg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>User Management</h2>
+                        <div class="tpl2-table-wrapper tpl2-table-wrapper-spaced">
+                            <table class="tpl2-table" id="userManagementTable">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Last Login</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="userManagementTableBody">
+                                    <tr>
+                                        <td colspan="6" class="tpl2-text-muted-sm">Loading superuser accounts...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Security Settings -->
+                    <div class="tpl2-card">
+                        <h2 class="tpl2-card-title">Security Settings</h2>
+                        <div class="tpl2-stack-md">
+                            <div class="tpl2-setting-row">
+                                <div class="tpl2-setting-label">
+                                    <div class="tpl2-setting-title">Session Timeout</div>
+                                    <div class="tpl2-setting-desc" id="tpl2SessionTimeoutDesc">Current: 30 minutes of inactivity</div>
+                                </div>
+                                <select class="tpl2-select-compact" id="tpl2SessionTimeoutSelect" aria-label="Session timeout">
+                                    <option value="900">15 minutes</option>
+                                    <option value="1800" selected>30 minutes</option>
+                                    <option value="3600">1 hour</option>
+                                    <option value="7200">2 hours</option>
+                                </select>
+                            </div>
+                            <div class="tpl2-setting-row">
+                                <div class="tpl2-setting-label">
+                                    <div class="tpl2-setting-title">Login Attempt Limit</div>
+                                    <div class="tpl2-setting-desc" id="tpl2LoginAttemptDesc">Lock out after failed attempts; retry allowed after 5 minutes</div>
+                                </div>
+                                <select class="tpl2-select-compact" id="tpl2LoginAttemptLimitSelect" aria-label="Login attempt limit">
+                                    <option value="3">3 attempts (5 min lockout)</option>
+                                    <option value="5" selected>5 attempts (5 min lockout)</option>
+                                    <option value="10">10 attempts (5 min lockout)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Application Control -->
+                    <div class="tpl2-card">
+                        <h2 class="tpl2-card-title">Application Control</h2>
+                        <div class="tpl2-stack-md">
+                            <div class="tpl2-setting-row">
+                                <div class="tpl2-setting-label">
+                                    <div class="tpl2-setting-title">Pause / Resume Applications</div>
+                                    <div class="tpl2-setting-desc">Control whether new agent applications can be submitted</div>
+                                </div>
+                                <select class="tpl2-select-compact">
+                                    <option selected>Resume Applications</option>
+                                    <option>Pause Applications</option>
+                                </select>
+                            </div>
+                            <div class="tpl2-setting-row">
+                                <div class="tpl2-setting-label">
+                                    <div class="tpl2-setting-title">Max Applications Per Day</div>
+                                    <div class="tpl2-setting-desc">Set a daily submission cap for agent applications</div>
+                                </div>
+                                <select class="tpl2-select-compact">
+                                    <option>100 applications/day</option>
+                                    <option>250 applications/day</option>
+                                    <option selected>500 applications/day</option>
+                                    <option>Unlimited</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- SIDE PANEL -->
+        <div class="tpl2-side-panel" id="sidePanel">
+            <div class="tpl2-side-panel-header">
+                <h2 id="panelTitle">Application Details</h2>
+                <button class="tpl2-side-panel-close" type="button" onclick="closeSidePanel()" aria-label="Close panel"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="tpl2-side-panel-content">
+                <div class="tpl2-side-panel-section">
+                    <div class="tpl2-side-panel-section-title">Applicant Information</div>
+                    <div class="tpl2-side-panel-item">
+                        <span class="tpl2-side-panel-label">Application ID</span>
+                        <span class="tpl2-side-panel-value" id="panelAppId">APP-3045</span>
+                    </div>
+                    <div class="tpl2-side-panel-item">
+                        <span class="tpl2-side-panel-label">Full Name</span>
+                        <span class="tpl2-side-panel-value" id="panelName">Maria Santos</span>
+                    </div>
+                    <div class="tpl2-side-panel-item">
+                        <span class="tpl2-side-panel-label">Email Address</span>
+                        <span class="tpl2-side-panel-value" id="panelEmail">maria@example.com</span>
+                    </div>
+                    <div class="tpl2-side-panel-item">
+                        <span class="tpl2-side-panel-label">Status</span>
+                        <span class="tpl2-side-panel-value" id="panelStatus">Pending</span>
+                    </div>
+                </div>
+                <div class="tpl2-side-panel-section">
+                    <div class="tpl2-side-panel-section-title">Documents</div>
+                    <div class="tpl2-stack-side">
+                        <div class="tpl2-doc-list-item"><svg class="tpl2-inline-icon tpl2-inline-icon-md" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>PRC License</div>
+                        <div class="tpl2-doc-list-item"><svg class="tpl2-inline-icon tpl2-inline-icon-md" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>Passport</div>
+                        <div class="tpl2-doc-list-item"><svg class="tpl2-inline-icon tpl2-inline-icon-md" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>Proof of Address</div>
+                    </div>
+                </div>
+                <div class="tpl2-side-panel-section">
+                    <div class="tpl2-side-panel-section-title">Risk Flags</div>
+                    <div class="tpl2-stack-side-tight">
+                        <div class="tpl2-risk-flag">Document quality concerns</div>
+                    </div>
+                </div>
+                <div class="tpl2-side-panel-section">
+                    <div class="tpl2-side-panel-section-title">Admin Actions</div>
+                    <div class="tpl2-stack-side">
+                        <button class="tpl2-btn tpl2-btn-primary tpl2-btn-block" type="button">Approve Application</button>
+                        <button class="tpl2-btn tpl2-btn-block" type="button">Request Documents</button>
+                        <button class="tpl2-btn tpl2-btn-block" type="button">Assign Reviewer</button>
+                        <button class="tpl2-btn tpl2-action-btn-reject tpl2-btn-block" type="button">Reject Application</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% else %}
+    <section class="tpl2-denied" aria-label="Restricted area">
+        <div class="tpl2-denied-box">
+            <h2>Super User Access Required</h2>
+            <p>This dashboard is restricted to superuser accounts. Please sign in with an authorized account to continue.</p>
+            <span class="tpl2-warning">Access blocked for non-superuser accounts</span>
+        </div>
+    </section>
+    {% endif %}
+</div>
+
+<!-- VIEW PROFILE MODAL -->
+<div id="viewProfileModal" class="tpl2-profile-modal" role="dialog" aria-modal="true" aria-labelledby="viewProfileTitle" hidden>
+    <button type="button" class="tpl2-profile-modal-backdrop" id="viewProfileBackdrop" aria-label="Close account profile modal"></button>
+    <section class="tpl2-profile-modal-card" role="document">
+        <header class="tpl2-profile-modal-header">
+            <div class="tpl2-profile-head-main">
+                <div class="tpl2-profile-avatar" aria-hidden="true">
+                    <img id="profileAccAvatarImage" class="tpl2-profile-avatar-image" src="" alt="" hidden>
+                    <span id="profileAccAvatarInitials">SU</span>
+                </div>
+                <div class="tpl2-profile-head-copy">
+                    <h2 id="viewProfileTitle"><span id="profileAccName">-</span></h2>
+                    <p id="profileAccId">-</p>
+                </div>
+            </div>
+            <button type="button" class="tpl2-profile-modal-close" id="viewProfileClose" aria-label="Close profile modal">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </header>
+
+        <div class="tpl2-profile-modal-body">
+            <section class="tpl2-profile-section" aria-label="Account information">
+                <h3 class="tpl2-profile-section-title">Information</h3>
+                <div class="tpl2-profile-info-grid">
+                    <div class="tpl2-profile-field">
+                        <span class="tpl2-profile-field-label">Email</span>
+                        <span class="tpl2-profile-field-value" id="profileAccEmail">-</span>
+                    </div>
+                    <div class="tpl2-profile-field">
+                        <span class="tpl2-profile-field-label">Phone</span>
+                        <span class="tpl2-profile-field-value" id="profileAccPhone">-</span>
+                    </div>
+                    <div class="tpl2-profile-field">
+                        <span class="tpl2-profile-field-label">Residential Address</span>
+                        <span class="tpl2-profile-field-value" id="profileAccAddress">-</span>
+                    </div>
+                    <div class="tpl2-profile-field">
+                        <span class="tpl2-profile-field-label">Status</span>
+                        <span class="tpl2-profile-status-badge" id="profileAccStatusBadge">Pending</span>
+                    </div>
+                    <div class="tpl2-profile-field">
+                        <span class="tpl2-profile-field-label">Submitted Date</span>
+                        <span class="tpl2-profile-field-value" id="profileAccDate">-</span>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </section>
+</div>
+
+<!-- ADD AGENT MODAL -->
+<div id="addAgentModal" class="tpl2-add-agent-modal">
+    <div class="tpl2-add-agent-modal-overlay" onclick="closeAddAgentModal()"></div>
+    <div class="tpl2-add-agent-modal-content">
+        <div class="tpl2-add-agent-modal-header">
+            <h2>Add New Agent</h2>
+            <button type="button" class="tpl2-add-agent-modal-close" onclick="closeAddAgentModal()">&#10005;</button>
+        </div>
+        <form id="addAgentForm" class="tpl2-add-agent-modal-form" onsubmit="handleAddAgentSubmit(event)">
+            <div class="tpl2-add-agent-form-group">
+                <label for="agentFullName" class="tpl2-add-agent-form-label">Full Name</label>
+                <input type="text" id="agentFullName" class="tpl2-add-agent-form-input" placeholder="Enter agent's full name" required>
+            </div>
+            <div class="tpl2-add-agent-form-group">
+                <label for="agentEmail" class="tpl2-add-agent-form-label">Email</label>
+                <input type="email" id="agentEmail" class="tpl2-add-agent-form-input" placeholder="Enter email address" required>
+            </div>
+            <div class="tpl2-add-agent-form-group">
+                <label for="agentPhone" class="tpl2-add-agent-form-label">Phone Number</label>
+                <input type="tel" id="agentPhone" class="tpl2-add-agent-form-input" placeholder="Enter phone number" required>
+            </div>
+            <div class="tpl2-add-agent-modal-actions">
+                <button type="button" class="tpl2-btn tpl2-btn-default" onclick="closeAddAgentModal()">Cancel</button>
+                <button type="submit" class="tpl2-btn tpl2-btn-primary">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Application Review Modal -->
+<div id="appReviewModal" class="tpl2-review-modal" hidden>
+    <div class="tpl2-review-modal-backdrop" onclick="closeApplicationReviewModal()"></div>
+    <div class="tpl2-review-modal-card">
+        <div class="tpl2-review-modal-header">
+            <div class="tpl2-review-head-main">
+                <div class="tpl2-review-avatar" aria-hidden="true">
+                    <img id="reviewAvatarImage" class="tpl2-review-avatar-image" src="" alt="" hidden>
+                    <span id="reviewAvatarInitials">AG</span>
+                </div>
+                <div>
+                    <h2 id="reviewAppId">Application Review</h2>
+                    <p id="reviewUserName" style="color: #657894; font-size: 0.9rem; margin-top: 4px;"></p>
+                </div>
+            </div>
+            <button class="tpl2-review-modal-close" type="button" onclick="closeApplicationReviewModal()" aria-label="Close modal">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="tpl2-review-modal-body">
+            <div class="tpl2-review-section">
+                <h3 class="tpl2-review-section-title">Applicant Information</h3>
+                <div class="tpl2-review-info-grid">
+                    <div class="tpl2-review-info-field">
+                        <label>Name</label>
+                        <p id="reviewName">-</p>
+                    </div>
+                    <div class="tpl2-review-info-field">
+                        <label>Email</label>
+                        <p id="reviewEmail">-</p>
+                    </div>
+                    <div class="tpl2-review-info-field">
+                        <label>Birthdate</label>
+                        <p id="reviewBirthdate">-</p>
+                    </div>
+                    <div class="tpl2-review-info-field">
+                        <label>Gender</label>
+                        <p id="reviewGender">-</p>
+                    </div>
+                    <div class="tpl2-review-info-field">
+                        <label>Phone</label>
+                        <p id="reviewPhone">-</p>
+                    </div>
+                    <div class="tpl2-review-info-field">
+                        <label>Address</label>
+                        <p id="reviewAddress">-</p>
+                    </div>
+                    <div class="tpl2-review-info-field">
+                        <label>Current Status</label>
+                        <p id="reviewCurrentStatus">In Progress</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tpl2-review-section">
+                <h3 class="tpl2-review-section-title">Submitted Documents</h3>
+                <div class="tpl2-review-doc-summary" id="reviewDocumentsSummary">
+                    <div class="tpl2-review-doc-summary-left">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        <span id="reviewDocumentsSummaryText">Loading submitted documents...</span>
+                    </div>
+                    <button type="button" class="tpl2-review-doc-summary-link" id="reviewDocumentsOpenInlineBtn" onclick="openDocumentsModal(currentReviewModal.appId, currentReviewModal.userId, currentReviewModal.name, currentReviewModal.email)">View Documents</button>
+                </div>
+            </div>
+
+            <div class="tpl2-review-section">
+                <h3 class="tpl2-review-section-title">Onboarding Progress</h3>
+                <div id="reviewProgress" class="tpl2-review-progress-list">
+                    <p style="color: #657894; text-align: center; padding: 20px;">Loading progress...</p>
+                </div>
+            </div>
+
+            <div class="tpl2-review-section">
+                <h3 class="tpl2-review-section-title">Loom Video</h3>
+                <div id="reviewLoomProgress" class="tpl2-review-progress-list">
+                    <p style="color: #657894; text-align: center; padding: 20px;">Loading Loom video progress...</p>
+                </div>
+            </div>
+
+            <div class="tpl2-review-section">
+                <h3 class="tpl2-review-section-title">Module Completion</h3>
+                <div id="reviewModuleProgress" class="tpl2-review-progress-list">
+                    <p style="color: #657894; text-align: center; padding: 20px;">Loading module progress...</p>
+                </div>
+            </div>
+
+            <div class="tpl2-review-section" id="reviewOutcomePanel" hidden>
+                <h3 class="tpl2-review-section-title" id="reviewOutcomePanelTitle">Post-decision Actions</h3>
+                <div class="tpl2-review-outcome-actions" id="reviewOutcomeActions"></div>
+            </div>
+        </div>
+        <div class="tpl2-review-modal-actions">
+            <button type="button" class="tpl2-btn tpl2-btn-default" onclick="closeApplicationReviewModal()">Close</button>
+            <button type="button" class="tpl2-icon-btn tpl2-icon-btn-primary" id="reviewViewDocumentsBtn" onclick="openDocumentsModal(currentReviewModal.appId, currentReviewModal.userId, currentReviewModal.name, currentReviewModal.email)" title="View submitted documents" aria-label="View submitted documents">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+            </button>
+            <button type="button" class="tpl2-btn tpl2-btn-primary tpl2-action-btn-approve" id="reviewApproveBtn" onclick="approveFromModal()">
+                <svg class="tpl2-inline-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Approve
+            </button>
+            <button type="button" class="tpl2-btn tpl2-action-btn-reject" id="reviewRejectBtn" onclick="rejectFromModal()">
+                <svg class="tpl2-inline-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                Reject
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="appDocumentsModal" class="tpl2-review-modal" hidden>
+    <button type="button" class="tpl2-review-modal-backdrop" id="appDocumentsBackdrop" aria-label="Close document preview modal"></button>
+    <div class="tpl2-review-modal-card tpl2-doc-preview-modal-card" role="dialog" aria-modal="true" aria-labelledby="appDocumentsTitle">
+        <div class="tpl2-review-modal-header">
+            <div>
+                <h2 id="appDocumentsTitle">Submitted Documents</h2>
+                <p id="appDocumentsSubtitle">Loading documents...</p>
+            </div>
+            <button class="tpl2-review-modal-close" type="button" id="appDocumentsClose" aria-label="Close document preview modal">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="tpl2-review-modal-body tpl2-doc-preview-layout">
+            <section class="tpl2-doc-preview-list-wrap" aria-label="Document list">
+                <div id="appDocumentsList" class="tpl2-review-files-list">
+                    <p style="color: #657894; text-align: center; padding: 20px;">Loading documents...</p>
+                </div>
+            </section>
+            <section class="tpl2-doc-preview-pane" aria-label="Document preview panel">
+                <h3 class="tpl2-review-section-title" id="appDocumentPreviewTitle">Preview</h3>
+                <div class="tpl2-doc-preview-frame-wrap">
+                    <iframe id="appDocumentPreviewFrame" title="Document preview" hidden></iframe>
+                    <img id="appDocumentPreviewImage" alt="Document preview image" hidden>
+                    <div id="appDocumentPreviewEmpty" class="tpl2-text-muted-sm">Select a document to preview.</div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<div id="rejectReasonModal" class="tpl2-review-modal" hidden>
+    <div class="tpl2-review-modal-backdrop" onclick="closeRejectReasonModal()"></div>
+    <div class="tpl2-review-modal-card tpl2-reject-modal-card">
+        <div class="tpl2-review-modal-header">
+            <div>
+                <h2>Reject Application</h2>
+                <p>Please provide a reason before confirming.</p>
+            </div>
+            <button class="tpl2-review-modal-close" type="button" onclick="closeRejectReasonModal()" aria-label="Close rejection reason modal">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="tpl2-review-modal-body">
+            <label for="rejectReasonInput" class="tpl2-review-section-title" style="margin: 0;">Rejection Reason</label>
+            <textarea id="rejectReasonInput" class="tpl2-reject-reason-input" rows="5" placeholder="State why this application is rejected and what should be corrected."></textarea>
+        </div>
+        <div class="tpl2-review-modal-actions">
+            <button type="button" class="tpl2-btn" onclick="closeRejectReasonModal()">Cancel</button>
+            <button type="button" class="tpl2-btn tpl2-action-btn-reject" onclick="confirmRejectWithReason()">Confirm Rejection</button>
+        </div>
+    </div>
+</div>
+
+<div id="approveConfirmModal" class="tpl2-review-modal" hidden>
+    <div class="tpl2-review-modal-backdrop" onclick="closeApproveConfirmModal()"></div>
+    <div class="tpl2-review-modal-card tpl2-approve-modal-card">
+        <div class="tpl2-review-modal-header">
+            <div>
+                <h2>Approve Application</h2>
+                <p>Confirm approval and send the applicant confirmation email.</p>
+            </div>
+            <button class="tpl2-review-modal-close" type="button" onclick="closeApproveConfirmModal()" aria-label="Close approval confirmation modal">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="tpl2-review-modal-body">
+            <div class="tpl2-review-progress-item">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #10b981;"><polyline points="20 6 9 17 4 12"/></svg>
+                <span id="approveConfirmText">Approve this application?</span>
+            </div>
+        </div>
+        <div class="tpl2-review-modal-actions">
+            <button type="button" class="tpl2-btn" onclick="closeApproveConfirmModal()">Cancel</button>
+            <button type="button" class="tpl2-btn tpl2-btn-primary" id="approveConfirmBtn" onclick="confirmApproveApplication()">Confirm Approval</button>
+        </div>
+    </div>
+</div>
+
+<div id="editRoleModal" class="tpl2-review-modal" hidden>
+    <div class="tpl2-review-modal-backdrop" onclick="closeEditRoleModal()"></div>
+    <div class="tpl2-review-modal-card tpl2-user-management-modal-card" role="dialog" aria-modal="true" aria-labelledby="editRoleModalTitle">
+        <div class="tpl2-review-modal-header">
+            <div>
+                <h2 id="editRoleModalTitle">Edit Role</h2>
+                <p id="editRoleModalSubtitle">Select a role for this user.</p>
+            </div>
+            <button class="tpl2-review-modal-close" type="button" onclick="closeEditRoleModal()" aria-label="Close edit role modal">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="tpl2-review-modal-body">
+            <label for="editRoleSelect" class="tpl2-setting-title">Role</label>
+            <select id="editRoleSelect" class="tpl2-select-compact tpl2-user-management-select" aria-label="Select superuser role">
+                <option value="administrator">ADMINISTRATOR - full system access</option>
+                <option value="reviewer">REVIEWER - view/review/accept/reject applications</option>
+            </select>
+        </div>
+        <div class="tpl2-review-modal-actions">
+            <button type="button" class="tpl2-btn" onclick="closeEditRoleModal()">Cancel</button>
+            <button type="button" class="tpl2-btn tpl2-btn-primary" id="editRoleSaveBtn" onclick="submitEditRole()">Save Role</button>
+        </div>
+    </div>
+</div>
+
+<div id="changePasswordModal" class="tpl2-review-modal" hidden>
+    <div class="tpl2-review-modal-backdrop" onclick="closeChangePasswordModal()"></div>
+    <div class="tpl2-review-modal-card tpl2-user-management-modal-card" role="dialog" aria-modal="true" aria-labelledby="changePasswordModalTitle">
+        <div class="tpl2-review-modal-header">
+            <div>
+                <h2 id="changePasswordModalTitle">Change Password</h2>
+                <p id="changePasswordModalSubtitle">Set a new password for this user.</p>
+            </div>
+            <button class="tpl2-review-modal-close" type="button" onclick="closeChangePasswordModal()" aria-label="Close change password modal">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="tpl2-review-modal-body">
+            <label for="changePasswordInput" class="tpl2-setting-title">New Password</label>
+            <input id="changePasswordInput" class="tpl2-select-compact tpl2-user-management-select" type="password" autocomplete="new-password" placeholder="Enter new password">
+        </div>
+        <div class="tpl2-review-modal-actions">
+            <button type="button" class="tpl2-btn" onclick="closeChangePasswordModal()">Cancel</button>
+            <button type="button" class="tpl2-btn tpl2-btn-primary" id="changePasswordSaveBtn" onclick="submitChangePassword()">Update Password</button>
+        </div>
+    </div>
+</div>
+
+<div id="tpl2ToastRack" class="tpl2-toast-rack" aria-live="polite" aria-atomic="true"></div>
+
+{{ activity_timeline|json_script:"tpl2TimelineData" }}
+
+<script>
+const APP_STATUS = {
+    IN_PROGRESS: 'In Progress',
+    UNDER_REVIEW: 'Under Review',
+    APPROVED: 'Approved',
+    REJECTED: 'Rejected'
+};
+
+let currentReviewModal = {
+    appId: null,
+    userId: null,
+    name: null,
+    email: null,
+    status: APP_STATUS.IN_PROGRESS,
+    notificationStepKey: null
+};
+
+let pendingRejectPayload = null;
+let pendingApprovePayload = null;
+let decisionInFlight = false;
+let profileCache = {};
+let filesCache = {};
+let lastDocumentsTrigger = null;
+let securitySettingsCache = {
+    session_timeout_seconds: Number('{{ security_settings.session_timeout_seconds|default:1800 }}') || 1800,
+    login_attempt_limit: Number('{{ security_settings.login_attempt_limit|default:5 }}') || 5,
+    lockout_minutes: Number('{{ security_settings.lockout_minutes|default:5 }}') || 5
+};
+
+function normalizeAppStatus(status) {
+    const value = String(status || '').trim().toLowerCase();
+    if (value === 'approved') return APP_STATUS.APPROVED;
+    if (value === 'rejected') return APP_STATUS.REJECTED;
+    if (value === 'under review' || value === 'in review') return APP_STATUS.UNDER_REVIEW;
+    return APP_STATUS.IN_PROGRESS;
+}
+
+function escapeHtml(value) {
+    return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function getStatusClass(status) {
+    const normalized = normalizeAppStatus(status);
+    if (normalized === APP_STATUS.APPROVED) return 'tpl2-status-approved';
+    if (normalized === APP_STATUS.REJECTED) return 'tpl2-status-rejected';
+    if (normalized === APP_STATUS.UNDER_REVIEW) return 'tpl2-status-in-review';
+    return 'tpl2-status-pending';
+}
+
+function toInlineJsArg(value) {
+    return String(value || '')
+        .replace(/\\/g, '\\\\')
+        .replace(/'/g, "\\'");
+}
+
+function formatDisplayDate(rawDate) {
+    if (!rawDate) return '-';
+    const parsed = new Date(rawDate);
+    if (Number.isNaN(parsed.getTime())) return String(rawDate);
+    return parsed.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function formatGenderLabel(value) {
+    const normalized = String(value || '').trim().toLowerCase();
+    if (!normalized) return '-';
+    if (normalized === 'male') return 'Male';
+    if (normalized === 'female') return 'Female';
+    if (normalized === 'prefer_not_to_say') return 'Prefer not to say';
+    return normalized.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function getInitials(name) {
+    const parts = String(name || '').trim().split(/\s+/).filter(Boolean);
+    if (!parts.length) return 'AG';
+    const first = parts[0][0] || '';
+    const second = parts[1] ? (parts[1][0] || '') : '';
+    const initials = `${first}${second}`.toUpperCase();
+    return initials || 'AG';
+}
+
+function showWorkflowToast(message, tone) {
+    const rack = document.getElementById('tpl2ToastRack');
+    if (!rack || !message) return;
+    const kind = tone === 'error' ? 'error' : (tone === 'warning' ? 'warning' : 'success');
+    const toast = document.createElement('div');
+    toast.className = `tpl2-toast tpl2-toast-${kind}`;
+    toast.textContent = message;
+    rack.appendChild(toast);
+    window.setTimeout(() => toast.classList.add('is-visible'), 20);
+    window.setTimeout(() => {
+        toast.classList.remove('is-visible');
+        window.setTimeout(() => toast.remove(), 220);
+    }, 3200);
+}
+
+function syncModalBodyLock() {
+    const modalIds = ['appReviewModal', 'rejectReasonModal', 'approveConfirmModal', 'appDocumentsModal', 'viewProfileModal', 'editRoleModal', 'changePasswordModal'];
+    const hasOpenModal = modalIds.some((id) => {
+        const modal = document.getElementById(id);
+        return modal && !modal.hasAttribute('hidden');
+    });
+    document.body.classList.toggle('tpl2-modal-open', hasOpenModal);
+}
+
+function updateReviewModalActionState(status) {
+    const normalized = normalizeAppStatus(status);
+    const approveBtn = document.getElementById('reviewApproveBtn');
+    const rejectBtn = document.getElementById('reviewRejectBtn');
+    const viewDocsBtn = document.getElementById('reviewViewDocumentsBtn');
+    if (approveBtn) {
+        const allowDecision = normalized === APP_STATUS.UNDER_REVIEW;
+        approveBtn.disabled = !allowDecision || decisionInFlight;
+        approveBtn.hidden = !allowDecision;
+    }
+    if (rejectBtn) {
+        const allowDecision = normalized === APP_STATUS.UNDER_REVIEW;
+        rejectBtn.disabled = !allowDecision || decisionInFlight;
+        rejectBtn.hidden = !allowDecision;
+    }
+    if (viewDocsBtn) {
+        viewDocsBtn.disabled = false;
+    }
+
+    const panel = document.getElementById('reviewOutcomePanel');
+    const panelTitle = document.getElementById('reviewOutcomePanelTitle');
+    const panelActions = document.getElementById('reviewOutcomeActions');
+    if (!panel || !panelTitle || !panelActions) return;
+
+    if (normalized === APP_STATUS.APPROVED) {
+        panel.hidden = false;
+        panelTitle.textContent = 'Post-approval Actions';
+        panelActions.innerHTML = `
+            <button type="button" class="tpl2-icon-btn tpl2-icon-btn-primary" onclick="handlePostApprovalAction('View Profile')" title="View profile" aria-label="View profile">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+            <button type="button" class="tpl2-icon-btn tpl2-icon-btn-primary" onclick="handlePostApprovalAction('View Documents')" title="View documents" aria-label="View documents">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+            </button>
+        `;
+        return;
+    }
+
+    if (normalized === APP_STATUS.REJECTED) {
+        panel.hidden = false;
+        panelTitle.textContent = 'Recovery Actions';
+        panelActions.innerHTML = `
+            <button type="button" class="tpl2-icon-btn tpl2-icon-btn-primary" onclick="handleRecoveryAction('Request Resubmission')" title="Request resubmission" aria-label="Request resubmission">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10"/><path d="M3.51 15a9 9 0 0 0 14.85 3.36L23 14"/></svg>
+            </button>
+        `;
+        return;
+    }
+
+    panel.hidden = true;
+    panelActions.innerHTML = '';
+}
+
+function getApplicationRow(appId) {
+    return document.getElementById(`applicationRow-${appId}`);
+}
+
+function getRowPayload(appId, fallback) {
+    const row = getApplicationRow(appId);
+    if (!row) return fallback || null;
+
+    const dateCell = row.children[4];
+    const submissionDate = dateCell ? dateCell.textContent.trim() : '';
+
+    return {
+        appId,
+        userId: row.dataset.userId,
+        name: row.dataset.name || '',
+        email: row.dataset.email || '',
+        status: normalizeAppStatus(row.dataset.status),
+        submissionDate
+    };
+}
+
+function updateAgentsStatsFromTable() {
+    const rows = Array.from(document.querySelectorAll('#applicationsTableBody tr[data-app-id]'));
+    let approved = 0;
+    let rejected = 0;
+    let pending = 0;
+
+    rows.forEach((row) => {
+        const status = normalizeAppStatus(row.dataset.status);
+        if (status === APP_STATUS.APPROVED) {
+            approved += 1;
+            return;
+        }
+        if (status === APP_STATUS.REJECTED) {
+            rejected += 1;
+            return;
+        }
+        pending += 1;
+    });
+
+    const approvedEl = document.getElementById('agentsApprovedCount');
+    const rejectedEl = document.getElementById('agentsRejectedCount');
+    const pendingEl = document.getElementById('agentsPendingCount');
+    if (approvedEl) approvedEl.textContent = String(approved);
+    if (rejectedEl) rejectedEl.textContent = String(rejected);
+    if (pendingEl) pendingEl.textContent = String(pending);
+}
+
+function renderApplicationActionCell(status, payload) {
+    const normalized = normalizeAppStatus(status);
+    const appId = toInlineJsArg(payload.appId);
+    const userId = toInlineJsArg(payload.userId);
+    const name = toInlineJsArg(payload.name);
+    const email = toInlineJsArg(payload.email);
+    const safeName = escapeHtml(payload.name);
+
+    if (normalized === APP_STATUS.IN_PROGRESS) {
+        return `
+            <div class="tpl2-action-group" data-role="application-actions">
+                <button class="tpl2-icon-btn tpl2-icon-btn-primary" type="button" onclick="openApplicationReviewModal('${appId}', '${userId}', '${name}', '${email}')" title="View profile" aria-label="View profile for ${safeName}">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+                <button class="tpl2-icon-btn tpl2-icon-btn-primary" type="button" onclick="moveApplicationToReview('${appId}')" title="Move to review" aria-label="Move application for ${safeName} to review">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                </button>
+            </div>
+        `;
+    }
+
+    if (normalized === APP_STATUS.UNDER_REVIEW) {
+        return `
+            <div class="tpl2-action-group" data-role="application-actions">
+                <button class="tpl2-icon-btn tpl2-icon-btn-primary" type="button" onclick="openApplicationReviewModal('${appId}', '${userId}', '${name}', '${email}')" title="View profile" aria-label="View profile for ${safeName}">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+                <button class="tpl2-icon-btn tpl2-icon-btn-approve" type="button" onclick="approveApplication('${appId}', '${userId}', '${name}', '${email}')" title="Approve application" aria-label="Approve application for ${safeName}">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                </button>
+                <button class="tpl2-icon-btn tpl2-icon-btn-reject" type="button" onclick="rejectApplication('${appId}', '${userId}', '${name}', '${email}')" title="Reject application" aria-label="Reject application for ${safeName}">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+        `;
+    }
+
+    if (normalized === APP_STATUS.APPROVED) {
+        return `
+            <div class="tpl2-action-group">
+                <button class="tpl2-icon-btn tpl2-icon-btn-primary" type="button" onclick="openApplicationReviewModal('${appId}', '${userId}', '${name}', '${email}')" title="View profile" aria-label="View approved profile for ${safeName}">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+                <button class="tpl2-icon-btn tpl2-icon-btn-primary" type="button" onclick="openDocumentsModal('${appId}', '${userId}', '${name}', '${email}')" title="View documents" aria-label="View documents for ${safeName}">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+                </button>
+            </div>
+        `;
+    }
+
+    if (normalized === APP_STATUS.REJECTED) {
+        return `
+            <div class="tpl2-action-group">
+                <button class="tpl2-icon-btn tpl2-icon-btn-primary" type="button" onclick="openApplicationReviewModal('${appId}', '${userId}', '${name}', '${email}')" title="View profile" aria-label="View rejected profile for ${safeName}">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+                <button class="tpl2-icon-btn tpl2-icon-btn-primary" type="button" onclick="requestResubmission('${appId}', '${userId}', '${name}', '${email}')" title="Request resubmission" aria-label="Request resubmission for ${safeName}">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10"/><path d="M3.51 15a9 9 0 0 0 14.85 3.36L23 14"/></svg>
+                </button>
+            </div>
+        `;
+    }
+
+    return '<div class="tpl2-text-muted-sm">No actions</div>';
+}
+
+function updateApplicationRowStatus(appId, nextStatus) {
+    const row = getApplicationRow(appId);
+    if (!row) return;
+
+    const status = normalizeAppStatus(nextStatus);
+    row.dataset.status = status;
+
+    const statusCell = row.querySelector('.tpl2-application-status-cell');
+    if (statusCell) {
+        statusCell.innerHTML = `<span class="tpl2-status-badge ${getStatusClass(status)}">${status}</span>`;
+    }
+
+    const payload = getRowPayload(appId);
+    const actionCell = row.querySelector('.tpl2-application-action-cell');
+    if (actionCell && payload) {
+        actionCell.innerHTML = renderApplicationActionCell(status, payload);
+    }
+
+    if (currentReviewModal.appId === appId) {
+        currentReviewModal.status = status;
+        const reviewStatusEl = document.getElementById('reviewCurrentStatus');
+        if (reviewStatusEl) reviewStatusEl.textContent = status;
+        updateReviewModalActionState(status);
+    }
+
+    updateAgentsStatsFromTable();
+}
+
+function openApplicationReviewModal(appId, userId, name, email, notificationStepKey = null) {
+    const payload = getRowPayload(appId, { appId, userId, name, email, status: APP_STATUS.IN_PROGRESS, submissionDate: '' });
+    const resolved = getRowPayload(appId, payload);
+    currentReviewModal = {
+        appId: resolved.appId,
+        userId: resolved.userId,
+        name: resolved.name,
+        email: resolved.email,
+        status: normalizeAppStatus(resolved.status),
+        notificationStepKey: notificationStepKey || null
+    };
+
+    const reviewAppId = document.getElementById('reviewAppId');
+    const reviewUserName = document.getElementById('reviewUserName');
+    const reviewName = document.getElementById('reviewName');
+    const reviewEmail = document.getElementById('reviewEmail');
+    const reviewBirthdate = document.getElementById('reviewBirthdate');
+    const reviewGender = document.getElementById('reviewGender');
+    const reviewPhone = document.getElementById('reviewPhone');
+    const reviewAddress = document.getElementById('reviewAddress');
+
+    if (reviewAppId) reviewAppId.textContent = resolved.appId;
+    if (reviewUserName) reviewUserName.textContent = resolved.name;
+    if (reviewName) reviewName.textContent = resolved.name;
+    if (reviewEmail) reviewEmail.textContent = resolved.email;
+    if (reviewBirthdate) reviewBirthdate.textContent = '-';
+    if (reviewGender) reviewGender.textContent = '-';
+    if (reviewPhone) reviewPhone.textContent = '-';
+    if (reviewAddress) reviewAddress.textContent = '-';
+
+    const initialsEl = document.getElementById('reviewAvatarInitials');
+    const imageEl = document.getElementById('reviewAvatarImage');
+    if (initialsEl) {
+        initialsEl.textContent = getInitials(resolved.name);
+        initialsEl.hidden = false;
+    }
+    if (imageEl) {
+        imageEl.src = '';
+        imageEl.hidden = true;
+    }
+
+    const reviewStatusEl = document.getElementById('reviewCurrentStatus');
+    if (reviewStatusEl) reviewStatusEl.textContent = currentReviewModal.status;
+
+    loadOnboardingProgress(resolved.userId);
+    loadReviewDocumentsSummary(resolved.userId);
+    updateReviewModalActionState(currentReviewModal.status);
+
+    document.getElementById('appReviewModal').removeAttribute('hidden');
+    syncModalBodyLock();
+}
+
+function closeApplicationReviewModal() {
+    document.getElementById('appReviewModal').setAttribute('hidden', '');
+    currentReviewModal = { appId: null, userId: null, name: null, email: null, status: APP_STATUS.IN_PROGRESS, notificationStepKey: null };
+    syncModalBodyLock();
+}
+
+function moveApplicationToReview(appId) {
+    const row = getApplicationRow(appId);
+    if (!row) return;
+    const status = normalizeAppStatus(row.dataset.status);
+    if (status !== APP_STATUS.IN_PROGRESS) return;
+    updateApplicationRowStatus(appId, APP_STATUS.UNDER_REVIEW);
+    showWorkflowToast(`Application ${appId} moved to Under Review.`, 'success');
+}
+
+function openRejectReasonModal(payload) {
+    if (decisionInFlight) return;
+    pendingRejectPayload = payload;
+    const reasonInput = document.getElementById('rejectReasonInput');
+    if (reasonInput) {
+        reasonInput.value = '';
+    }
+    document.getElementById('rejectReasonModal').removeAttribute('hidden');
+    syncModalBodyLock();
+}
+
+function closeRejectReasonModal() {
+    if (decisionInFlight) return;
+    document.getElementById('rejectReasonModal').setAttribute('hidden', '');
+    pendingRejectPayload = null;
+    syncModalBodyLock();
+}
+
+function openApproveConfirmModal(payload) {
+    if (decisionInFlight) return;
+    pendingApprovePayload = payload;
+    const text = document.getElementById('approveConfirmText');
+    if (text) {
+        text.textContent = `Approve application ${payload.appId} for ${payload.name || 'this applicant'}?`;
+    }
+    document.getElementById('approveConfirmModal').removeAttribute('hidden');
+    syncModalBodyLock();
+}
+
+function closeApproveConfirmModal() {
+    if (decisionInFlight) return;
+    document.getElementById('approveConfirmModal').setAttribute('hidden', '');
+    pendingApprovePayload = null;
+    syncModalBodyLock();
+}
+
+function setDecisionInFlight(isBusy) {
+    decisionInFlight = Boolean(isBusy);
+    const approveConfirmBtn = document.getElementById('approveConfirmBtn');
+    const reviewViewDocsBtn = document.getElementById('reviewViewDocumentsBtn');
+    if (approveConfirmBtn) {
+        approveConfirmBtn.disabled = decisionInFlight;
+    }
+    if (reviewViewDocsBtn) {
+        reviewViewDocsBtn.disabled = decisionInFlight;
+    }
+    updateReviewModalActionState(currentReviewModal.status);
+}
+
+function confirmApproveApplication() {
+    if (!pendingApprovePayload || decisionInFlight) return;
+    const payload = pendingApprovePayload;
+    closeApproveConfirmModal();
+    submitApproval(payload);
+}
+
+function confirmRejectWithReason() {
+    if (!pendingRejectPayload) return;
+    const reasonInput = document.getElementById('rejectReasonInput');
+    const reason = (reasonInput ? reasonInput.value : '').trim();
+    if (!reason) {
+        showWorkflowToast('Rejection reason is required before confirming.', 'warning');
+        if (reasonInput) reasonInput.focus();
+        return;
+    }
+    const payload = pendingRejectPayload;
+    closeRejectReasonModal();
+    submitRejection(payload, reason);
+}
+
+function fetchUserFiles(userId) {
+    const cacheKey = String(userId || '');
+    if (filesCache[cacheKey]) {
+        return Promise.resolve(filesCache[cacheKey]);
+    }
+
+    return fetch(`/portal-admin/user-files/${userId}/`)
+        .then((response) => {
+            if (!response.ok) throw new Error('Failed to load files');
+            return response.json();
+        })
+        .then((data) => {
+            const files = Array.isArray(data.files) ? data.files : [];
+            filesCache[cacheKey] = files;
+            return files;
+        });
+}
+
+function renderQuizResults(quizResults) {
+    // Quiz results are intentionally hidden in Agents App.
+}
+
+function renderModuleProgress(moduleProgress) {
+    const moduleTarget = document.getElementById('reviewModuleProgress');
+    if (!moduleTarget) return;
+    if (!moduleProgress || !moduleProgress.modules) {
+        moduleTarget.innerHTML = '<p style="color: #657894;">No module data available.</p>';
+        return;
+    }
+
+    const items = Array.isArray(moduleProgress.modules)
+        ? moduleProgress.modules
+        : Object.values(moduleProgress.modules);
+
+    const cards = items.map((item, index) => {
+        const percent = Number(item.percent || 0);
+        const boundedPercent = Math.max(0, Math.min(100, percent));
+        const moduleNumber = Number(item.module_number || (index + 1));
+        const completedCount = Number(item.completed_count || 0);
+        const totalCount = Number(item.total_count || 0);
+        const statusLabel = item.completed ? 'Completed' : (boundedPercent > 0 ? 'In Progress' : 'Locked');
+        const cardClass = item.completed
+            ? 'tpl2-module-card is-complete'
+            : (boundedPercent > 0 ? 'tpl2-module-card is-progress' : 'tpl2-module-card is-locked');
+
+        return `
+            <article class="${cardClass}">
+                <div class="tpl2-module-card-head">
+                    <span class="tpl2-module-card-chip">Module ${moduleNumber}</span>
+                    <span class="tpl2-module-card-percent">${boundedPercent}%</span>
+                </div>
+                <h4 class="tpl2-module-card-title">${escapeHtml(item.title || item.label || `Module ${moduleNumber}`)}</h4>
+                <div class="tpl2-module-card-track"><span style="width:${boundedPercent}%"></span></div>
+                <div class="tpl2-module-card-foot">
+                    <span>${escapeHtml(statusLabel)}</span>
+                    <span>${completedCount}/${totalCount}</span>
+                </div>
+            </article>
+        `;
+    }).join('');
+
+    moduleTarget.innerHTML = `
+        <div class="tpl2-review-progress-item"><strong>${moduleProgress.percent}%</strong> (${moduleProgress.completed_count}/${moduleProgress.total_count}) modules complete</div>
+        <div class="tpl2-module-cards-grid">${cards}</div>
+    `;
+}
+
+function renderOnboardingProgress(onboardingProgress) {
+    const progressDiv = document.getElementById('reviewProgress');
+    if (!progressDiv) return;
+
+    const rows = Array.isArray(onboardingProgress) ? onboardingProgress : [];
+    if (!rows.length) {
+        progressDiv.innerHTML = '<p style="color: #657894;">No onboarding progress yet.</p>';
+        return;
+    }
+
+    progressDiv.innerHTML = rows.map((item) => {
+        const done = Number(item.completed_count || 0);
+        const total = Number(item.total_count || 0);
+        const rowClass = item.completed ? 'tpl2-review-progress-item tpl2-review-progress-item-complete' : 'tpl2-review-progress-item';
+        return `
+            <div class="${rowClass}" data-progress-key="${escapeHtml(item.key || '')}">
+                <span>${escapeHtml(item.label || '-')}</span>
+                <strong>${done} / ${total} complete</strong>
+            </div>
+        `;
+    }).join('');
+}
+
+function renderLoomVideoProgress(loomVideoProgress) {
+    const target = document.getElementById('reviewLoomProgress');
+    if (!target) return;
+
+    const items = Array.isArray(loomVideoProgress) ? loomVideoProgress : [];
+    if (!items.length) {
+        target.innerHTML = '<p style="color: #657894;">No Loom video progress available.</p>';
+        return;
+    }
+
+    const completedCount = items.filter(item => item.completed).length;
+    const totalCount = items.length;
+    const percent = totalCount ? Math.round((completedCount / totalCount) * 100) : 0;
+
+    const cards = items.map((item, index) => {
+        const statusLabel = item.completed ? 'Completed' : 'Not started';
+        const cardClass = item.completed ? 'tpl2-module-card is-complete' : 'tpl2-module-card is-locked';
+        return `
+            <article class="${cardClass}" data-step-key="${escapeHtml(item.step_key || '')}">
+                <div class="tpl2-module-card-head">
+                    <span class="tpl2-module-card-chip">${escapeHtml(item.label || `Loom Video ${index + 1}`)}</span>
+                    <span class="tpl2-module-card-percent">${item.completed ? '100%' : '0%'}</span>
+                </div>
+                <h4 class="tpl2-module-card-title">${escapeHtml(item.label || `Loom Video ${index + 1}`)}</h4>
+                <div class="tpl2-module-card-track"><span style="width:${item.completed ? 100 : 0}%"></span></div>
+                <div class="tpl2-module-card-foot">
+                    <span>${escapeHtml(statusLabel)}</span>
+                    <span>${Number(item.completed_count || 0)}/${Number(item.total_count || 1)}</span>
+                </div>
+            </article>
+        `;
+    }).join('');
+
+    target.innerHTML = `
+        <div class="tpl2-review-progress-item"><strong>${percent}%</strong> (${completedCount}/${totalCount}) videos complete</div>
+        <div class="tpl2-module-cards-grid">${cards}</div>
+    `;
+}
+
+function highlightOnboardingProgressRow(stepKey) {
+    if (!stepKey) return;
+
+    const progressKeyMap = {
+        'beta_intro_welcome_done': 'welcome_orientation',
+        'beta_step_company_overview_done': 'welcome_orientation',
+        'beta_step_profile_identity_done': 'profile_credentials',
+        'beta_step_agent_requirements_docs_done': 'profile_credentials',
+        'beta_video_module13_1_done': 'loom_video',
+        'beta_video_module13_2_done': 'loom_video',
+        'beta_video_module13_3_done': 'loom_video',
+        'beta_video_module13_4_done': 'loom_video',
+        'beta_video_module13_5_done': 'loom_video',
+    };
+
+    const progressKey = progressKeyMap[stepKey];
+    if (!progressKey) return;
+
+    const allRows = document.querySelectorAll('#reviewProgress [data-progress-key]');
+    allRows.forEach((row) => row.classList.remove('tpl2-review-progress-item-highlighted'));
+    const targetRow = document.querySelector(`#reviewProgress [data-progress-key="${CSS.escape(progressKey)}"]`);
+    if (targetRow) {
+        targetRow.classList.add('tpl2-review-progress-item-highlighted');
+        targetRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+}
+
+function highlightLoomVideoCard(stepKey) {
+    if (!stepKey) return;
+    const target = document.querySelector(`#reviewLoomProgress [data-step-key="${CSS.escape(stepKey)}"]`);
+    if (!target) return;
+
+    const allLoomCards = document.querySelectorAll('#reviewLoomProgress .tpl2-module-card');
+    allLoomCards.forEach((card) => card.classList.remove('tpl2-module-card-highlighted'));
+    target.classList.add('tpl2-module-card-highlighted');
+    target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function highlightReviewProgressItem(stepKey) {
+    highlightOnboardingProgressRow(stepKey);
+    highlightLoomVideoCard(stepKey);
+}
+
+function renderReviewDocumentsSummary(files) {
+    const summaryText = document.getElementById('reviewDocumentsSummaryText');
+    const openBtn = document.getElementById('reviewDocumentsOpenInlineBtn');
+    const count = Array.isArray(files) ? files.length : 0;
+    if (summaryText) {
+        summaryText.textContent = count
+            ? `View all submitted documents (${count})`
+            : 'No uploaded documents yet.';
+    }
+    if (openBtn) {
+        openBtn.disabled = !count;
+    }
+}
+
+function loadReviewDocumentsSummary(userId) {
+    renderReviewDocumentsSummary([]);
+    fetchUserFiles(userId)
+        .then((files) => {
+            renderReviewDocumentsSummary(files);
+        })
+        .catch((error) => {
+            console.error('Error loading document summary:', error);
+            const summaryText = document.getElementById('reviewDocumentsSummaryText');
+            if (summaryText) {
+                summaryText.textContent = 'Unable to load submitted documents.';
+            }
+        });
+}
+
+function renderReviewProfileDetails(details) {
+    const reviewName = document.getElementById('reviewName');
+    const reviewEmail = document.getElementById('reviewEmail');
+    const reviewPhone = document.getElementById('reviewPhone');
+    const reviewAddress = document.getElementById('reviewAddress');
+    const reviewBirthdate = document.getElementById('reviewBirthdate');
+    const reviewGender = document.getElementById('reviewGender');
+    const avatarImage = document.getElementById('reviewAvatarImage');
+    const avatarInitials = document.getElementById('reviewAvatarInitials');
+
+    if (reviewName) reviewName.textContent = details.full_name || currentReviewModal.name || '-';
+    if (reviewEmail) reviewEmail.textContent = details.email || currentReviewModal.email || '-';
+    if (reviewPhone) reviewPhone.textContent = details.phone_number || '-';
+    if (reviewAddress) reviewAddress.textContent = details.residential_address || '-';
+    if (reviewBirthdate) reviewBirthdate.textContent = formatDisplayDate(details.birthdate);
+    if (reviewGender) reviewGender.textContent = formatGenderLabel(details.gender);
+
+    const photoUrl = String(details.photo_2x2_url || '').trim();
+    if (avatarImage) {
+        if (photoUrl) {
+            avatarImage.src = photoUrl;
+            avatarImage.hidden = false;
+            if (avatarInitials) avatarInitials.hidden = true;
+            avatarImage.onerror = function () {
+                avatarImage.hidden = true;
+                if (avatarInitials) avatarInitials.hidden = false;
+            };
+        } else {
+            avatarImage.src = '';
+            avatarImage.hidden = true;
+            if (avatarInitials) avatarInitials.hidden = false;
+        }
+    }
+}
+
+function loadOnboardingProgress(userId) {
+    const progressDiv = document.getElementById('reviewProgress');
+
+    fetch(`/portal-admin/user-progress/${userId}/`)
+        .then(response => {
+            if (!response.ok) throw new Error('Failed to load progress');
+            return response.json();
+        })
+        .then(data => {
+            profileCache[String(userId || '')] = data;
+            const details = data.personal_details || {};
+            renderReviewProfileDetails(details);
+
+            renderOnboardingProgress(data.onboarding_progress);
+            renderLoomVideoProgress(data.loom_video_progress);
+            if (currentReviewModal.notificationStepKey) {
+                highlightReviewProgressItem(currentReviewModal.notificationStepKey);
+            }
+            renderModuleProgress(data.module_progress);
+        })
+        .catch(error => {
+            console.error('Error loading progress:', error);
+            progressDiv.innerHTML = '<p style="color: #ef4444;">Error loading progress.</p>';
+            const modules = document.getElementById('reviewModuleProgress');
+            if (modules) modules.innerHTML = '<p style="color: #ef4444;">Error loading module progress.</p>';
+        });
+}
+
+function renderDocumentsList(files) {
+    const list = document.getElementById('appDocumentsList');
+    if (!list) return;
+
+    if (!files.length) {
+        list.innerHTML = '<p style="color: #657894; text-align: center; padding: 20px;">No documents submitted yet.</p>';
+        const frame = document.getElementById('appDocumentPreviewFrame');
+        const image = document.getElementById('appDocumentPreviewImage');
+        const empty = document.getElementById('appDocumentPreviewEmpty');
+        if (frame) {
+            frame.src = '';
+            frame.hidden = true;
+        }
+        if (image) {
+            image.src = '';
+            image.hidden = true;
+        }
+        if (empty) empty.hidden = false;
+        return;
+    }
+
+    list.innerHTML = files.map((file) => {
+        const fileName = escapeHtml(file.name || 'Document');
+        const fileType = escapeHtml(file.type || 'File');
+        const uploadedAt = escapeHtml(file.uploaded_at || 'Uploaded');
+        const urlArg = toInlineJsArg(file.url || '');
+        const nameArg = toInlineJsArg(file.name || 'Document');
+
+        return `
+            <button type="button" class="tpl2-review-file-item tpl2-doc-file-btn" onclick="openDocumentPreview('${urlArg}', '${nameArg}')" aria-label="Preview ${fileName}">
+                <svg class="tpl2-file-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                <div class="tpl2-file-info">
+                    <p class="tpl2-file-name">${fileName}</p>
+                    <p class="tpl2-file-meta">${fileType} • ${uploadedAt}</p>
+                </div>
+            </button>
+        `;
+    }).join('');
+
+    openDocumentPreview(files[0].url || '', files[0].name || 'Document');
+}
+
+function openDocumentPreview(url, name) {
+    const frame = document.getElementById('appDocumentPreviewFrame');
+    const image = document.getElementById('appDocumentPreviewImage');
+    const empty = document.getElementById('appDocumentPreviewEmpty');
+    const title = document.getElementById('appDocumentPreviewTitle');
+    if (!frame || !image || !empty || !title) return;
+
+    const fileUrl = String(url || '').trim();
+    title.textContent = name ? `Preview: ${name}` : 'Preview';
+
+    if (!fileUrl) {
+        frame.src = '';
+        image.src = '';
+        frame.hidden = true;
+        image.hidden = true;
+        empty.hidden = false;
+        return;
+    }
+
+    const lower = fileUrl.toLowerCase();
+    const isImage = /\.(png|jpg|jpeg|gif|webp|bmp|svg)(\?|$)/.test(lower);
+    if (isImage) {
+        image.src = fileUrl;
+        image.hidden = false;
+        frame.src = '';
+        frame.hidden = true;
+        empty.hidden = true;
+        return;
+    }
+
+    frame.src = fileUrl;
+    frame.hidden = false;
+    image.src = '';
+    image.hidden = true;
+    empty.hidden = true;
+}
+
+function openDocumentsModal(appId, userId, name, email) {
+    const payload = getRowPayload(appId, { appId, userId, name, email, status: APP_STATUS.IN_PROGRESS, submissionDate: '' });
+    const modal = document.getElementById('appDocumentsModal');
+    const subtitle = document.getElementById('appDocumentsSubtitle');
+    const list = document.getElementById('appDocumentsList');
+    if (!modal || !subtitle || !list) return;
+
+    lastDocumentsTrigger = document.activeElement;
+    subtitle.textContent = `${payload.appId} • ${payload.name}`;
+    list.innerHTML = '<p style="color: #657894; text-align: center; padding: 20px;">Loading documents...</p>';
+    modal.removeAttribute('hidden');
+    syncModalBodyLock();
+
+    fetchUserFiles(payload.userId)
+        .then((files) => {
+            renderDocumentsList(files);
+        })
+        .catch((error) => {
+            console.error('Error loading files:', error);
+            list.innerHTML = '<p style="color: #ef4444; text-align: center; padding: 20px;">Error loading documents.</p>';
+        });
+}
+
+function closeDocumentsModal() {
+    const modal = document.getElementById('appDocumentsModal');
+    if (!modal) return;
+    modal.setAttribute('hidden', '');
+    const frame = document.getElementById('appDocumentPreviewFrame');
+    const image = document.getElementById('appDocumentPreviewImage');
+    if (frame) {
+        frame.src = '';
+        frame.hidden = true;
+    }
+    if (image) {
+        image.src = '';
+        image.hidden = true;
+    }
+    syncModalBodyLock();
+    if (lastDocumentsTrigger && typeof lastDocumentsTrigger.focus === 'function') {
+        lastDocumentsTrigger.focus();
+    }
+}
+
+function appendApprovedAgentToAccounts(payload, accountResponse) {
+    const account = accountResponse || {};
+    const accountRecord = {
+        account_id: account.account_id || `ACC-${payload.userId}`,
+        user_id: Number(payload.userId),
+        full_name: payload.name,
+        email: payload.email,
+        activation_status: account.activation_status || 'Submitted',
+        submitted_at: new Date().toISOString(),
+        documents: {}
+    };
+
+    if (typeof window.portalAddApprovedAccount === 'function') {
+        window.portalAddApprovedAccount(accountRecord);
+        return;
+    }
+
+    window.dispatchEvent(new CustomEvent('tpl2:add-approved-account', { detail: accountRecord }));
+}
+
+function approveApplication(appId, userId, name, email) {
+    const row = getApplicationRow(appId);
+    if (!row || normalizeAppStatus(row.dataset.status) !== APP_STATUS.UNDER_REVIEW) {
+        showWorkflowToast('Move this application to Under Review before approving.', 'warning');
+        return;
+    }
+
+    openApproveConfirmModal({ appId, userId, name, email });
+}
+
+function submitApproval(payload) {
+    const { appId, userId, name, email } = payload;
+    setDecisionInFlight(true);
+
+    fetch(`/portal-admin/approve-application/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken()
+        },
+        body: JSON.stringify({
+            user_id: parseInt(userId, 10),
+            app_id: appId,
+            name,
+            email
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (!data.success) {
+            throw new Error(data.message || 'Failed to approve application');
+        }
+        updateApplicationRowStatus(appId, APP_STATUS.APPROVED);
+        appendApprovedAgentToAccounts(payload, data.account);
+        showWorkflowToast(`Application approved for ${name}. Confirmation email sent and account activated.`, 'success');
+    })
+    .catch(error => {
+        console.error('Approval error:', error);
+        showWorkflowToast(error.message || 'Error approving application.', 'error');
+    })
+    .finally(() => {
+        setDecisionInFlight(false);
+    });
+}
+
+function submitRejection(payload, reason) {
+    setDecisionInFlight(true);
+    fetch(`/portal-admin/reject-application/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken()
+        },
+        body: JSON.stringify({
+            user_id: parseInt(payload.userId, 10),
+            app_id: payload.appId,
+            name: payload.name,
+            email: payload.email,
+            reason
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (!data.success) {
+            throw new Error(data.message || 'Failed to reject application');
+        }
+        updateApplicationRowStatus(payload.appId, APP_STATUS.REJECTED);
+        showWorkflowToast(`Application rejected for ${payload.name}. Rejection email sent.`, 'error');
+    })
+    .catch(error => {
+        console.error('Rejection error:', error);
+        showWorkflowToast(error.message || 'Error rejecting application.', 'error');
+    })
+    .finally(() => {
+        setDecisionInFlight(false);
+    });
+}
+
+function rejectApplication(appId, userId, name, email) {
+    const row = getApplicationRow(appId);
+    if (!row || normalizeAppStatus(row.dataset.status) !== APP_STATUS.UNDER_REVIEW) {
+        showWorkflowToast('Only applications under review can be rejected.', 'warning');
+        return;
+    }
+    openRejectReasonModal({ appId, userId, name, email });
+}
+
+function requestResubmission(appId, userId, name, email) {
+    const row = getApplicationRow(appId);
+    if (!row || normalizeAppStatus(row.dataset.status) !== APP_STATUS.REJECTED) {
+        return;
+    }
+    updateApplicationRowStatus(appId, APP_STATUS.IN_PROGRESS);
+    if (currentReviewModal.appId === appId) {
+        currentReviewModal.status = APP_STATUS.IN_PROGRESS;
+        updateReviewModalActionState(APP_STATUS.IN_PROGRESS);
+    }
+    showWorkflowToast(`Resubmission requested for ${name || appId}.`, 'warning');
+}
+
+function approveFromModal() {
+    if (!currentReviewModal.appId) return;
+    approveApplication(currentReviewModal.appId, currentReviewModal.userId, currentReviewModal.name, currentReviewModal.email);
+}
+
+function rejectFromModal() {
+    if (!currentReviewModal.appId) return;
+    rejectApplication(currentReviewModal.appId, currentReviewModal.userId, currentReviewModal.name, currentReviewModal.email);
+}
+
+function handlePostApprovalAction(actionName) {
+    if (actionName === 'View Profile') {
+        if (!currentReviewModal.appId) return;
+        openApplicationReviewModal(currentReviewModal.appId, currentReviewModal.userId, currentReviewModal.name, currentReviewModal.email);
+        return;
+    }
+
+    if (actionName === 'View Documents') {
+        if (!currentReviewModal.appId) return;
+        openDocumentsModal(currentReviewModal.appId, currentReviewModal.userId, currentReviewModal.name, currentReviewModal.email);
+        return;
+    }
+
+    showWorkflowToast(`${actionName} action queued.`, 'success');
+}
+
+function handleRecoveryAction(actionName) {
+    if (actionName === 'Request Resubmission' && currentReviewModal.appId) {
+        requestResubmission(currentReviewModal.appId, currentReviewModal.userId, currentReviewModal.name, currentReviewModal.email);
+        return;
+    }
+    showWorkflowToast(`${actionName} action queued for applicant outreach.`, 'warning');
+}
+
+function formatSessionTimeoutLabel(seconds) {
+    const minutes = Math.floor(Number(seconds || 0) / 60);
+    if (minutes === 60) return '1 hour';
+    if (minutes > 60 && minutes % 60 === 0) return `${minutes / 60} hours`;
+    return `${minutes} minutes`;
+}
+
+function syncSecuritySettingsUI(config) {
+    const sessionSelect = document.getElementById('tpl2SessionTimeoutSelect');
+    const loginSelect = document.getElementById('tpl2LoginAttemptLimitSelect');
+    const sessionDesc = document.getElementById('tpl2SessionTimeoutDesc');
+    const loginDesc = document.getElementById('tpl2LoginAttemptDesc');
+
+    if (sessionSelect) sessionSelect.value = String(config.session_timeout_seconds);
+    if (loginSelect) loginSelect.value = String(config.login_attempt_limit);
+    if (sessionDesc) {
+        sessionDesc.textContent = `Current: ${formatSessionTimeoutLabel(config.session_timeout_seconds)} of inactivity`;
+    }
+    if (loginDesc) {
+        loginDesc.textContent = `Lock out after ${config.login_attempt_limit} failed attempts; retry allowed after ${config.lockout_minutes} minutes`;
+    }
+}
+
+function getSecuritySettingsApiUrls() {
+    const root = document.getElementById('tpl2Root');
+    if (!root) {
+        return { readUrl: '', saveUrl: '' };
+    }
+    return {
+        readUrl: root.getAttribute('data-security-settings-api-url') || '',
+        saveUrl: root.getAttribute('data-security-settings-save-api-url') || ''
+    };
+}
+
+function loadSecuritySettings() {
+    const { readUrl } = getSecuritySettingsApiUrls();
+    if (!readUrl) {
+        syncSecuritySettingsUI(securitySettingsCache);
+        return;
+    }
+
+    fetch(readUrl)
+        .then((response) => {
+            if (!response.ok) throw new Error('Unable to load security settings.');
+            return response.json();
+        })
+        .then((data) => {
+            if (!data.ok || !data.settings) {
+                throw new Error('Unable to load security settings.');
+            }
+            securitySettingsCache = {
+                session_timeout_seconds: Number(data.settings.session_timeout_seconds) || 1800,
+                login_attempt_limit: Number(data.settings.login_attempt_limit) || 5,
+                lockout_minutes: Number(data.settings.lockout_minutes) || 5
+            };
+            syncSecuritySettingsUI(securitySettingsCache);
+        })
+        .catch(() => {
+            syncSecuritySettingsUI(securitySettingsCache);
+            showWorkflowToast('Could not load security settings.', 'warning');
+        });
+}
+
+function saveSecuritySettings(nextConfig) {
+    const { saveUrl } = getSecuritySettingsApiUrls();
+    if (!saveUrl) return Promise.reject(new Error('Security settings save endpoint is missing.'));
+
+    return fetch(saveUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken()
+        },
+        body: JSON.stringify({
+            session_timeout_seconds: Number(nextConfig.session_timeout_seconds),
+            login_attempt_limit: Number(nextConfig.login_attempt_limit)
+        })
+    })
+        .then((response) => {
+            if (!response.ok) throw new Error('Unable to save security settings.');
+            return response.json();
+        })
+        .then((data) => {
+            if (!data.ok || !data.settings) {
+                throw new Error(data.message || 'Unable to save security settings.');
+            }
+            securitySettingsCache = {
+                session_timeout_seconds: Number(data.settings.session_timeout_seconds) || 1800,
+                login_attempt_limit: Number(data.settings.login_attempt_limit) || 5,
+                lockout_minutes: Number(data.settings.lockout_minutes) || 5
+            };
+            syncSecuritySettingsUI(securitySettingsCache);
+            showWorkflowToast('Security settings updated.', 'success');
+            return securitySettingsCache;
+        });
+}
+
+function bindSecuritySettingsControls() {
+    const sessionSelect = document.getElementById('tpl2SessionTimeoutSelect');
+    const loginSelect = document.getElementById('tpl2LoginAttemptLimitSelect');
+    if (!sessionSelect || !loginSelect) return;
+
+    const handleChange = () => {
+        const nextConfig = {
+            session_timeout_seconds: Number(sessionSelect.value || securitySettingsCache.session_timeout_seconds),
+            login_attempt_limit: Number(loginSelect.value || securitySettingsCache.login_attempt_limit)
+        };
+
+        saveSecuritySettings(nextConfig).catch((error) => {
+            console.error('Security settings save error:', error);
+            syncSecuritySettingsUI(securitySettingsCache);
+            showWorkflowToast(error.message || 'Could not save security settings.', 'error');
+        });
+    };
+
+    sessionSelect.addEventListener('change', handleChange);
+    loginSelect.addEventListener('change', handleChange);
+    syncSecuritySettingsUI(securitySettingsCache);
+    loadSecuritySettings();
+}
+
+function getCSRFToken() {
+    var cookieMatch = document.cookie.match(/(?:^|; )csrftoken=([^;]+)/);
+    if (cookieMatch) {
+        return decodeURIComponent(cookieMatch[1]);
+    }
+
+    var tokenInput = document.querySelector('input[name="csrfmiddlewaretoken"]');
+    if (tokenInput && tokenInput.value) {
+        return tokenInput.value;
+    }
+
+    return '';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('#applicationsTableBody tr[data-app-id]').forEach((row) => {
+        row.dataset.status = normalizeAppStatus(row.dataset.status);
+        updateApplicationRowStatus(row.dataset.appId, row.dataset.status);
+    });
+    updateAgentsStatsFromTable();
+
+    const docsClose = document.getElementById('appDocumentsClose');
+    const docsBackdrop = document.getElementById('appDocumentsBackdrop');
+    if (docsClose) docsClose.addEventListener('click', closeDocumentsModal);
+    if (docsBackdrop) docsBackdrop.addEventListener('click', closeDocumentsModal);
+
+    bindSecuritySettingsControls();
+
+    document.addEventListener('keydown', function(event) {
+        if (event.key !== 'Escape') return;
+        const approveModal = document.getElementById('approveConfirmModal');
+        if (approveModal && !approveModal.hasAttribute('hidden')) {
+            closeApproveConfirmModal();
+            return;
+        }
+        const docsModal = document.getElementById('appDocumentsModal');
+        if (docsModal && !docsModal.hasAttribute('hidden')) {
+            closeDocumentsModal();
+        }
+    });
+});
+
+// ===== Timeline Filter Functions =====
+const timelineDataElement = document.getElementById('tpl2TimelineData');
+const timelineData = timelineDataElement ? JSON.parse(timelineDataElement.textContent || '[]') : [];
+let filteredTimeline = [...timelineData];
+
+function getEventIcon(kind) {
+    if (kind === 'submission') {
+        return '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17.5V6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v11a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 17.5z"/><polyline points="9 12 11 14 15 10"/></svg>';
+    }
+    if (kind === 'confirmation') {
+        return '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="8.5 12.5 11 15 16 10"/></svg>';
+    }
+    return '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>';
+}
+
+function parseYmdToDate(ymd) {
+    if (!ymd || typeof ymd !== 'string') return null;
+    const parts = ymd.split('-').map(Number);
+    if (parts.length !== 3 || parts.some(Number.isNaN)) return null;
+    return new Date(parts[0], parts[1] - 1, parts[2]);
+}
+
+const phTodayDate = parseYmdToDate('{{ today_date }}');
+
+function renderTimeline(data) {
+    const container = document.getElementById('timelineContainer');
+    if (!data || data.length === 0) {
+        container.innerHTML = '<div class="tpl2-text-muted-sm" style="padding: 20px;">No activity for the selected date.</div>';
+        return;
+    }
+
+    let html = '';
+    data.forEach(day => {
+        html += `<div class="tpl2-daily-section" data-date="${day.date}">
+            <div class="tpl2-daily-header">
+                <h3 class="tpl2-daily-date">${day.date_display}</h3>
+            </div>
+            <div class="tpl2-activity-timeline">`;
+        
+        day.events.forEach(event => {
+            const statusClass = event.status === 'Approved' ? 'tpl2-status-approved' : 
+                              event.status === 'Pending' ? 'tpl2-status-pending' : 'tpl2-status-in-review';
+            
+            html += `<div class="tpl2-activity-item tpl2-activity-item-${event.kind}">
+                <div class="tpl2-activity-icon" aria-hidden="true">${getEventIcon(event.kind)}</div>
+                <div class="tpl2-activity-body">
+                    <div class="tpl2-activity-meta-row">
+                        <div class="tpl2-activity-time">${event.timestamp}</div>
+                        <span class="tpl2-activity-kind tpl2-activity-kind-${event.kind}">${event.kind_label}</span>
+                        <span class="tpl2-activity-app-badge">${event.application_id}</span>
+                        <span class="tpl2-status-badge ${statusClass}">${event.status}</span>
+                    </div>
+                    <div class="tpl2-activity-action">
+                        <span class="tpl2-activity-user">${event.user_name}</span> - ${event.message}
+                    </div>
+                </div>
+            </div>`;
+        });
+        
+        html += `</div></div>`;
+    });
+    
+    container.innerHTML = html;
+}
+
+function filterTimelineByDate(selectedDate) {
+    filteredTimeline = timelineData.filter(day => day.date === selectedDate);
+    renderTimeline(filteredTimeline);
+    updateQuickFilterButtons(null);
+}
+
+function filterTimelineByRange(range) {
+    const today = phTodayDate ? new Date(phTodayDate) : new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayEnd = new Date(today);
+    todayEnd.setHours(23, 59, 59, 999);
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const weekStart = new Date(today);
+    weekStart.setDate(weekStart.getDate() - 7);
+    
+    filteredTimeline = timelineData.filter(day => {
+        const dayDate = parseYmdToDate(day.date);
+        if (!dayDate) return false;
+        dayDate.setHours(0, 0, 0, 0);
+        
+        switch(range) {
+            case 'today':
+                return dayDate.toDateString() === today.toDateString();
+            case 'yesterday':
+                return dayDate.toDateString() === yesterday.toDateString();
+            case 'week':
+                return dayDate >= weekStart && dayDate <= todayEnd;
+            case 'all':
+                return true;
+            default:
+                return true;
+        }
+    });
+    
+    renderTimeline(filteredTimeline);
+    updateQuickFilterButtons(range);
+}
+
+function updateQuickFilterButtons(activeFilter) {
+    document.querySelectorAll('.tpl2-quick-filter-btn').forEach(btn => {
+        btn.classList.remove('tpl2-quick-filter-active');
+        if (btn.getAttribute('data-filter') === activeFilter) {
+            btn.classList.add('tpl2-quick-filter-active');
+        }
+    });
+}
+
+function resetTimelineFilter() {
+    document.getElementById('timelineDateFilter').value = '{{ today_date }}';
+    filterTimelineByRange('today');
+}
+
+// Event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    const dateInput = document.getElementById('timelineDateFilter');
+    if (dateInput) {
+        dateInput.addEventListener('change', function() {
+            filterTimelineByDate(this.value);
+        });
+        
+        // Initialize with today's data
+        filterTimelineByRange('today');
+    }
+});
+</script>
+
+<script src="{% static 'js/template2-inline.js' %}"></script>
+{% endblock %}

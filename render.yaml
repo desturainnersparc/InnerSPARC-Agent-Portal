@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: inner-sparc-portal
+    env: python
+    buildCommand: bash build.sh
+    startCommand: gunicorn Inner_Sparc_Portal.wsgi:application
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: EMAIL_HOST
+        value: smtp.gmail.com
+      - key: EMAIL_PORT
+        value: "587"
+      - key: EMAIL_USE_TLS
+        value: "True"
+      - key: EMAIL_USE_SSL
+        value: "False"
+      - key: EMAIL_HOST_USER
+        value: gerodsantos05@gmail.com
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+      - key: DEFAULT_FROM_EMAIL
+        value: gerodsantos05@gmail.com
+      - key: EMAIL_ASSET_BASE_URL
+        value: https://inner-sparc-portal-main.onrender.com

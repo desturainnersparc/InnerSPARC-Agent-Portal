@@ -1,0 +1,627 @@
+{% load static %}
+
+<div class="modal-backdrop" id="signin-modal" aria-hidden="true">
+    <div class="modal-panel signin-panel" role="dialog" aria-modal="true" aria-labelledby="signin-title">
+        <button class="modal-close" type="button" aria-label="Close Sign In" data-close-modal>&times;</button>
+        <div class="modal-body">
+            <h3 id="signin-title">Log In</h3>
+            <p class="modal-sub">Hi! welcome back</p>
+
+            <form id="sign-in-form" class="modal-form" method="post" novalidate>
+                {% csrf_token %}
+                <div class="signin-field">
+                    <input id="signin-email" type="email" placeholder="Email" aria-label="Email" autocomplete="email" required />
+                </div>
+                <p class="modal-error" id="signin-email-error"></p>
+
+                <div class="signin-field">
+                    <div class="signin-password-wrap">
+                        <input id="signin-password" type="password" placeholder="Password" aria-label="Password" autocomplete="current-password" required />
+                        <button class="password-toggle" type="button" aria-label="Show password" data-toggle-password="signin-password" onclick="return togglePasswordVisibility(this)">
+                            <svg class="icon-eye" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <svg class="icon-eye-off password-icon-hidden" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M3 3l18 18"></path>
+                                <path d="M10.58 10.58a2 2 0 002.83 2.83"></path>
+                                <path d="M9.88 5.09A10.94 10.94 0 0112 4.9c7 0 11 7.1 11 7.1a20.63 20.63 0 01-4.27 5.12"></path>
+                                <path d="M6.61 6.61A20.88 20.88 0 001 12s4 7.1 11 7.1a10.9 10.9 0 005.09-1.18"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <p class="modal-error" id="signin-password-error"></p>
+
+                <p class="modal-status" id="signin-status" aria-live="polite"></p>
+
+                <div class="signin-options-row">
+                    <label class="modal-check signin-remember" for="signin-remember-me">
+                        <input id="signin-remember-me" type="checkbox" />
+                        <span>Remember Me</span>
+                    </label>
+                    <div class="signin-forgot-row">
+                        <a class="signin-forgot" href="{% url 'forgot_password' %}" data-switch-modal="forgot-modal">Forgot password?</a><br/>
+                    </div>
+                </div>
+
+                <button class="modal-submit" id="signin-submit-btn" type="submit">Log In</button>
+            </form>
+
+            <div class="signin-divider" aria-hidden="true">
+                <span></span>
+                <p>Or log in with</p>
+                <span></span>
+            </div>
+
+            <div class="signin-social" aria-label="Sign in with social account">
+                <a href="{% url 'portal_google_start' %}" class="signin-social-btn" aria-label="Continue with Google">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill="#ea4335" d="M12 5.75c1.69 0 3.21.58 4.41 1.72l3.28-3.28C17.7 2.33 15.05 1.2 12 1.2 7.31 1.2 3.27 3.89 1.31 7.82l3.86 2.99C6.08 7.85 8.8 5.75 12 5.75z"></path>
+                        <path fill="#34a853" d="M12 22.8c2.98 0 5.57-.98 7.43-2.66l-3.63-2.81c-1.03.69-2.35 1.09-3.8 1.09-3.18 0-5.89-2.08-6.81-5.02l-3.89 3c1.95 3.97 6 6.4 10.7 6.4z"></path>
+                        <path fill="#fbbc05" d="M5.19 13.4c-.23-.69-.36-1.43-.36-2.2 0-.77.13-1.51.36-2.2l-3.89-3C.47 7.65 0 9.39 0 11.2s.47 3.55 1.3 5.2l3.89-3z"></path>
+                        <path fill="#4285f4" d="M23.52 11.2c0-.74-.06-1.29-.2-1.87H12v3.7h6.63c-.13.92-.82 2.3-2.36 3.23l3.63 2.81c2.12-1.95 3.62-4.82 3.62-7.87z"></path>
+                    </svg>
+                    <span class="social-provider-label">Google</span>
+                </a>
+            </div>
+
+            <p class="modal-switch">
+                Don't have an account?
+                <a href="{% url 'sign_up' %}" data-switch-modal="signup-modal">Register Now</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="modal-backdrop" id="forgot-modal" aria-hidden="true">
+    <div class="modal-panel forgot-panel" role="dialog" aria-modal="true" aria-labelledby="forgot-title">
+        <button class="modal-close" type="button" aria-label="Close Forgot Password" data-close-modal>&times;</button>
+        <div class="modal-body">
+            <h3 id="forgot-title">Forgot password</h3>
+            <p class="modal-sub">Please enter your email to reset the password</p>
+
+            <form class="modal-form forgot-modal-form" novalidate>
+                <div class="signin-field">
+                    <input id="forgot-email" type="email" placeholder="Your Email" aria-label="Your Email" autocomplete="email" required />
+                </div>
+                <button class="modal-submit" type="submit">Reset Password</button>
+            </form>
+
+            <p class="modal-switch">
+                Remember your password?
+                <a href="{% url 'sign_in' %}" data-switch-modal="signin-modal">Sign In</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="modal-backdrop" id="contact-modal" aria-hidden="true">
+    <div class="modal-panel contact-modal-panel" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title">
+        <button class="modal-close contact-modal-close-btn" type="button" aria-label="Close Contact" data-close-modal>&times;</button>
+        <div class="modal-body contact-modal-layout">
+
+            <!-- Left column: intro + chat CTA -->
+            <div class="contact-left-col">
+                <h3 id="contact-modal-title" class="contact-left-heading">Get In Touch With Us</h3>
+                <p class="contact-left-sub">Have questions or concerns? You may use the contact details on the right to chat with us directly, or get instant assistance through our chatbot for faster support.</p>
+                <button class="contact-chat-btn" type="button" id="chatWithSparcBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M8 18.5H7a3.5 3.5 0 0 1-3.5-3.5V8A3.5 3.5 0 0 1 7 4.5h10A3.5 3.5 0 0 1 20.5 8v7a3.5 3.5 0 0 1-3.5 3.5h-4.2L9 21.5v-3z"/>
+                        <circle cx="9" cy="11.5" r="0.9" fill="currentColor" stroke="none"/>
+                        <circle cx="12" cy="11.5" r="0.9" fill="currentColor" stroke="none"/>
+                        <circle cx="15" cy="11.5" r="0.9" fill="currentColor" stroke="none"/>
+                    </svg>
+                    Chat with SPARC
+                </button>
+            </div>
+
+            <!-- Right column: gradient info card -->
+            <aside class="contact-info-col">
+                <div class="map-wrap">
+                    <iframe
+                        src="https://maps.google.com/maps?q=Avida+Residences+Sta.+Catalina+Salawag+Dasmarinas+Cavite+Philippines&output=embed&z=15"
+                        title="Inner SPARC office location"
+                        allowfullscreen
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+
+                <div class="contact-detail-list">
+                    <div class="contact-detail-item">
+                        <span class="detail-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><path d="M22 17v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3 19.5 19.5 0 01-6-6A19.8 19.8 0 012.2 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1.9.3 1.8.6 2.6a2 2 0 01-.5 2.1L8 9.8a16 16 0 006.2 6.2l1.4-1.4a2 2 0 012.1-.5c.8.3 1.7.5 2.6.6A2 2 0 0122 17z"/></svg>
+                        </span>
+                        <div>
+                            <p class="detail-label">Contact Number</p>
+                            <p>(046)458-0700</p>
+                            <p>0917-853-4875 (Globe/TM)</p>
+                            <p>0999-984-3304 (Smart/TNT)</p>
+                        </div>
+                    </div>
+                    <div class="contact-detail-item">
+                        <span class="detail-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><path d="M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2zm0 3l8 6 8-6"/></svg>
+                        </span>
+                        <div>
+                            <p class="detail-label">Email</p>
+                            <p>innersparcrealt yservices@gmail.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-detail-item">
+                        <span class="detail-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        </span>
+                        <div>
+                            <p class="detail-label">Business Hours</p>
+                            <p>Monday &ndash; Sunday 9am &ndash; 5pm</p>
+                        </div>
+                    </div>
+                    <div class="contact-detail-item">
+                        <span class="detail-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1118 0zm-9 3a3 3 0 100-6 3 3 0 000 6z"/></svg>
+                        </span>
+                        <div>
+                            <p class="detail-label">Location</p>
+                            <p>Blk 28 Lot 4 Phase 3, Avida Residences Sta. Catalina, Brgy, Salawag, Dasma&ntilde;as, Cavite, Philippines</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-social-wrap">
+                    <p>Connect with us</p>
+                    <div class="social-grid">
+                        {% include 'partials/social_icons.html' with social_link_class='social-circle' %}
+                    </div>
+                </div>
+            </aside>
+
+        </div>
+    </div>
+</div>
+
+<!-- Sign-in Gate Modal -->
+<div class="modal-backdrop" id="signinGateModal" aria-hidden="true">
+    <div class="modal-panel signin-gate-panel" role="dialog" aria-modal="true" aria-labelledby="signin-gate-title">
+        <button class="modal-close signin-gate-close" type="button" aria-label="Close Sign In Gate" onclick="closeSigninGate()">&times;</button>
+        <div class="modal-body signin-gate-body">
+            <!-- Lock Icon -->
+            <div class="signin-gate-icon-wrap">
+                <div class="signin-gate-icon">
+                    <svg fill="none" stroke="currentColor" stroke-width="2.1" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 11V8a4 4 0 0 1 8 0v3" />
+                        <rect x="5" y="11" width="14" height="10" rx="2" ry="2" />
+                    </svg>
+                </div>
+            </div>
+
+            <h2 id="signin-gate-title" class="signin-gate-title">Sign In Required</h2>
+            <p class="signin-gate-subtitle">You need to be signed in to chat with SPARC.</p>
+
+            <!-- Sign In Button -->
+            <a href="{% url 'sign_in' %}" class="signin-gate-btn">
+                Sign In
+            </a>
+
+            <!-- Sign Up Link -->
+            <p class="signin-gate-signup">
+                Don't have an account?
+                <a href="{% url 'sign_up' %}" class="signin-gate-signup-link">Sign Up</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<button type="button" id="chatbotTrigger" aria-hidden="true" tabindex="-1" hidden></button>
+
+<div class="chatbot-overlay" id="chatbotOverlay" aria-hidden="true">
+    <div class="chatbot-modal" id="chatbotModal" role="dialog" aria-modal="true" aria-labelledby="chatbotTitle">
+        <div class="chatbot-header">
+            <div class="chatbot-header-avatar" aria-hidden="true">IS</div>
+            <div class="chatbot-header-info">
+                <h2 id="chatbotTitle">SPARC Assistant</h2>
+                <div class="chatbot-status"><span class="chatbot-status-dot"></span>Online · Inner SPARC Realty</div>
+            </div>
+            <button class="chatbot-close" type="button" id="chatbotClose" aria-label="Close chat assistant">✕</button>
+        </div>
+
+        <div class="chatbot-body" id="chatbotBody"></div>
+        <div class="chatbot-quick-replies" id="chatbotQuickReplies"></div>
+
+        <div class="chatbot-footer">
+            <div class="chatbot-input-row">
+                <input type="text" id="chatbotInput" placeholder="Ask anything about Inner SPARC..." autocomplete="off" />
+                <button class="chatbot-send" type="button" id="chatbotSend" aria-label="Send message">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </div>
+            <p class="chatbot-powered">Quick FAQ assistant · For detailed concerns, contact our team</p>
+        </div>
+    </div>
+</div>
+
+<div class="modal-backdrop" id="verify-reset-modal" aria-hidden="true">
+    <div class="modal-panel verify-reset-panel" role="dialog" aria-modal="true" aria-labelledby="verify-reset-title">
+        <button class="modal-close" type="button" aria-label="Close Verify Reset" data-close-modal>&times;</button>
+        <div class="modal-body">
+            <h3 id="verify-reset-title">Verify Reset</h3>
+            <p class="modal-sub">Please enter the reset code sent to your email</p>
+
+            <form class="modal-form verify-reset-form verify-form" novalidate>
+                <div class="verify-otp-row" aria-label="Reset verification code">
+                    <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" aria-label="Code digit 1" required />
+                    <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" aria-label="Code digit 2" required />
+                    <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" aria-label="Code digit 3" required />
+                    <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" aria-label="Code digit 4" required />
+                    <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" aria-label="Code digit 5" required />
+                    <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" aria-label="Code digit 6" required />
+                </div>
+
+                <p class="modal-error" id="verify-reset-error"></p>
+
+                <div class="verify-resend">
+                    <p>Didn't receive OTP?</p>
+                    <a href="#">Resend code</a>
+                </div>
+
+                <button class="modal-submit verify-submit" type="submit">Verify</button>
+            </form>
+
+            <p class="modal-switch">
+                Back to
+                <a href="{% url 'forgot_password' %}" data-switch-modal="forgot-modal">Forgot Password</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="modal-backdrop" id="reset-success-modal" aria-hidden="true">
+    <div class="modal-panel reset-success-panel" role="dialog" aria-modal="true" aria-labelledby="reset-success-title">
+        <button class="modal-close" type="button" aria-label="Close Password Reset Success" data-close-modal>&times;</button>
+        <div class="modal-body">
+            <h3 id="reset-success-title">Password reset</h3>
+            <p class="modal-sub reset-success-sub">Your password has been successfully reset. click confirm to set a new password</p>
+            <button class="modal-submit reset-success-confirm" type="button" data-reset-success-confirm>Confirm</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-backdrop" id="reset-password-modal" aria-hidden="true">
+    <div class="modal-panel reset-password-panel" role="dialog" aria-modal="true" aria-labelledby="reset-password-title">
+        <button class="modal-close" type="button" aria-label="Close Set New Password" data-close-modal>&times;</button>
+        <div class="modal-body">
+            <h3 id="reset-password-title">Set a new password</h3>
+            <p class="modal-sub reset-password-sub">Create a new password. Ensure it differs from previous one for security</p>
+
+            <form class="modal-form reset-password-form" novalidate>
+                <div class="reset-password-field">
+                    <div class="signin-password-wrap">
+                        <input id="reset-new-password" type="password" placeholder="Password" aria-label="Password" autocomplete="new-password" required />
+                        <button class="password-toggle" type="button" aria-label="Show password" data-toggle-password="reset-new-password" onclick="return togglePasswordVisibility(this)">
+                            <svg class="icon-eye" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <svg class="icon-eye-off password-icon-hidden" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M3 3l18 18"></path>
+                                <path d="M10.58 10.58a2 2 0 002.83 2.83"></path>
+                                <path d="M9.88 5.09A10.94 10.94 0 0112 4.9c7 0 11 7.1 11 7.1a20.63 20.63 0 01-4.27 5.12"></path>
+                                <path d="M6.61 6.61A20.88 20.88 0 001 12s4 7.1 11 7.1a10.9 10.9 0 005.09-1.18"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="reset-password-field">
+                    <div class="signin-password-wrap">
+                        <input id="reset-confirm-password" type="password" placeholder="Confirm Password" aria-label="Confirm Password" autocomplete="new-password" required />
+                        <button class="password-toggle" type="button" aria-label="Show password" data-toggle-password="reset-confirm-password" onclick="return togglePasswordVisibility(this)">
+                            <svg class="icon-eye" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <svg class="icon-eye-off password-icon-hidden" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M3 3l18 18"></path>
+                                <path d="M10.58 10.58a2 2 0 002.83 2.83"></path>
+                                <path d="M9.88 5.09A10.94 10.94 0 0112 4.9c7 0 11 7.1 11 7.1a20.63 20.63 0 01-4.27 5.12"></path>
+                                <path d="M6.61 6.61A20.88 20.88 0 001 12s4 7.1 11 7.1a10.9 10.9 0 005.09-1.18"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <p class="modal-error reset-password-error"></p>
+                <button class="modal-submit" type="submit">Update Password</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal-backdrop" id="reset-done-modal" aria-hidden="true">
+    <div class="modal-panel reset-done-panel" role="dialog" aria-modal="true" aria-labelledby="reset-done-title">
+        <button class="modal-close" type="button" aria-label="Close Password Updated" data-close-modal>&times;</button>
+        <div class="modal-body">
+            <div class="reset-done-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false">
+                    <circle cx="12" cy="12" r="12"></circle>
+                    <path d="M7.2 12.3l3.1 3.2 6.5-6.8"></path>
+                </svg>
+            </div>
+            <h3 id="reset-done-title">Successful</h3>
+            <p class="modal-sub reset-done-sub">Congratulations! Your password has been changed. Click continue to login</p>
+            <button class="modal-submit" type="button" data-reset-done-continue>Continue to login</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-backdrop" id="verify-signup-modal" aria-hidden="true">
+    <div class="modal-panel verify-signup-panel" role="dialog" aria-modal="true" aria-labelledby="verify-signup-title">
+        <button class="modal-close" type="button" aria-label="Close Verify Signup" data-close-modal>&times;</button>
+        <div class="modal-body">
+            <h3 id="verify-signup-title">Verify Signup</h3>
+            <p class="modal-sub">Please enter the signup code sent to your email</p>
+
+            <form class="modal-form verify-signup-form verify-form" novalidate>
+                <div class="verify-otp-row" aria-label="Signup verification code">
+                    <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" aria-label="Code digit 1" required />
+                    <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" aria-label="Code digit 2" required />
+                    <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" aria-label="Code digit 3" required />
+                    <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" aria-label="Code digit 4" required />
+                    <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" aria-label="Code digit 5" required />
+                    <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" aria-label="Code digit 6" required />
+                </div>
+
+                <p class="modal-error" id="verify-signup-error"></p>
+
+                <div class="verify-resend">
+                    <p>Didn't receive OTP?</p>
+                    <a href="#">Resend code</a>
+                </div>
+
+                <button class="modal-submit verify-submit" type="submit">Verify</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal-backdrop" id="signup-modal" aria-hidden="true">
+    <div class="modal-panel signup-panel" role="dialog" aria-modal="true" aria-labelledby="signup-title">
+        <button class="modal-close" type="button" aria-label="Close Sign Up" data-close-modal>&times;</button>
+        <div class="modal-body">
+            <h3 id="signup-title">Create Your Account</h3>
+            <p class="modal-sub">Start your Inner SPARC application in minutes.</p>
+
+            <form id="sign-up-form" class="modal-form" method="post" novalidate>
+                {% csrf_token %}
+                <div class="signup-grid-2">
+                    <div class="signup-field">
+                        <input id="signup-first-name" type="text" placeholder="First Name" aria-label="First Name" autocomplete="given-name" required />
+                    </div>
+                    <div class="signup-field">
+                        <input id="signup-last-name" type="text" placeholder="Last Name" aria-label="Last Name" autocomplete="family-name" required />
+                    </div>
+                </div>
+                <p class="modal-error" id="signup-name-error"></p>
+
+                <div class="signup-field">
+                    <input id="signup-email" type="email" placeholder="Email Address" aria-label="Email Address" autocomplete="email" required />
+                </div>
+                <p class="modal-error" id="signup-email-error"></p>
+
+                <div class="signup-field">
+                    <div class="signup-phone-row">
+                        <select id="signup-country-code" aria-label="Country code">
+                            <option value="+63" selected>+63</option>
+                            <option value="+1">+1</option>
+                            <option value="+44">+44</option>
+                            <option value="+91">+91</option>
+                            <option value="+86">+86</option>
+                        </select>
+                        <input id="signup-phone" type="tel" placeholder="Phone Number" aria-label="Phone Number" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" autocomplete="tel-national" required />
+                    </div>
+                </div>
+                <p class="modal-error" id="signup-phone-error"></p>
+
+                <div class="signup-grid-2">
+                    <div class="signup-field">
+                        <div class="signup-password-wrap">
+                            <input id="signup-password" type="password" placeholder="Password" aria-label="Password" autocomplete="new-password" required />
+                            <button class="password-toggle" type="button" aria-label="Show password" data-toggle-password="signup-password" onclick="return togglePasswordVisibility(this)">
+                                <svg class="icon-eye" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                <svg class="icon-eye-off password-icon-hidden" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M3 3l18 18"></path>
+                                    <path d="M10.58 10.58a2 2 0 002.83 2.83"></path>
+                                    <path d="M9.88 5.09A10.94 10.94 0 0112 4.9c7 0 11 7.1 11 7.1a20.63 20.63 0 01-4.27 5.12"></path>
+                                    <path d="M6.61 6.61A20.88 20.88 0 001 12s4 7.1 11 7.1a10.9 10.9 0 005.09-1.18"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="signup-field">
+                        <div class="signup-password-wrap">
+                            <input id="signup-confirm-password" type="password" placeholder="Confirm Password" aria-label="Confirm Password" autocomplete="new-password" required />
+                            <button class="password-toggle" type="button" aria-label="Show password" data-toggle-password="signup-confirm-password" onclick="return togglePasswordVisibility(this)">
+                                <svg class="icon-eye" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                <svg class="icon-eye-off password-icon-hidden" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M3 3l18 18"></path>
+                                    <path d="M10.58 10.58a2 2 0 002.83 2.83"></path>
+                                    <path d="M9.88 5.09A10.94 10.94 0 0112 4.9c7 0 11 7.1 11 7.1a20.63 20.63 0 01-4.27 5.12"></path>
+                                    <path d="M6.61 6.61A20.88 20.88 0 001 12s4 7.1 11 7.1a10.9 10.9 0 005.09-1.18"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <p class="modal-error" id="signup-password-error"></p>
+
+                <label class="modal-check" for="signup-terms">
+                    <input id="signup-terms" type="checkbox" required />
+                    <span>I agree to the <a href="#">Terms and Conditions</a></span>
+                </label>
+                <p class="modal-error" id="signup-terms-error"></p>
+
+                <button class="modal-submit" type="submit">Create Account</button>
+            </form>
+
+            <div class="signup-divider" aria-hidden="true">
+                <span></span>
+                <p>Or sign up with</p>
+                <span></span>
+            </div>
+
+            <div class="signup-social" aria-label="Sign up with social account">
+                <a href="{% url 'portal_google_start' %}" class="signup-social-btn" aria-label="Continue with Google">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill="#ea4335" d="M12 5.75c1.69 0 3.21.58 4.41 1.72l3.28-3.28C17.7 2.33 15.05 1.2 12 1.2 7.31 1.2 3.27 3.89 1.31 7.82l3.86 2.99C6.08 7.85 8.8 5.75 12 5.75z"></path>
+                        <path fill="#34a853" d="M12 22.8c2.98 0 5.57-.98 7.43-2.66l-3.63-2.81c-1.03.69-2.35 1.09-3.8 1.09-3.18 0-5.89-2.08-6.81-5.02l-3.89 3c1.95 3.97 6 6.4 10.7 6.4z"></path>
+                        <path fill="#fbbc05" d="M5.19 13.4c-.23-.69-.36-1.43-.36-2.2 0-.77.13-1.51.36-2.2l-3.89-3C.47 7.65 0 9.39 0 11.2s.47 3.55 1.3 5.2l3.89-3z"></path>
+                        <path fill="#4285f4" d="M23.52 11.2c0-.74-.06-1.29-.2-1.87H12v3.7h6.63c-.13.92-.82 2.3-2.36 3.23l3.63 2.81c2.12-1.95 3.62-4.82 3.62-7.87z"></path>
+                    </svg>
+                    <span class="social-provider-label">Google</span>
+                </a>
+            </div>
+
+            <p class="modal-switch">
+                Already have an account?
+                <a href="{% url 'sign_in' %}" data-switch-modal="signin-modal">Sign In</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="modal-backdrop" id="about-modal" aria-hidden="true">
+    <div class="modal-panel about-modal-panel" role="dialog" aria-modal="true" aria-labelledby="about-modal-title">
+        <button class="modal-close" type="button" aria-label="Close About" data-close-modal>&times;</button>
+        <div class="modal-body about-modal-body">
+            <h2 id="about-modal-title" class="about-modal-title">Our Journey</h2>
+            
+            <!-- Hero Section: Image and Established Box -->
+            <div class="about-hero-grid">
+                <!-- Left: Image -->
+                <div class="about-image-container">
+                    <img 
+                        src="{% static 'images/Sir-Gab.png' %}"
+                        alt="Gabriel V. Libarios Jr. – CEO / Founder"
+                        loading="lazy"
+                        class="about-founder-image"
+                    />
+                </div>
+                
+                <!-- Right: Established Box -->
+                <div class="about-established-card">
+                    <h3 class="about-established-title">Established in 2019</h3> <br/>
+                    <p class="about-established-text">
+                        <strong>Inner SPARC Realty Corporation</strong> began as a small dream and quickly grew into a thriving business, thanks to the trust of our valued clients. Founded on October 14, 2019, by Licensed Real Estate Broker Gabriel Villamor Libacao Jr., REB, and Mr. Erwin G. Baguioan, Inner SPARC transitioned from a humble sole proprietorship into a corporation driven by a passion for helping Filipinos achieve homeownership.
+                    </p>
+                    <p class="about-established-text">
+                        Our journey is about more than growth - it's about commitment. We understand the importance of buying a home, and we're dedicated to providing affordable, high-quality properties that meet the needs of Filipino families. Fully compliant with Department of Trade and Industry regulations, Inner SPARC is committed to transparency and ethics, making homeownership a reality for everyone.
+                    </p>
+                    <p class="about-founder-credit">
+                        Gabriel V. Libacao Jr.<br>
+                        CEO/Founder
+                    </p>
+                </div>
+            </div>
+
+            <!-- Vision and Mission Cards -->
+            <div class="about-cards-grid">
+                <!-- Vision Card -->
+                <div class="about-card">
+                    <div class="about-card-head">
+                        <div class="about-card-icon about-card-icon-vision">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </div>
+                        <h3 class="about-card-title">Vision</h3>
+                    </div>
+                    <p class="about-card-text">
+                        At Inner Sparc Realty Corporation, we envision a future where every Filipino family finds their dream home with ease and confidence. We are committed to transforming the real estate experience by making it accessible, affordable, and personalized, ensuring that every homebuyer and investor feels valued and supported throughout their journey.
+                    </p>
+                </div>
+                
+                <!-- Mission Card -->
+                <div class="about-card">
+                    <div class="about-card-head">
+                        <div class="about-card-icon about-card-icon-mission">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="12 2 15.09 6.26 20 6.87 16.54 10.29 17.18 15.40 12 12.78 6.82 15.40 7.46 10.29 4 6.87 8.91 6.26 12 2"></polyline>
+                            </svg>
+                        </div>
+                        <h3 class="about-card-title">Mission</h3>
+                    </div>
+                    <p class="about-card-text">
+                        Our mission is to empower Filipino families and individuals by providing exceptional real estate services that cater to their unique needs and aspirations. We strive to deliver innovative solutions, unparalleled customer service, and a deep understanding of local communities. Through our dedication to integrity and excellence, we aim to build lasting relationships and contribute to the fulfillment of homeownership dreams across the Philippines.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Read More Button -->
+            <div class="about-read-more-wrap">
+                <a href="https://www.innersparcrealty.com/about/" class="about-read-more-btn" target="_blank" rel="noopener noreferrer">Read More</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Sign-in Gate Logic for Chatbot Access
+const isAuthenticated = {{ request.user.is_authenticated|yesno:"true,false" }};
+
+function openSigninGate() {
+  const modal = document.getElementById('signinGateModal');
+  if (modal) {
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+  }
+}
+
+function closeSigninGate() {
+  const modal = document.getElementById('signinGateModal');
+  if (modal) {
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+}
+
+// Attach to the "Chat with SPARC" button
+document.addEventListener('DOMContentLoaded', function () {
+  const chatBtn = document.getElementById('chatWithSparcBtn');
+  const modal = document.getElementById('signinGateModal');
+
+  if (chatBtn) {
+    chatBtn.addEventListener('click', function (e) {
+      if (!isAuthenticated) {
+        e.preventDefault();
+        openSigninGate();
+      } else {
+        // For authenticated users, trigger the chatbot
+        const trigger = document.getElementById('chatbotTrigger');
+        if (trigger) {
+          trigger.click();
+        }
+      }
+    });
+  }
+
+  // Close modal when clicking outside (on the backdrop)
+  if (modal) {
+    modal.addEventListener('click', function (e) {
+      if (e.target === modal) {
+        closeSigninGate();
+      }
+    });
+  }
+});
+</script>

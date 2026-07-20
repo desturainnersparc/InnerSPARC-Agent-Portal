@@ -1,0 +1,26 @@
+{% load static %}
+<footer class="footer" id="{{ footer_id|default:'contact' }}">
+    <div class="footer-line" aria-hidden="true"></div>
+    <div class="container footer-inner">
+        <a class="footer-brand-wrap" href="{% url 'home' %}">
+            <img class="brand-logo" src="{% static 'images/innersparc.png' %}" alt="Inner SPARC logo" />
+            <h4 class="footer-brand">Inner SPARC Realty Corporation</h4>
+        </a>
+
+        <nav class="footer-nav" aria-label="Footer">
+            {% if footer_on_home %}
+            <a href="#home">Home</a>
+            {% else %}
+            <a href="{% url 'home' %}">Home</a>
+            {% endif %}
+            <a href="#" data-open-modal="about-modal">About</a>
+            <a href="{% url 'home' %}?openModal=contact-modal" data-open-modal="contact-modal">Contact</a>
+        </nav>
+
+        <div class="social-row">
+            {% include 'partials/social_icons.html' %}
+        </div>
+
+        <p>Copyright &copy; 2026 Inner SPARC Realty Corporation | Powered by Inner SPARC Realty Corporation</p>
+    </div>
+</footer>

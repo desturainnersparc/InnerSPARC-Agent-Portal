@@ -1,0 +1,77 @@
+/* panel-buttons.css — override panel button colors to a single blue */
+:root {
+  --panel-primary-bg: #2563eb; /* primary blue */
+  --panel-primary-hover: #1e4fcf;
+  --panel-primary-text: #ffffff;
+  --panel-primary-disabled: #93b6ff;
+  --panel-accent-tint: #e6f0ff; /* used for selected option tint if needed */
+}
+
+/* Primary buttons (tpl1 and oqp variants) */
+.tpl1-btn.primary,
+.oqp-btn-primary,
+button.tpl1-btn.primary,
+button.oqp-btn-primary {
+  background-color: var(--panel-primary-bg) !important;
+  color: var(--panel-primary-text) !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Hover/focus */
+.tpl1-btn.primary:hover,
+.oqp-btn-primary:hover,
+button.tpl1-btn.primary:hover,
+button.oqp-btn-primary:hover,
+.tpl1-btn.primary:focus,
+.oqp-btn-primary:focus {
+  background-color: var(--panel-primary-hover) !important;
+  outline: none;
+  box-shadow: none !important;
+}
+
+/* Disabled primary buttons */
+.tpl1-btn.primary:disabled,
+.oqp-btn-primary:disabled,
+button.tpl1-btn.primary:disabled,
+button.oqp-btn-primary:disabled {
+  background-color: var(--panel-primary-disabled) !important;
+  color: rgba(255,255,255,0.9) !important;
+  opacity: 0.9;
+}
+
+/* Ensure other btn classes that may show green are aligned */
+.tpl1-btn,
+.oqp-btn,
+button.tpl1-btn,
+button.oqp-btn {
+  border-radius: 8px;
+  transition: background-color .12s ease, border-color .12s ease;
+}
+
+/* Replace green selection tints (quiz choices) with blue-tinted variant */
+.oqp-choice.is-selected,
+.oqp-choice.is-selected .oqp-choice-circle,
+.oqp-choice.is-selected .oqp-choice-dot {
+  background: var(--panel-accent-tint) !important;
+  border-color: var(--panel-primary-bg) !important;
+}
+.oqp-choice.is-selected .oqp-choice-dot {
+  background: var(--panel-primary-bg) !important;
+}
+
+/* Also neutralize any inline green helper classes that might exist */
+.bg-green-50, .bg-green-100, .bg-green-200, .bg-green-300, .text-green-600, .border-green-200 {
+  background: transparent !important;
+  color: inherit !important;
+  border-color: transparent !important;
+}
+
+/* Small-screen adjustments kept minimal */
+@media (max-width: 900px) {
+  .tpl1-btn.primary,
+  .oqp-btn-primary {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+}

@@ -1,0 +1,625 @@
+/* ========================================
+   VIDEO PLAYER REFACTORED - LAYOUT & UX ENHANCEMENTS 
+   Improvements:
+   - Better spacing and vertical alignment
+   - Optimized for responsive design
+   - Smooth transitions and animations
+   - Layout shift prevention
+   - Performance optimized
+   ======================================== */
+
+.tpl1-intro-video-card {
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: linear-gradient(180deg, #2d3f9f 0%, #4b1f7f 100%);
+    padding: 16px;
+    display: grid;
+    gap: 14px;
+    color: #ffffff;
+    
+    /* Prevent layout shift during loading */
+    contain: layout style paint;
+    will-change: auto;
+}
+
+.tpl1-intro-video-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    border-radius: 14px;
+    overflow: hidden;
+    background: rgba(6, 9, 24, 0.55);
+    display: grid;
+    place-items: center;
+    
+    /* Prevent CLS (Cumulative Layout Shift) */
+    contain: layout style paint;
+    flex-shrink: 0;
+    
+    /* Smooth transitions for state changes */
+    transition: background-color 200ms ease;
+}
+
+.tpl1-intro-video {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    background: rgba(6, 9, 24, 0.55);
+    
+    /* Improve rendering performance */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/* ========================================
+   OVERLAY & CENTER CONTENT
+   ======================================== */
+
+.tpl1-intro-video-frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(11, 14, 36, 0.24) 0%, rgba(9, 12, 30, 0.72) 100%);
+    z-index: 2;
+    
+    /* Smooth fade transition */
+    transition: opacity 280ms cubic-bezier(0.2, 0.9, 0.2, 1);
+    opacity: 1;
+}
+
+.tpl1-intro-video-center-copy {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
+    display: grid;
+    justify-items: center;
+    gap: 6px;
+    text-align: center;
+    z-index: 3;
+    pointer-events: none;
+    
+    /* Smooth fade on playback */
+    transition: opacity 200ms ease, transform 200ms ease;
+    opacity: 1;
+}
+
+.tpl1-intro-video-center-copy strong {
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: #ffffff;
+    letter-spacing: -0.3px;
+}
+
+.tpl1-intro-video-center-copy span {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.92);
+    line-height: 1.3;
+    letter-spacing: -0.2px;
+}
+
+/* ========================================
+   PLAY BUTTON - CENTERED (INITIAL STATE)
+   ======================================== */
+
+.tpl1-intro-video-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, calc(-50% - 30px));
+    width: 64px;
+    height: 64px;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(146, 154, 228, 0.40);
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 4;
+    
+    /* Enhanced transitions for interactive feedback */
+    transition: transform 170ms cubic-bezier(0.2, 0.9, 0.2, 1), 
+                background-color 170ms ease, 
+                box-shadow 170ms ease,
+                opacity 200ms ease;
+    
+    box-shadow: 0 12px 32px rgba(9, 12, 28, 0.35);
+    
+    /* Prevent accidental double-click selection */
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.tpl1-intro-video-play:hover,
+.tpl1-intro-video-play:focus-visible {
+    transform: translate(-50%, calc(-50% - 30px)) scale(1.08);
+    background: rgba(165, 173, 242, 0.52);
+    box-shadow: 0 14px 36px rgba(9, 12, 28, 0.42);
+    outline: none;
+}
+
+.tpl1-intro-video-play:active {
+    transform: translate(-50%, calc(-50% - 30px)) scale(0.96);
+}
+
+/* ========================================
+   PLAYING STATE - BUTTON REPOSITIONED
+   ======================================== */
+
+.tpl1-intro-video-frame.is-playing::before,
+.tpl1-intro-video-frame.is-playing .tpl1-intro-video-center-copy {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.tpl1-intro-video-frame.is-playing .tpl1-intro-video-play {
+    top: auto;
+    bottom: 16px;
+    left: auto;
+    right: 16px;
+    transform: none;
+    width: 44px;
+    height: 44px;
+    background: rgba(10, 14, 32, 0.58);
+    opacity: 0.85;
+    pointer-events: auto;
+    
+    /* Fade in smoothly */
+    animation: fadeIn 300ms ease forwards;
+}
+
+.tpl1-intro-video-frame.is-playing .tpl1-intro-video-play:hover,
+.tpl1-intro-video-frame.is-playing .tpl1-intro-video-play:focus-visible {
+    transform: scale(1.08);
+    background: rgba(10, 14, 32, 0.74);
+    opacity: 1;
+}
+
+/* ========================================
+   ERROR & FALLBACK STATES
+   ======================================== */
+
+.tpl1-intro-video-fallback {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    gap: 8px;
+    text-align: center;
+    padding: 16px;
+    background: linear-gradient(180deg, rgba(18, 24, 54, 0.94), rgba(11, 16, 38, 0.97));
+    color: #ffffff;
+    z-index: 6;
+    border-radius: inherit;
+}
+
+.tpl1-intro-video-fallback strong {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.tpl1-intro-video-fallback span {
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.84);
+    line-height: 1.5;
+}
+
+/* ========================================
+   BUFFERING STATE
+   ======================================== */
+
+.tpl1-intro-video-frame.is-buffering .tpl1-intro-video-play {
+    opacity: 0.48;
+    cursor: wait;
+}
+
+/* ========================================
+   CONTROLS SECTION - IMPROVED SPACING
+   ======================================== */
+
+.tpl1-intro-video-controls {
+    display: grid;
+    gap: 10px;
+    align-items: center;
+    grid-template-columns: auto 1fr;
+    grid-template-areas: 'play timeline' 
+                         'times times';
+    
+    /* Prevent layout shift */
+    contain: layout style;
+    min-height: 70px;
+    padding: 4px 0;
+}
+
+/* Play/Pause Button */
+.tpl1-intro-video-control-btn {
+    grid-area: play;
+    border: 1px solid rgba(255, 255, 255, 0.32);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+    color: #ffffff;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    min-height: 36px;
+    padding: 0 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    
+    /* Smooth interactions */
+    transition: transform 140ms cubic-bezier(0.2, 0.9, 0.2, 1),
+                background-color 140ms ease,
+                box-shadow 140ms ease;
+    
+    user-select: none;
+    -webkit-user-select: none;
+    
+    /* Prevent layout shift */
+    flex-shrink: 0;
+}
+
+.tpl1-intro-video-control-btn:hover:not(:disabled),
+.tpl1-intro-video-control-btn:focus-visible:not(:disabled) {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.28);
+    box-shadow: 0 8px 20px rgba(8, 12, 28, 0.28);
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.48);
+}
+
+.tpl1-intro-video-control-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.tpl1-intro-video-control-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ========================================
+   TIMELINE & PROGRESS CONTROLS
+   ======================================== */
+
+.tpl1-intro-video-timeline-wrap {
+    grid-area: timeline;
+    position: relative;
+    min-width: 0;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Buffer progress (background) */
+.tpl1-intro-video-buffer {
+    position: absolute;
+    left: 0;
+    right: auto;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 0;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.4);
+    pointer-events: none;
+    z-index: 1;
+    
+    /* Smooth width updates */
+    transition: width 120ms ease;
+}
+
+/* Seek range slider - custom styling */
+.tpl1-intro-video-seek {
+    width: 100%;
+    margin: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    height: 4px;
+    border-radius: 999px;
+    
+    /* Gradient fill based on --seek-played variable */
+    background: linear-gradient(
+        90deg,
+        #ffffff 0,
+        #ffffff var(--seek-played, 0%),
+        rgba(255, 255, 255, 0.28) var(--seek-played, 0%),
+        rgba(255, 255, 255, 0.28) 100%
+    );
+    
+    outline: none;
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+    
+    /* Smooth background transitions */
+    transition: background 80ms linear;
+    
+    /* Prevent accidental text selection */
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* Webkit browsers (Chrome, Safari, Edge) - slider thumb */
+.tpl1-intro-video-seek::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 0;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(76, 144, 255, 0.44);
+    cursor: pointer;
+    
+    /* Smooth thumb transitions */
+    transition: box-shadow 140ms ease, transform 100ms ease;
+}
+
+.tpl1-intro-video-seek::-webkit-slider-thumb:hover {
+    box-shadow: 0 0 0 4px rgba(76, 144, 255, 0.62);
+    transform: scale(1.12);
+}
+
+.tpl1-intro-video-seek::-webkit-slider-thumb:active {
+    transform: scale(0.95);
+}
+
+/* Firefox - slider thumb */
+.tpl1-intro-video-seek::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 0;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(76, 144, 255, 0.44);
+    cursor: pointer;
+    
+    transition: box-shadow 140ms ease, transform 100ms ease;
+}
+
+.tpl1-intro-video-seek::-moz-range-thumb:hover {
+    box-shadow: 0 0 0 4px rgba(76, 144, 255, 0.62);
+    transform: scale(1.12);
+}
+
+.tpl1-intro-video-seek::-moz-range-thumb:active {
+    transform: scale(0.95);
+}
+
+/* Firefox - track background */
+.tpl1-intro-video-seek::-moz-range-track {
+    background: transparent;
+    border: none;
+}
+
+/* ========================================
+   TIME DISPLAY
+   ======================================== */
+
+.tpl1-intro-video-times {
+    grid-area: times;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.96);
+    font-variant-numeric: tabular-nums;
+    
+    /* Prevent layout shift */
+    min-height: 18px;
+    align-items: center;
+}
+
+/* ========================================
+   LOADING INDICATOR
+   ======================================== */
+
+.tpl1-intro-video-loading {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 999px;
+    background: rgba(8, 12, 30, 0.72);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #ffffff;
+    font-size: 0.8125rem;
+    line-height: 1;
+    pointer-events: none;
+    
+    /* Smooth fade in/out */
+    transition: opacity 200ms ease;
+    animation: fadeInScale 300ms ease forwards;
+}
+
+.tpl1-intro-video-loading[hidden] {
+    display: none;
+}
+
+.tpl1-intro-video-spinner {
+    width: 16px;
+    height: 16px;
+    border-radius: 999px;
+    border: 2.5px solid rgba(255, 255, 255, 0.32);
+    border-top-color: #ffffff;
+    border-right-color: #ffffff;
+    
+    /* Optimized spinner animation */
+    animation: tpl1-intro-spin 720ms linear infinite;
+    will-change: transform;
+    backface-visibility: hidden;
+}
+
+@keyframes tpl1-intro-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ========================================
+   ACCESSIBILITY & FOCUS STATES
+   ======================================== */
+
+.tpl1-intro-video-control-btn:focus-visible,
+.tpl1-intro-video-seek:focus-visible {
+    outline: 2.5px solid rgba(255, 255, 255, 0.92);
+    outline-offset: 3px;
+}
+
+/* ========================================
+   HINT/NOTE TEXT
+   ======================================== */
+
+.tpl1-intro-video-note {
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.82);
+    text-align: center;
+    line-height: 1.5;
+    margin: 4px 0 0;
+    padding: 0;
+}
+
+.tpl1-intro-video-note[hidden] {
+    display: none;
+}
+
+/* ========================================
+   RESPONSIVE ADJUSTMENTS
+   ======================================== */
+
+@media (max-width: 900px) {
+    .tpl1-intro-video-frame {
+        aspect-ratio: 9 / 16;
+    }
+    
+    .tpl1-intro-video-play {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .tpl1-intro-video-frame.is-playing .tpl1-intro-video-play {
+        width: 42px;
+        height: 42px;
+        bottom: 12px;
+        right: 12px;
+    }
+    
+    .tpl1-intro-video-control-btn {
+        min-height: 36px;
+        padding: 0 12px;
+        font-size: 0.75rem;
+    }
+    
+    .tpl1-intro-video-times {
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .tpl1-intro-video-card {
+        padding: 12px;
+        gap: 14px;
+    }
+    
+    .tpl1-intro-video-play {
+        width: 56px;
+        height: 56px;
+    }
+    
+    .tpl1-intro-video-center-copy strong {
+        font-size: 1rem;
+    }
+    
+    .tpl1-intro-video-center-copy span {
+        font-size: 0.8125rem;
+    }
+    
+    .tpl1-intro-video-control-btn {
+        min-height: 34px;
+        padding: 0 10px;
+        font-size: 0.7125rem;
+    }
+    
+    .tpl1-intro-video-timeline-wrap {
+        height: 18px;
+    }
+    
+    .tpl1-intro-video-times {
+        font-size: 0.7125rem;
+        gap: 8px;
+    }
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 0.85;
+    }
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* ========================================
+   DARK MODE SUPPORT (Future)
+   ======================================== */
+
+@media (prefers-color-scheme: dark) {
+    /* Maintains contrast in dark mode */
+    .tpl1-intro-video-card {
+        background: linear-gradient(180deg, #1a2560 0%, #2a1352 100%);
+    }
+}
+
+/* ========================================
+   REDUCED MOTION SUPPORT
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .tpl1-intro-video-play,
+    .tpl1-intro-video-control-btn,
+    .tpl1-intro-video-seek::-webkit-slider-thumb,
+    .tpl1-intro-video-seek::-moz-range-thumb,
+    .tpl1-intro-video-loading,
+    .tpl1-intro-video-spinner {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+}
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+
+@media print {
+    .tpl1-intro-video-controls,
+    .tpl1-intro-video-play {
+        display: none;
+    }
+}

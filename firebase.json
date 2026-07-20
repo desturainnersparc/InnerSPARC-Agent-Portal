@@ -1,0 +1,24 @@
+{
+  "hosting": {
+    "public": "hosting",
+    "ignore": [
+      "firebase.json",
+      ".firebaserc",
+      "**/.*",
+      "**/node_modules/**",
+      "venv/**",
+      "app/**",
+      "Inner_Sparc_Portal/**",
+      "manage.py",
+      "db.sqlite3",
+      "**/*.py",
+      "**/*.pyc",
+      "**/__pycache__/**",
+      "**/*.exe",
+      "**/*.dll",
+      "**/*.bat",
+      "**/*.cmd",
+      "**/*.sh"
+    ]
+  }
+}

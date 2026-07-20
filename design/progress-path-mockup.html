@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Progress Path Mockup</title>
+  <link rel="stylesheet" href="/static/css/progress-path.css?v=2">
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="/static/js/components/ProgressPath.umd.js?v=2"></script>
+  <style>body{background:#0f1724;color:#fff;font-family:Inter,system-ui,Arial,Helvetica,sans-serif;padding:24px}</style>
+</head>
+<body>
+  <h2>Rail Track Progress Mockup</h2>
+  <div id="mockRoot" style="max-width:720px;background:rgba(255,255,255,0.03);padding:20px;border-radius:12px"></div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function(){
+      var nodes = [
+        { type: 'start', label: 'Intro' },
+        { type: 'lesson', label: 'Basics' },
+        { type: 'lesson', label: 'Deep Dive' },
+        { type: 'quiz', label: 'Quiz' },
+        { type: 'lesson', label: 'Wrap Up' },
+        { type: 'final', label: 'Certification' }
+      ];
+      var mount = document.createElement('div');
+      mount.id = 'mockProgress';
+      document.getElementById('mockRoot').appendChild(mount);
+      if (window.renderProgressPath) {
+        window.renderProgressPath('mockProgress',{ nodes: nodes, currentIndex: 2, onNodeClick: function(i){ console.log('clicked',i); } });
+      } else {
+        console.warn('renderProgressPath missing');
+      }
+    });
+  </script>
+</body>
+</html>

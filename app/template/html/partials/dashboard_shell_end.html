@@ -1,0 +1,42 @@
+        </div>
+    </main>
+</div>
+
+<button class="chatbot-trigger" type="button" id="chatbotTrigger" aria-label="Open chat assistant">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M8 18.5H7a3.5 3.5 0 0 1-3.5-3.5V8A3.5 3.5 0 0 1 7 4.5h10A3.5 3.5 0 0 1 20.5 8v7a3.5 3.5 0 0 1-3.5 3.5h-4.2L9 21.5v-3z"></path>
+        <circle cx="9" cy="11.5" r="0.95" fill="currentColor" stroke="none"></circle>
+        <circle cx="12" cy="11.5" r="0.95" fill="currentColor" stroke="none"></circle>
+        <circle cx="15" cy="11.5" r="0.95" fill="currentColor" stroke="none"></circle>
+    </svg>
+    <span class="chatbot-trigger-label">Chat with us</span>
+</button>
+
+<div class="chatbot-overlay" id="chatbotOverlay" aria-hidden="true">
+    <div class="chatbot-modal" id="chatbotModal" role="dialog" aria-modal="true" aria-labelledby="chatbotTitle">
+        <div class="chatbot-header">
+            <div class="chatbot-header-avatar" aria-hidden="true">IS</div>
+            <div class="chatbot-header-info">
+                <h2 id="chatbotTitle">SPARC Assistant</h2>
+                <div class="chatbot-status"><span class="chatbot-status-dot"></span>Online · Inner SPARC Realty</div>
+            </div>
+            <button class="chatbot-close" type="button" id="chatbotClose" aria-label="Close chat assistant">✕</button>
+        </div>
+
+        <div class="chatbot-body" id="chatbotBody"></div>
+        <div class="chatbot-quick-replies" id="chatbotQuickReplies"></div>
+
+        <div class="chatbot-footer">
+            <div class="chatbot-input-row">
+                <input type="text" id="chatbotInput" placeholder="Ask anything about Inner SPARC..." autocomplete="off" />
+                <button class="chatbot-send" type="button" id="chatbotSend" aria-label="Send message">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </div>
+            <p class="chatbot-powered">Quick FAQ assistant · For detailed concerns, contact our team</p>
+        </div>
+    </div>
+</div>

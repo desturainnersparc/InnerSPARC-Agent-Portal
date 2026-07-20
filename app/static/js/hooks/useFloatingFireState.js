@@ -1,0 +1,392 @@
+(function () {
+  function useFloatingFireState(options) {
+    var opts = options || {};
+    var mapApi = window.floatingFireMap || {};
+    var DEBUG = !!opts.debug || (typeof window !== 'undefined' && !!window.__DEBUG_FLOATING_FIRE);
+
+    var root = (typeof document !== 'undefined') ? document.getElementById('tpl1Root') : null;
+    var email = (root && root.dataset && root.dataset.accountEmail) ? root.dataset.accountEmail : 'anon';
+    var safeScope = String(email || 'anon').toLowerCase().replace(/[^a-z0-9]+/g, '_');
+
+    var STORAGE_LATEST_V2 = opts.storageLatestKey || ('innerSparc_floating_fire_latest_module_v2_' + safeScope);
+    var STORAGE_LAST_SHOWN_V2 = opts.storageCelebratedKey || ('innerSparc_floating_fire_last_shown_module_v2_' + safeScope);
+    var STORAGE_PENDING_MODAL_V2 = opts.storagePendingModalKey || ('innerSparc_floating_fire_pending_modal_module_v2_' + safeScope);
+
+    // Legacy fallback keys (read once, then persisted to V2).
+    var STORAGE_LATEST_V1 = 'innerSparc_floating_fire_latest_module_' + safeScope;
+    var STORAGE_LAST_CELEBRATED_V1 = 'innerSparc_floating_fire_last_celebrated_module_' + safeScope;
+    var STORAGE_PENDING_MODAL_V1 = 'innerSparc_floating_fire_pending_modal_module_' + safeScope;
+
+    var state = {
+      isLoading: true,
+      currentModule: 0,
+      fireVisible: false,
+      firePath: null,
+      modalOpen: false,
+      modalModule: 0,
+      previousModalModule: 0,
+      hasPlaybackError: false
+    };
+
+    var latestCompletedModule = 0;
+    var lastShownModule = 0;
+    var pendingModalModule = 0;
+    var previousShownModule = 0;
+
+    function normalize(value) {
+      var normalizeModule = mapApi.normalizeModuleCount || function (v) {
+        var p = parseInt(v, 10);
+        return isNaN(p) || p < 0 ? 0 : p;
+      };
+      return normalizeModule(value);
+    }
+
+    function readStorageInt(key) {
+      try {
+        var raw = localStorage.getItem(key);
+        if (raw === null || raw === undefined || raw === '') return null;
+        var parsed = parseInt(raw, 10);
+        return isNaN(parsed) ? null : parsed;
+      } catch (err) {
+        return null;
+      }
+    }
+
+    function writeStorageInt(key, value) {
+      try {
+        localStorage.setItem(key, String(value));
+      } catch (err) {
+        console.warn('[FloatingFireState] Persist failed for key', key, err);
+      }
+    }
+
+    function removeStorageKey(key) {
+      try {
+        localStorage.removeItem(key);
+      } catch (err) {
+        // no-op
+      }
+    }
+
+    function persistAll() {
+      writeStorageInt(STORAGE_LATEST_V2, latestCompletedModule);
+      writeStorageInt(STORAGE_LAST_SHOWN_V2, lastShownModule);
+      if (pendingModalModule > 0) {
+        writeStorageInt(STORAGE_PENDING_MODAL_V2, pendingModalModule);
+      } else {
+        removeStorageKey(STORAGE_PENDING_MODAL_V2);
+      }
+    }
+
+    function dispatchState() {
+      document.dispatchEvent(new CustomEvent('floatingFire:stateChange', { detail: getState() }));
+    }
+
+    function applyModuleCount(moduleCount, options) {
+      var optsLocal = options || {};
+      var normalized = normalize(moduleCount);
+      var config = mapApi.resolveFloatingFireConfig
+        ? mapApi.resolveFloatingFireConfig(normalized)
+        : { idlePath: null };
+
+      var validation = mapApi.resolveValidatedAssetPath
+        ? mapApi.resolveValidatedAssetPath({
+            moduleCount: normalized,
+            candidatePath: config.idlePath,
+            previousValidPath: state.firePath,
+            channel: 'idle'
+          })
+        : { path: config.idlePath || null };
+
+      state.currentModule = normalized;
+      state.firePath = validation.path || null;
+      state.fireVisible = !!validation.path;
+      state.hasPlaybackError = false;
+
+      if (DEBUG) {
+        console.debug('[FloatingFireState] applyModuleCount', {
+          moduleCount: normalized,
+          resolvedPath: state.firePath,
+          visible: state.fireVisible
+        });
+      }
+
+      if (!optsLocal.skipDispatch) {
+        dispatchState();
+      }
+
+      return normalized;
+    }
+
+    function derivePendingList() {
+      var pending = [];
+      for (var m = lastShownModule + 1; m <= latestCompletedModule; m += 1) {
+        pending.push(m);
+      }
+      return pending;
+    }
+
+    function isValidPendingModal(moduleNumber) {
+      return moduleNumber > lastShownModule && moduleNumber <= latestCompletedModule;
+    }
+
+    function openModal(moduleNumber, reason) {
+      var target = normalize(moduleNumber);
+      if (!isValidPendingModal(target)) return;
+      if (state.modalOpen && state.modalModule === target) return;
+
+      // Anchor progress animation to persisted history, not transient modal state.
+      // modalModule can be reset to 0 after close, but lastShownModule tracks real history.
+      var previousAnchor = normalize(Math.max(lastShownModule, previousShownModule));
+      if (previousAnchor >= target) previousAnchor = Math.max(0, target - 1);
+      state.previousModalModule = previousAnchor;
+      state.modalOpen = true;
+      state.modalModule = target;
+      pendingModalModule = target;
+      persistAll();
+
+      if (DEBUG) {
+        console.debug('[FloatingFireState] modal open', {
+          reason: reason,
+          latestCompletedModule: latestCompletedModule,
+          lastShownModule: lastShownModule,
+          pendingModalModule: pendingModalModule,
+          modalOpen: state.modalOpen,
+          modalModule: state.modalModule
+        });
+      }
+    }
+
+    function logRecompute(reason, pending) {
+      if (!DEBUG) return;
+      console.debug('[FloatingFireState] recompute', {
+        reason: reason,
+        latestCompletedModule: latestCompletedModule,
+        lastShownModule: lastShownModule,
+        pendingModalModule: pendingModalModule,
+        pending: pending,
+        modalOpen: state.modalOpen,
+        modalModule: state.modalModule
+      });
+    }
+
+    function clampInvariants() {
+      latestCompletedModule = normalize(latestCompletedModule);
+      lastShownModule = normalize(lastShownModule);
+      pendingModalModule = normalize(pendingModalModule);
+
+      if (lastShownModule > latestCompletedModule) {
+        lastShownModule = latestCompletedModule;
+      }
+
+      if (!isValidPendingModal(pendingModalModule)) {
+        pendingModalModule = 0;
+      }
+
+      if (state.modalOpen && !isValidPendingModal(state.modalModule)) {
+        state.modalOpen = false;
+        state.modalModule = 0;
+      }
+    }
+
+    function recomputeState(reason) {
+      clampInvariants();
+
+      var pending = derivePendingList();
+
+      if (state.modalOpen) {
+        // Keep currently open valid modal and ensure pending key matches it.
+        pendingModalModule = state.modalModule;
+      } else if (isValidPendingModal(pendingModalModule)) {
+        openModal(pendingModalModule, reason + ':restore-pending');
+      } else if (pending.length > 0) {
+        openModal(pending[0], reason + ':next-pending');
+       }
+
+      // If modal is open for X, pending list should still be derived and include X,
+      // but we avoid re-opening/re-enqueueing via modalOpen+modalModule checks.
+
+      persistAll();
+      logRecompute(reason, pending);
+      dispatchState();
+    }
+
+    function readInitialAuthoritativeProgress() {
+      if (typeof window === 'undefined') return null;
+      if (typeof window.getOnboardingCompletedModulesCount !== 'function') return null;
+      try {
+        var count = Number(window.getOnboardingCompletedModulesCount());
+        if (!isFinite(count)) return null;
+        return normalize(count);
+      } catch (err) {
+        return null;
+      }
+    }
+
+    function bootstrapFromStorage() {
+      var latestV2 = readStorageInt(STORAGE_LATEST_V2);
+      var lastShownV2 = readStorageInt(STORAGE_LAST_SHOWN_V2);
+      var pendingV2 = readStorageInt(STORAGE_PENDING_MODAL_V2);
+
+      var latestV1 = null;
+      var lastShownV1 = null;
+      var pendingV1 = null;
+      if (latestV2 === null || lastShownV2 === null || pendingV2 === null) {
+        latestV1 = readStorageInt(STORAGE_LATEST_V1);
+        lastShownV1 = readStorageInt(STORAGE_LAST_CELEBRATED_V1);
+        pendingV1 = readStorageInt(STORAGE_PENDING_MODAL_V1);
+      }
+
+      var authoritativeInitial = readInitialAuthoritativeProgress();
+
+      if (authoritativeInitial !== null) {
+        latestCompletedModule = authoritativeInitial;
+      } else if (latestV2 !== null) {
+        latestCompletedModule = latestV2;
+      } else if (latestV1 !== null) {
+        latestCompletedModule = latestV1;
+      } else {
+        latestCompletedModule = 0;
+      }
+
+      if (lastShownV2 !== null) {
+        lastShownModule = lastShownV2;
+      } else if (lastShownV1 !== null) {
+        lastShownModule = lastShownV1;
+      } else {
+        lastShownModule = 0;
+      }
+
+      if (pendingV2 !== null) {
+        pendingModalModule = pendingV2;
+      } else if (pendingV1 !== null) {
+        pendingModalModule = pendingV1;
+      } else {
+        pendingModalModule = 0;
+      }
+
+      clampInvariants();
+      persistAll();
+
+      if (DEBUG) {
+        console.debug('[FloatingFireState] init', {
+          latestCompletedModule: latestCompletedModule,
+          lastShownModule: lastShownModule,
+          pendingModalModule: pendingModalModule
+        });
+      }
+    }
+
+    function handleModulesUpdated(event) {
+      var detail = event && event.detail ? event.detail : {};
+      var nextModule = normalize(detail.modulesCompleted);
+
+      if (DEBUG) {
+        console.debug('[FloatingFireState] onboarding:modulesUpdated payload', detail);
+      }
+
+      if (nextModule === latestCompletedModule) {
+        // Duplicate event: recompute is idempotent and prevents duplicate open.
+        recomputeState('modulesUpdated:duplicate');
+        return;
+      }
+
+      latestCompletedModule = nextModule;
+      applyModuleCount(latestCompletedModule, { skipDispatch: true });
+
+      // Regression safety: clear invalid pending before recompute.
+      clampInvariants();
+      if (!isValidPendingModal(pendingModalModule)) {
+        pendingModalModule = 0;
+      }
+
+      recomputeState('modulesUpdated');
+    
+        // DEBUG LOGGING
+        var DEBUG_LOG_ENABLED = DEBUG;
+        function logDebug(msg, data) {
+          if (!DEBUG_LOG_ENABLED) return;
+          console.debug('[FloatingFireState.handleModulesUpdated]', msg, data || '');
+        }
+    }
+
+    function initialize() {
+      bootstrapFromStorage();
+      applyModuleCount(latestCompletedModule, { skipDispatch: true });
+      state.isLoading = false;
+      recomputeState('initialize');
+    }
+
+    function closeModal() {
+      if (!state.modalOpen) return;
+
+      var completedModule = state.modalModule;
+      previousShownModule = state.modalModule;
+      lastShownModule = normalize(completedModule);
+      if (lastShownModule > latestCompletedModule) {
+        lastShownModule = latestCompletedModule;
+      }
+
+      pendingModalModule = 0;
+      state.previousModalModule = state.modalModule;
+      state.modalOpen = false;
+      state.modalModule = 0;
+
+      persistAll();
+
+      if (DEBUG) {
+        console.debug('[FloatingFireState] modal close', {
+          latestCompletedModule: latestCompletedModule,
+          lastShownModule: lastShownModule,
+          pendingModalModule: pendingModalModule,
+          completedModule: completedModule,
+          modalOpen: state.modalOpen,
+          modalModule: state.modalModule
+        });
+      }
+
+      recomputeState('closeModal');
+    }
+
+    function reportPlaybackError() {
+      state.hasPlaybackError = true;
+      dispatchState();
+    }
+
+    function getState() {
+      return {
+        isLoading: state.isLoading,
+        currentModule: state.currentModule,
+        fireVisible: state.fireVisible,
+        firePath: state.firePath,
+        modalOpen: state.modalOpen,
+        modalModule: state.modalModule,
+        previousModalModule: state.previousModalModule,
+        hasPlaybackError: state.hasPlaybackError
+      };
+    }
+
+    function cleanup() {
+      document.removeEventListener('onboarding:modulesUpdated', handleModulesUpdated);
+    }
+
+    initialize();
+    document.addEventListener('onboarding:modulesUpdated', handleModulesUpdated);
+
+    return {
+      getState: getState,
+      cleanup: cleanup,
+      reportPlaybackError: reportPlaybackError,
+      applyModuleCount: applyModuleCount,
+      closeModal: closeModal
+    };
+  }
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = useFloatingFireState;
+  }
+
+  if (typeof window !== 'undefined') {
+    window.useFloatingFireState = useFloatingFireState;
+  }
+})();

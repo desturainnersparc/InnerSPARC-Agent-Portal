@@ -1,0 +1,75 @@
+.tpl1 .tpl1-card-grid.tpl1-docs-list {
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+
+.tpl1 .doc-upload-block {
+    display: block;
+}
+
+.tpl1 .doc-upload-block .doc-row {
+    margin-bottom: 0;
+}
+
+.tpl1 .doc-row {
+    position: relative;
+}
+
+.tpl1 .doc-feedback {
+    display: none;
+    margin-top: 6px;
+    padding: 0 4px 0 4px;
+    font-size: 0.73rem;
+    line-height: 1.45;
+}
+
+.tpl1 .doc-feedback.show {
+    display: block;
+}
+
+.tpl1 .doc-feedback.ok {
+    color: #1d9f5f;
+}
+
+.tpl1 .doc-feedback.bad {
+    color: #ba2f2f;
+}
+
+.tpl1 .doc-feedback.checking {
+    color: #222689;
+}
+
+.tpl1 .tpl1-upload-action.choose-btn.is-checking {
+    opacity: 0.92;
+}
+
+.tpl1 .tpl1-upload-action.choose-btn.is-invalid {
+    border-color: rgba(186, 47, 47, 0.5);
+    color: #a52525;
+}
+
+.tpl1 .validation-loader {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    width: 14px;
+    height: 14px;
+    border-radius: 999px;
+    border: 2px solid rgba(34, 38, 137, 0.2);
+    border-top-color: #222689;
+    transform: translateY(-50%);
+    animation: doc-validator-spin 0.75s linear infinite;
+}
+
+@keyframes doc-validator-spin {
+    from {
+        transform: translateY(-50%) rotate(0deg);
+    }
+    to {
+        transform: translateY(-50%) rotate(360deg);
+    }
+}
+
+[data-theme="dark"] .tpl1 .doc-feedback.checking {
+    color: #8a91ff;
+}

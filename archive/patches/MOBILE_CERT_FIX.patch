@@ -1,0 +1,252 @@
+--- a/app/static/css/certification-panel.css
++++ b/app/static/css/certification-panel.css
+@@ -373,41 +373,7 @@
+   width: 100%;
+   justify-content: flex-start;
+ }
+-
+-
+-@media (max-width: 767px) {
+-  .cert-header-bar {
+-    padding: 0 0 0.875rem 0;
+-  }
+-
+-  .cert-preview-card {
+-    width: 92%;
+-    padding: 0.68rem;
+-  }
+-
+-  .cert-document {
+-    min-height: 0;
+-    aspect-ratio: auto;
+-    padding: 0.86rem;
+-  }
+-
+-  .cert-logo {
+-    height: 30px;
+-  }
+-
+-  .cert-body {
+-    margin: 0.45rem 0 0.2rem;
+-  }
+-
+-  .cert-recipient-name {
+-    font-size: 1.35rem;
+-  }
+-
+-  .cert-details {
+-    flex-direction: column;
+-    gap: 0.44rem;
+-    align-items: center;
+-  }
++/* REMOVED: Conflicting mobile block with aspect-ratio: auto causing distortion */
+ 
+   .cert-meta-divider {
+     width: 84%;
+     height: 1px;
+@@ -380,23 +346,7 @@
+   }
+ }
+ 
+-@media (max-width: 480px) {
+-  .cert-header-text {
+-    font-size: 1rem;
+-  }
+-
+-  .cert-preview-card {
+-    width: 92%;
+-    padding: 0.62rem;
+-  }
+-
+-  .cert-title {
+-    font-size: 0.8rem;
+-    letter-spacing: 0.18em;
+-  }
+-
+-  .cert-recipient-name {
+-    font-size: clamp(1.22rem, 8vw, 1.6rem);
+-  }
++/* REMOVED: Conflicting @media (max-width: 480px) block */
+ 
+   .cert-body-text {
+     font-size: 0.8rem;
+@@ -612,26 +562,7 @@
+   overflow-y: visible !important;
+ }
+ 
+-@media (max-width: 767px) {
+-  [data-theme='dark'] .cert-section .cert-document,
+-  .cert-section .cert-document {
+-    aspect-ratio: 3 / 2 !important;
+-  }
+-
+-  [data-theme='dark'] .cert-section .cert-preview-card,
+-  .cert-section .cert-preview-card {
+-    min-width: 700px !important;
+-  }
+-
+-  [data-theme='dark'] .cert-section .cert-details,
+-  .cert-section .cert-details {
+-    flex-direction: row !important;
+-    align-items: stretch !important;
+-  }
+-
+-  [data-theme='dark'] .cert-section .cert-meta-divider,
+-  .cert-section .cert-meta-divider {
+-    width: 1px !important;
+-    height: auto !important;
+-  }
++/* REMOVED: Conflicting @media (max-width: 767px) with min-width: 700px !important */
+ }
+ 
+ /* Mobile: responsive certificate, compact spacing, sticky footer */
+@@ -668,85 +599,7 @@
+ 
+ }
+ 
+-@media (max-width: 420px) {
+-  .cert-document { padding: 8px !important; }
+-  .cert-preview-wrapper { padding: 8px; }
+-  .cert-canvas-scale .cert-document { aspect-ratio: 4 / 3; }
+-}
+-
+-/* Dark theme visibility adjustments for footer/header */
+-[data-theme='dark'] .cert-header-text,
+-[data-theme='dark'] .cert-section .cert-title {
+-  color: #ffffff !important;
+-}
+-
+-[data-theme='dark'] .cert-footer-text {
+-  color: rgba(255,255,255,0.85) !important;
+-}
+-
+-/* Mobile: responsive certificate, transparent background, scoped sticky footer */
+-@media (max-width: 767px) {
+-  /* Scope to cert-section so other panels are unaffected */
+-  .cert-section .cert-preview-wrapper {
+-    display: flex;
+-    justify-content: center;
+-    padding: 10px 12px;
+-    box-sizing: border-box;
+-    overflow: visible;
+-  }
+-
+-  .cert-section .cert-preview-card {
+-    width: 100% !important;
+-    max-width: 720px;
+-    padding: 0 8px;
+-    background: transparent;
+-    box-shadow: none;
+-  }
+-
+-  /* Use responsive scaling (preserve original aspect ratio) rather than forcing a new aspect-ratio */
+-  .cert-section .cert-canvas-scale {
+-    width: var(--cert-fixed-width);
+-    --cert-scale: calc(min(1, (100vw - 48px) / var(--cert-fixed-width)));
+-    transform: scale(var(--cert-scale));
+-    transform-origin: top center;
+-    transition: transform 220ms cubic-bezier(.2,.9,.2,1);
+-    margin: 0 auto;
+-  }
+-
+-  .cert-section .cert-canvas-scale .cert-document,
+-  .cert-section .cert-canvas-scale .cert-canvas-frame {
+-    width: var(--cert-fixed-width);
+-    max-width: 100%;
+-  }
+-
+-  /* Prevent visual compression; make the document background transparent on mobile */
+-  .cert-section .cert-document {
+-    aspect-ratio: auto !important;
+-    background: transparent !important;
+-    border: none !important;
+-    box-shadow: none !important;
+-    padding: 10px !important;
+-    box-sizing: border-box;
+-    color: inherit;
+-  }
+-
+-}
+-
+-/* Extra small screens */
+-@media (max-width: 420px) {
+-  .cert-section .cert-preview-wrapper { padding: 8px; }
+-  .cert-section .cert-document { padding: 8px !important; }
+-  .cert-section .cert-canvas-scale { --cert-scale: calc(min(1, (100vw - 32px) / var(--cert-fixed-width))); }
+-}
+-
+-/* Dark theme readability (scoped) */
+-[data-theme='dark'] .cert-section .cert-header-text,
+-[data-theme='dark'] .cert-section .cert-title {
+-  color: #ffffff !important;
+-}
+-
+-[data-theme='dark'] .cert-section .cert-footer-text {
+-  color: rgba(255,255,255,0.9) !important;
+-}
++/* REMOVED: Conflicting @media (max-width: 420px) with aspect-ratio: 4/3 */
++
++/* REMOVED: Conflicting mobile block with aspect-ratio: auto !important and transform: none !important */
+ 
+ /* Keep the certificate heading permanently black in all themes/states. */
+@@ -758,3 +611,47 @@
+ [data-theme='dark'] .cert-panel .cert-section .cert-title {
+   color: #000000 !important;
+ }
++
++/* ============================================================================ */
++/* FINAL AUTHORITATIVE MOBILE LAYOUT BLOCK                                     */
++/* Applied last to win cascade and fix mobile certificate distortion           */
++/* ============================================================================ */
++
++@media (max-width: 767px) {
++  .tpl1 .cert-section .cert-preview-wrapper {
++    display: flex !important;
++    justify-content: center !important;
++    align-items: flex-start !important;
++    overflow: visible !important;
++    padding: 8px 0 !important;
++  }
++
++  .tpl1 .cert-section .cert-preview-card {
++    width: 100% !important;
++    max-width: 100% !important;
++    min-width: 0 !important;
++    margin: 0 auto !important;
++    padding: 0 !important;
++  }
++
++  .tpl1 .cert-section .cert-canvas-scale {
++    width: var(--cert-fixed-width) !important;
++    margin: 0 auto !important;
++    transform-origin: top center !important;
++    --cert-scale: calc(min(1, (100vw - 24px) / var(--cert-fixed-width)));
++    transform: scale(var(--cert-scale)) !important;
++  }
++
++  .tpl1 .cert-section .cert-canvas-scale .cert-canvas-frame,
++  .tpl1 .cert-section .cert-canvas-scale .cert-document {
++    width: var(--cert-fixed-width) !important;
++    max-width: none !important;
++    aspect-ratio: var(--cert-ratio) !important;
++  }
++}
++
++@media (max-width: 420px) {
++  .tpl1 .cert-section .cert-canvas-scale {
++    --cert-scale: calc(min(1, (100vw - 18px) / var(--cert-fixed-width)));
++  }
++}
+
+--- a/app/template/html/templateBeta.html
++++ b/app/template/html/templateBeta.html
+@@ -6,7 +6,7 @@
+ {% block extra_css %}
+ <link rel="stylesheet" href="{% static 'css/templateBeta.css' %}?v=13">
+ <link rel="stylesheet" href="{% static 'css/doc-validator.css' %}?v=1">
+ <link rel="stylesheet" href="{% static 'js/components/OnboardingQuizPanel.css' %}?v=6">
+-<link rel="stylesheet" href="{% static 'css/certification-panel.css' %}?v=8">
++<link rel="stylesheet" href="{% static 'css/certification-panel.css' %}?v=9">
+ {% endblock %}
+ 
+ {% block content %}

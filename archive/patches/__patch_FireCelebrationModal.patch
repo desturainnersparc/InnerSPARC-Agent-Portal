@@ -1,0 +1,165 @@
+diff --git a/app/static/js/components/FireCelebrationModal.js b/app/static/js/components/FireCelebrationModal.js
+new file mode 100644
+index 0000000..cf317a5
+--- /dev/null
++++ b/app/static/js/components/FireCelebrationModal.js
+@@ -0,0 +1,159 @@
++(function () {
++  function FireCelebrationModal(props) {
++    var React = window.React;
++    var providerFactory = window.animationProviderFactory || {};
++    var mapApi = window.floatingFireMap || {};
++    var DEBUG = (typeof window !== 'undefined') && !!window.__DEBUG_FLOATING_FIRE;
++
++    var isOpen = !!props.isOpen;
++    var moduleCount = props.moduleCount || 0;
++    var onClose = props.onClose || function () {};
++    var onPlaybackError = props.onPlaybackError;
++    var containerId = props.containerId || 'fireCelebrationModalLayer';
++
++    var config = mapApi.resolveFloatingFireConfig
++      ? mapApi.resolveFloatingFireConfig(moduleCount)
++      : { evolutionPath: null, headline: 'Module Complete', subtitle: 'Streak upgraded.' };
++
++    // Fallback glow colors (orange) if not defined in config
++    var defaultModalGlowShadow = 'rgba(251,146,60,0.78)';
++    var defaultModalAura = 'rgba(251,146,60,0.35)';
++    var modalGlowShadow = config && config.modalGlowShadow ? config.modalGlowShadow : defaultModalGlowShadow;
++    var modalAura = config && config.modalAura ? config.modalAura : defaultModalAura;
++
++    var providerRef = React.useRef(null);
++    var resolvedPath = null;
++
++    if (config.evolutionPath && mapApi.isKnownAssetPath && mapApi.isKnownAssetPath(config.evolutionPath)) {
++      resolvedPath = config.evolutionPath;
++    } else if (config.evolutionPath && !mapApi.isKnownAssetPath) {
++      resolvedPath = config.evolutionPath;
++    } else if (config.evolutionPath) {
++      console.warn('[FireCelebrationModal] Unknown evolution path for module', moduleCount, ':', config.evolutionPath);
++    }
++
++    if (DEBUG) {
++      console.debug('[FireCelebrationModal] moduleCount=', moduleCount, 'resolvedEvolutionPath=', resolvedPath, 'fallbackUsed=', false);
++    }
++
++    React.useEffect(function () {
++      var animationContainer = document.getElementById(containerId);
++      if (!animationContainer) return;
++
++      if (!providerRef.current) {
++        providerRef.current = (providerFactory.createAnimationProvider || function () {
++          return { play: function () { return { ok: false }; }, destroy: function () {} };
++        })('lottie-web', { container: animationContainer });
++      }
++
++      if (!isOpen) {
++        providerRef.current.destroy();
++        return;
++      }
++
++      // Restart animation per open/module update.
++      providerRef.current.destroy();
++
++      if (resolvedPath) {
++        var result = providerRef.current.play({
++          path: resolvedPath,
++          loop: true,
++          autoplay: true
++        });
++
++        if (!result.ok && typeof onPlaybackError === 'function') {
++          onPlaybackError();
++        }
++      } else {
++        providerRef.current.destroy();
++        if (typeof onPlaybackError === 'function') {
++          onPlaybackError();
++        }
++      }
++
++      return function () {
++        if (providerRef.current) {
++          providerRef.current.destroy();
++        }
++      };
++    }, [isOpen, moduleCount, resolvedPath, onPlaybackError, containerId]);
++
++    React.useEffect(function () {
++      return function () {
++        if (providerRef.current) {
++          providerRef.current.destroy();
++        }
++      };
++    }, []);
++
++    if (!isOpen) {
++      return null;
++    }
++
++    return React.createElement(
++      'div',
++      {
++        className: 'fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/55 px-4 backdrop-blur-[2px]'
++      },
++      React.createElement(
++        'div',
++        {
++          className: 'relative w-full max-w-md overflow-hidden rounded-3xl border border-white/25 bg-white/12 p-6 text-white backdrop-blur-xl',
++          style: {
++            boxShadow: '0 24px 70px -24px ' + modalGlowShadow
++          }
++        },
++        React.createElement('div', {
++          className: 'pointer-events-none absolute -top-20 left-1/2 h-52 w-52 -translate-x-1/2 rounded-full',
++          style: {
++            background: 'radial-gradient(circle, ' + modalAura + ' 0%, rgba(251,146,60,0) 70%)',
++            animation: 'celebrationAuraPulse 1.5s ease-in-out infinite'
++          },
++          'aria-hidden': 'true'
++        }),
++        React.createElement(
++          'div',
++          { className: 'relative z-10' },
++          React.createElement('div', {
++            key: 'modal-fire-' + moduleCount + '-' + (resolvedPath || 'none'),
++            id: containerId,
++            className: 'mx-auto h-44 w-44',
++            style: {
++              filter: 'drop-shadow(0 0 18px ' + modalGlowShadow + ')'
++            }
++          }),
++          React.createElement('h3', { className: 'text-center text-2xl font-semibold tracking-tight text-white' }, config.headline || 'Module Complete'),
++          React.createElement('p', { className: 'mt-2 text-center text-sm text-white/90' }, config.subtitle || 'Your fire has evolved. Streak upgraded.'),
++          React.createElement(
++            'p',
++            {
++              className: 'mt-3 text-center text-[11px] uppercase tracking-[0.2em] text-amber-200/90',
++              role: 'status',
++              'aria-live': 'polite'
++            },
++            'Module ',
++            String(moduleCount),
++            ' complete'
++          ),
++          React.createElement(
++            'button',
++            {
++              type: 'button',
++              onClick: onClose,
++              className: 'mt-5 w-full rounded-xl border border-white/25 bg-white/20 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/30'
++            },
++            'Continue'
++          )
++        )
++      )
++    );
++  }
++
++  if (typeof module !== 'undefined' && module.exports) {
++    module.exports = FireCelebrationModal;
++  }
++
++  if (typeof window !== 'undefined') {
++    window.FireCelebrationModal = FireCelebrationModal;
++  }
++})();
